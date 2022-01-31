@@ -19,7 +19,8 @@ protocol ListDisplayLogic: AnyObject
 
 class ListViewController: UIViewController, ListDisplayLogic
 {
-  var interactor: ListBusinessLogic?
+    @IBOutlet weak var tableView: UITableView!
+    var interactor: ListBusinessLogic?
   var router: (NSObjectProtocol & ListRoutingLogic & ListDataPassing)?
 
   // MARK: Object lifecycle
@@ -86,4 +87,25 @@ class ListViewController: UIViewController, ListDisplayLogic
   {
     //nameTextField.text = viewModel.name
   }
+}
+
+
+extension ListViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: K.cellId, for: indexPath)
+        cell.textLabel?.text = "1"
+        return cell
+    }
+    
+    
+}
+
+extension ListViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print(indexPath)
+    }
 }
