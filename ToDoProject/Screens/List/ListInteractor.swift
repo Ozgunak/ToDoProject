@@ -12,30 +12,51 @@
 
 import UIKit
 
-protocol ListBusinessLogic
-{
-  func doSomething(request: List.Something.Request)
+protocol ListBusinessLogic {
+    func fetchTodos(request: List.FetchTodos.Request)
+    func checkTodo(request: List.CheckTodo.Request)
 }
 
-protocol ListDataStore
-{
-  //var name: String { get set }
+protocol ListDataStore {
+    var todos: [TodoItem]? { get set }
 }
 
-class ListInteractor: ListBusinessLogic, ListDataStore
-{
-  var presenter: ListPresentationLogic?
-  var worker: ListWorker?
-  //var name: String = ""
-  
-  // MARK: Do something
-  
-  func doSomething(request: List.Something.Request)
-  {
-    worker = ListWorker()
-    worker?.doSomeWork()
+class ListInteractor: ListBusinessLogic, ListDataStore {
     
-    let response = List.Something.Response()
-    presenter?.presentSomething(response: response)
-  }
+    var todos: [TodoItem]?
+    
+    
+    var presenter: ListPresentationLogic?
+    var worker: ListWorker?
+    var todosWorker = ListWorker(todosStore: TodoStore())
+    // MARK: - Fetch Todos
+    
+    func fetchTodos(request: List.FetchTodos.Request) {
+        todosWorker.fetchTodos { (todos) -> Void in
+            self.todos = todos
+            let response = TodoList.FetchTodos.Response(todos: todos)
+            self.presenter?.presentTodos(response: response)
+        }
+    }
+
+    func checkTodo(request: List.CheckTodo.Request) {
+        todosWorker.checkTodo(todoIdToCheck: request.id, todoRowToCheck: request.row) { (row, todo) -> Void in
+
+            let response = TodoList.CheckTodo.Response(row: row, todo: todo!)
+            self.presenter?.updateTodo(response: response)
+        }
+    }
+
+
 }
+    
+    
+//  func doSomething(request: List.Something.Request)
+//  {
+//    worker = ListWorker()
+//    worker?.doSomeWork()
+//
+//    let response = List.Something.Response()
+//    presenter?.presentSomething(response: response)
+//  }
+

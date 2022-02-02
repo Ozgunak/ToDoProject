@@ -12,20 +12,49 @@
 
 import UIKit
 
-enum List
-{
+enum List {
   // MARK: Use cases
   
-  enum Something
-  {
-    struct Request
-    {
+    enum FetchTodos {
+        struct Request {
+        }
+        struct Response {
+            var todos: [TodoItem]
+        }
+        struct ViewModel {
+            struct DisplayedTodo {
+                var id: Int
+                var title: String
+                var isDone: Bool
+            }
+
+            var displayedTodos: [DisplayedTodo]
+        }
     }
-    struct Response
-    {
+
+    enum CheckTodo {
+        struct Request {
+            var id: Int
+            var row: Int
+        }
+        struct Response {
+            var row: Int
+            var todo: TodoItem
+        }
+        struct ViewModel {
+            var row: Int
+            var todo: TodoItem
+        }
     }
-    struct ViewModel
-    {
+
+    enum FetchTodayDate {
+        struct Request {
+        }
+        struct Response {
+            var date: Date
+        }
+        struct ViewModel {
+            var todayString: String
+        }
     }
-  }
 }

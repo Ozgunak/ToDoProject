@@ -12,35 +12,34 @@
 
 import UIKit
 
-protocol ListDisplayLogic: AnyObject
-{
-  func displaySomething(viewModel: List.Something.ViewModel)
+protocol ListDisplayLogic: AnyObject {
+    func displayTodoList(viewModel: List.FetchTodos.ViewModel)
+    func displayUpdatedTodoList(viewModel: List.CheckTodo.ViewModel)
 }
 
-class ListViewController: UIViewController, ListDisplayLogic
-{
+class ListViewController: UIViewController, ListDisplayLogic {
+
+    
     @IBOutlet weak var tableView: UITableView!
+    
     var interactor: ListBusinessLogic?
   var router: (NSObjectProtocol & ListRoutingLogic & ListDataPassing)?
 
   // MARK: Object lifecycle
   
-  override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?)
-  {
+  override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
     super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     setup()
   }
   
-  required init?(coder aDecoder: NSCoder)
-  {
+  required init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
     setup()
   }
   
   // MARK: Setup
   
-  private func setup()
-  {
+  private func setup() {
     let viewController = self
     let interactor = ListInteractor()
     let presenter = ListPresenter()
@@ -55,8 +54,7 @@ class ListViewController: UIViewController, ListDisplayLogic
   
   // MARK: Routing
   
-  override func prepare(for segue: UIStoryboardSegue, sender: Any?)
-  {
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if let scene = segue.identifier {
       let selector = NSSelectorFromString("routeTo\(scene)WithSegue:")
       if let router = router, router.responds(to: selector) {
@@ -67,28 +65,39 @@ class ListViewController: UIViewController, ListDisplayLogic
   
   // MARK: View lifecycle
   
-  override func viewDidLoad()
-  {
+  override func viewDidLoad() {
     super.viewDidLoad()
-    doSomething()
+      fetchTodos()
   }
   
   // MARK: Do something
   
   //@IBOutlet weak var nameTextField: UITextField!
   
-  func doSomething()
-  {
-    let request = List.Something.Request()
-    interactor?.doSomething(request: request)
-  }
-  
-  func displaySomething(viewModel: List.Something.ViewModel)
-  {
-    //nameTextField.text = viewModel.name
-  }
+    var displayedTodos: [List.FetchTodos.ViewModel.DisplayedTodo] = []{
+        didSet{
+            self.tableView.reloadData()
+        }
+    }
+
+    func fetchTodos() {
+        let request = List.FetchTodos.Request()
+        interactor?.fetchTodos(request: request)
+    }
+
+    func displayTodoList(viewModel: List.FetchTodos.ViewModel)
+    {
+        displayedTodos = viewModel.displayedTodos
+    }
+
+    func displayUpdatedTodoList(viewModel: List.CheckTodo.ViewModel)
+    {
+        displayedTodos[viewModel.row].isDone = viewModel.todo.isDone
+        tableView.reloadData()
+    }
 }
 
+//MARK: - Table View Data Source
 
 extension ListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -104,6 +113,7 @@ extension ListViewController: UITableViewDataSource {
     
 }
 
+//MARK: - Table View Delegate
 extension ListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print(indexPath)

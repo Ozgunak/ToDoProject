@@ -12,9 +12,89 @@
 
 import UIKit
 
-class ListWorker
-{
-  func doSomeWork()
-  {
-  }
+
+// MARK: - Todos store API
+
+protocol TodosStoreProtocol {
+    func fetchTodos(completionHandler: @escaping (() throws -> [TodoItem]) -> Void)
+    func fetchTodo(id: Int, completionHandler: @escaping (() throws -> TodoItem?) -> Void)
+//    func createTodo(title: String, content: String, completionHandler: @escaping (() throws -> Bool?) -> Void)
+    func checkTodo(todoIdToCheck: Int, completionHandler: @escaping (() throws -> Int, TodoItem?) -> Void)
 }
+
+class ListWorker {
+    var todosStore: TodosStoreProtocol
+
+    init(todosStore: TodosStoreProtocol) {
+        self.todosStore = todosStore
+    }
+
+    func fetchTodos(completionHandler: @escaping ([TodoItem]) -> Void) {
+        todosStore.fetchTodos { (todos: () throws -> [TodoItem])
+            -> Void in
+            do {
+                let todos = try todos()
+                DispatchQueue.main.async {
+                    completionHandler(todos)
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    completionHandler([])
+                }
+            }
+        }
+    }
+
+    func fetchTodo(id: Int, completionHandler: @escaping (TodoItem?) -> Void) {
+        todosStore.fetchTodo(id: id) { (todo: () throws -> TodoItem?) -> Void in
+            do {
+                let todo = try todo()
+                DispatchQueue.main.async {
+                    completionHandler(todo)
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    completionHandler(nil)
+                }
+            }
+        }
+    }
+
+
+//    func createTodo(title: String, content: String, completionHandler: @escaping (Bool?) -> Void) {
+//        todosStore.createTodo(title: title, content: content) {
+//            (success: () throws -> Bool?) -> Void in
+//            do {
+//                let success = try success()
+//                DispatchQueue.main.async {
+//                    completionHandler(success)
+//                }
+//            } catch {
+//                DispatchQueue.main.async {
+//                    completionHandler(nil)
+//                }
+//            }
+//        }
+//    }
+
+    func checkTodo(todoIdToCheck: Int, todoRowToCheck: Int, completionHandler: @escaping (Int, TodoItem?) -> Void) {
+        todosStore.checkTodo(todoIdToCheck: todoIdToCheck) {
+            (row: () throws -> Int, todo: TodoItem?) -> Void in
+
+            do {
+                let row = try row()
+                DispatchQueue.main.async {
+                    completionHandler(row, todo)
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    completionHandler(0, nil)
+                }
+            }
+        }
+    }
+}
+
+
+
+
