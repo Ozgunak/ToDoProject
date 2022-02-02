@@ -12,23 +12,29 @@
 
 import UIKit
 
-@objc protocol ListRoutingLogic
-{
-  //func routeToSomewhere(segue: UIStoryboardSegue?)
+@objc protocol ListRoutingLogic {
+    func routeToCreateTodo(segue: UIStoryboardSegue?)
 }
 
-protocol ListDataPassing
-{
+protocol ListDataPassing {
   var dataStore: ListDataStore? { get }
 }
 
-class ListRouter: NSObject, ListRoutingLogic, ListDataPassing
-{
+class ListRouter: NSObject, ListRoutingLogic, ListDataPassing {
+    
+    
   weak var viewController: ListViewController?
   var dataStore: ListDataStore?
   
   // MARK: Routing
   
+    func routeToCreateTodo(segue: UIStoryboardSegue?) {
+        if segue == nil {
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let destinationVC = storyboard.instantiateViewController(withIdentifier: "DetailViewController") as! DetailViewController
+            navigateToDetailTodo(source: viewController!, destination: destinationVC)
+        }
+    }
   //func routeToSomewhere(segue: UIStoryboardSegue?)
   //{
   //  if let segue = segue {
@@ -46,15 +52,17 @@ class ListRouter: NSObject, ListRoutingLogic, ListDataPassing
 
   // MARK: Navigation
   
-  //func navigateToSomewhere(source: ListViewController, destination: SomewhereViewController)
-  //{
-  //  source.show(destination, sender: nil)
-  //}
+  func navigateToDetailTodo(source: ListViewController, destination: DetailViewController)
+  {
+    source.show(destination, sender: nil)
+  }
   
   // MARK: Passing data
   
-  //func passDataToSomewhere(source: ListDataStore, destination: inout SomewhereDataStore)
-  //{
-  //  destination.name = source.name
-  //}
+    func passDataToTodoDetail(source: ListDataStore, destination: inout DetailDataStore) {
+        let indexPath : IndexPath = (viewController?.tableView.indexPathForSelectedRow!)!
+
+        let selectedTodo = viewController?.displayedTodos[indexPath[0]]
+//        destination.id = selectedTodo?.id
+    }
 }

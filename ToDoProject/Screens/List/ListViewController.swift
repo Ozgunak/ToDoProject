@@ -72,10 +72,10 @@ class ListViewController: UIViewController, ListDisplayLogic {
   
   // MARK: Do something
   
-  //@IBOutlet weak var nameTextField: UITextField!
   
     var displayedTodos: [List.FetchTodos.ViewModel.DisplayedTodo] = []{
         didSet{
+            print("didset")
             self.tableView.reloadData()
         }
     }
@@ -101,12 +101,13 @@ class ListViewController: UIViewController, ListDisplayLogic {
 
 extension ListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return displayedTodos.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: K.cellId, for: indexPath)
-        cell.textLabel?.text = "1"
+        let displatedData = displayedTodos[indexPath.row]
+        cell.textLabel?.text = displatedData.title
         return cell
     }
     

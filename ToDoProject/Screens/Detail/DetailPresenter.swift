@@ -12,20 +12,18 @@
 
 import UIKit
 
-protocol DetailPresentationLogic
-{
-  func presentSomething(response: Detail.Something.Response)
+protocol DetailPresentationLogic {
+    func presentCreateTodo(response: CreateTodo.CreateTodo.Response)
 }
 
-class DetailPresenter: DetailPresentationLogic
-{
-  weak var viewController: DetailDisplayLogic?
+class DetailPresenter: DetailPresentationLogic {
+    
+    
+    weak var viewController: DetailDisplayLogic?
   
-  // MARK: Do something
   
-  func presentSomething(response: Detail.Something.Response)
-  {
-    let viewModel = Detail.Something.ViewModel()
-    viewController?.displaySomething(viewModel: viewModel)
-  }
+    func presentCreateTodo(response: CreateTodo.CreateTodo.Response) {
+        let viewModel = CreateTodo.CreateTodo.ViewModel(isSuccess: response.isSuccess)
+        viewController?.displayCreateTodo(viewModel: viewModel)
+    }
 }

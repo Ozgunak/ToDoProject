@@ -12,20 +12,42 @@
 
 import UIKit
 
-enum Detail
+enum CreateTodo {
+    struct TodoField {
+        var title: String
+        var description: String
+    }
+
+    // MARK: Use cases
+    enum CreateTodo {
+        struct Request {
+            var todoField: TodoField
+        }
+        struct Response {
+            var isSuccess: Bool?
+        }
+        struct ViewModel {
+            var isSuccess: Bool?
+        }
+    }
+    
+    enum FetchTodo {
+      struct Request {
+      }
+      struct Response {
+          var todo: Todo
+      }
+      struct ViewModel {
+          var title: String
+          var content: String
+          var creationDate: String
+      }
+    }
+}
+
+enum TodoDetail
 {
   // MARK: Use cases
   
-  enum Something
-  {
-    struct Request
-    {
-    }
-    struct Response
-    {
-    }
-    struct ViewModel
-    {
-    }
-  }
+  
 }

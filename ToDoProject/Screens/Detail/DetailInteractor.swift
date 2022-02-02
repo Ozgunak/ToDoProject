@@ -12,30 +12,33 @@
 
 import UIKit
 
-protocol DetailBusinessLogic
-{
-  func doSomething(request: Detail.Something.Request)
+protocol DetailBusinessLogic {
+    func createTodo(request: CreateTodo.CreateTodo.Request)
+    
 }
 
-protocol DetailDataStore
-{
+protocol DetailDataStore {
   //var name: String { get set }
 }
 
-class DetailInteractor: DetailBusinessLogic, DetailDataStore
-{
-  var presenter: DetailPresentationLogic?
-  var worker: DetailWorker?
+class DetailInteractor: DetailBusinessLogic, DetailDataStore {
+    var presenter: DetailPresentationLogic?
+    var worker = DetailWorker(todosStore: TodoStore())
   //var name: String = ""
   
   // MARK: Do something
   
-  func doSomething(request: Detail.Something.Request)
-  {
-    worker = DetailWorker()
-    worker?.doSomeWork()
-    
-    let response = Detail.Something.Response()
-    presenter?.presentSomething(response: response)
-  }
+    func createTodo(request: CreateTodo.CreateTodo.Request) {
+
+        let title = request.todoField.title
+        let description = request.todoField.description
+
+        worker.createTodo(title: title, description: description) { (isSuccess: Bool?) in
+
+            let response = CreateTodo.CreateTodo.Response(isSuccess: isSuccess)
+            self.presenter?.presentCreateTodo(response: response)
+
+        }
+
+    }
 }

@@ -12,34 +12,33 @@
 
 import UIKit
 
-protocol DetailDisplayLogic: class
-{
-  func displaySomething(viewModel: Detail.Something.ViewModel)
+protocol DetailDisplayLogic: AnyObject {
+  func displayCreateTodo(viewModel: CreateTodo.CreateTodo.ViewModel)
 }
 
-class DetailViewController: UIViewController, DetailDisplayLogic
-{
+class DetailViewController: UIViewController, DetailDisplayLogic {
   var interactor: DetailBusinessLogic?
   var router: (NSObjectProtocol & DetailRoutingLogic & DetailDataPassing)?
 
+    @IBOutlet weak var titleTextField: UITextField!
+    @IBOutlet weak var descriptionTextField: UITextField!
+    @IBOutlet weak var datePicker: UIDatePicker!
+    
   // MARK: Object lifecycle
   
-  override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?)
-  {
+  override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
     super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     setup()
   }
   
-  required init?(coder aDecoder: NSCoder)
-  {
+  required init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
     setup()
   }
   
   // MARK: Setup
   
-  private func setup()
-  {
+  private func setup() {
     let viewController = self
     let interactor = DetailInteractor()
     let presenter = DetailPresenter()
@@ -54,8 +53,7 @@ class DetailViewController: UIViewController, DetailDisplayLogic
   
   // MARK: Routing
   
-  override func prepare(for segue: UIStoryboardSegue, sender: Any?)
-  {
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if let scene = segue.identifier {
       let selector = NSSelectorFromString("routeTo\(scene)WithSegue:")
       if let router = router, router.responds(to: selector) {
@@ -66,24 +64,40 @@ class DetailViewController: UIViewController, DetailDisplayLogic
   
   // MARK: View lifecycle
   
-  override func viewDidLoad()
-  {
+  override func viewDidLoad() {
     super.viewDidLoad()
-    doSomething()
+
   }
   
+    deinit {
+        print("denitited")
+    }
   // MARK: Do something
   
-  //@IBOutlet weak var nameTextField: UITextField!
-  
-  func doSomething()
-  {
-    let request = Detail.Something.Request()
-    interactor?.doSomething(request: request)
-  }
-  
-  func displaySomething(viewModel: Detail.Something.ViewModel)
-  {
-    //nameTextField.text = viewModel.name
-  }
+  // date eklenecek
+    @IBAction func saveButtonTapped(_ sender: UIBarButtonItem) {
+        let title = titleTextField.text
+        let description = descriptionTextField.text
+        if title != nil {
+            let request = CreateTodo.CreateTodo.Request( todoField: CreateTodo.TodoField(title: title!, description: description ?? ""))
+            interactor?.createTodo(request: request)
+        }
+        
+    }
+    
+    func displayCreateTodo(viewModel: CreateTodo.CreateTodo.ViewModel) {
+        print(viewModel.isSuccess as Any)
+        guard let isSuccess = viewModel.isSuccess else {
+            //log alert
+            return
+        }
+        if isSuccess {
+            navigationController?.popToRootViewController(animated: true)
+//            router?.routeToTodoList(segue: nil)
+        } else {
+            // log alert
+        }
+
+    }
+
 }

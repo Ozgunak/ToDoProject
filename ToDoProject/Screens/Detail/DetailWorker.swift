@@ -12,9 +12,31 @@
 
 import UIKit
 
-class DetailWorker
-{
-  func doSomeWork()
-  {
-  }
+protocol DetailStoreProtocol {
+    func createTodo(title: String, description: String, completionHandler: @escaping (() throws -> Bool?) -> Void)
+
+}
+class DetailWorker {
+    var todosStore: DetailStoreProtocol
+    init(todosStore: DetailStoreProtocol)
+    {
+        self.todosStore = todosStore
+    }
+    
+    func createTodo(title: String, description: String, completionHandler: @escaping (Bool?) -> Void)
+    {
+        todosStore.createTodo(title: title, description: description) {
+            (success: () throws -> Bool?) -> Void in
+            do {
+                let success = try success()
+                DispatchQueue.main.async {
+                    completionHandler(success)
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    completionHandler(nil)
+                }
+            }
+        }
+    }
 }

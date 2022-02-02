@@ -123,8 +123,8 @@
 			isa = PBXGroup;
 			children = (
 				EF8E503127A8731C0088612E /* Main.storyboard */,
-				EF8E504327A873480088612E /* List */,
 				EF8E505427A8739B0088612E /* Detail */,
+				EF8E504327A873480088612E /* List */,
 			);
 			path = Screens;
 			sourceTree = "<group>";

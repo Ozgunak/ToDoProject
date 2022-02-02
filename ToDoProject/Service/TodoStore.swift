@@ -9,15 +9,18 @@ import Foundation
 import CoreData
 
 class TodoStore: TodosStoreProtocol, DetailStoreProtocol {
-   
-
-    // MARK: - CRUD operations - Inner closure
-
-    func fetchTodos(completionHandler: @escaping (() throws -> [Todos]) -> Void) {
+    func fetchTodos(completionHandler: @escaping (() throws -> [TodoItem]) -> Void) {
         let todos = CoreDataManager().fetchTodoList()
 //        let todos = CoreDataManager.shared.fetchTodos(ascending: true)
         completionHandler { return todos }
     }
+    
+    
+   
+
+    // MARK: - CRUD operations - Inner closure
+
+ 
 
 //    func fetchTodo(id: Int, completionHandler: @escaping (() throws -> Todo?) -> Void) {
 //

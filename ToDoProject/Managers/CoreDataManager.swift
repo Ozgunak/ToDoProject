@@ -11,15 +11,15 @@ import CoreData
 
 protocol CoreDataManagerProtocol {
     func saveTodo(title: String, description: String, isDone: Bool, onSuccess: @escaping ((Bool) -> Void))
-    func fetchTodoList() -> [Todos]
+    func fetchTodoList() -> [TodoItem]
     func updateTodo(with todoId: UUID, title: String, description: String?, completionDate: Date?)
     func deleteTodo(todo: Todos)
 }
 
 class CoreDataManager: CoreDataManagerProtocol {
-   
+    
     lazy var context = persistentContainer.viewContext
-
+    
     func saveTodo(title: String, description: String, isDone: Bool, onSuccess: @escaping ((Bool) -> Void)) {
         if let entity: NSEntityDescription
             = NSEntityDescription.entity(forEntityName: "Todos", in: context) {
@@ -27,10 +27,10 @@ class CoreDataManager: CoreDataManagerProtocol {
             // id get value
             var lastId: Int = 0
             let fetchRequest: NSFetchRequest<NSManagedObject>
-                = NSFetchRequest<NSManagedObject>(entityName: "Todos")
+            = NSFetchRequest<NSManagedObject>(entityName: "Todos")
             do {
                 if let fetchResult: [Todos] = try context.fetch(fetchRequest) as? [Todos] {
-
+                    
                     if fetchResult.count != 0 {
                         lastId = Int(fetchResult[fetchResult.count-1].id)
                     } else {
@@ -46,29 +46,47 @@ class CoreDataManager: CoreDataManagerProtocol {
                 todo.title = title
                 todo.descriptions = description
                 todo.isDone = isDone
-//                todo.creationDate = creationDate
-
-                contextSave { success in
+                //                todo.creationDate = creationDate
                 
+                contextSave { success in
+                    
                     onSuccess(success)
                 }
             }
         }
     }
     
-    func fetchTodoList() -> [Todos] {
+    func fetchTodoList() -> [TodoItem] {
         
+        var models = [TodoItem]()
         
-        var todoList = [Todos]()
-        let fetchRequest: NSFetchRequest<Todos> = Todos.fetchRequest()
-
+        let idSort: NSSortDescriptor = NSSortDescriptor(key: "id", ascending: false)
+        let fetchRequest: NSFetchRequest<NSManagedObject>
+        = NSFetchRequest<NSManagedObject>(entityName: "Todos")
+        fetchRequest.sortDescriptors = [idSort]
+        
         do {
-            todoList = try context.fetch(fetchRequest)
-        } catch {
-            print(error.localizedDescription)
+            if let fetchResult: [Todos] = try context.fetch(fetchRequest) as? [Todos] {
+                for item in fetchResult {
+                    let todo = TodoItem(id: Int(item.id), title: item.title ?? "", descriptions: item.descriptions, isDone: item.isDone)
+                    models.append(todo)
+                }
+                
+            }
+        } catch let error as NSError {
+            print("Could not fetch🥺: \(error), \(error.userInfo)")
         }
-
-        return todoList
+        
+        //        var todoList = [TodoItem]()
+        //        let fetchRequest: NSFetchRequest<Todos> = Todos.fetchRequest()
+        //
+        //        do {
+        //            todoList = try context.fetch(fetchRequest)
+        //        } catch {
+        //            print(error.localizedDescription)
+        //        }
+        //
+        return models
     }
     
     func updateTodo(with todoId: UUID, title: String, description: String?, completionDate: Date?) {
@@ -131,11 +149,11 @@ class CoreDataManager: CoreDataManagerProtocol {
 extension CoreDataManager {
     fileprivate func filteredRequest(id: Int64) -> NSFetchRequest<NSFetchRequestResult> {
         let fetchRequest: NSFetchRequest<NSFetchRequestResult>
-            = NSFetchRequest<NSFetchRequestResult>(entityName: "Todos")
+        = NSFetchRequest<NSFetchRequestResult>(entityName: "Todos")
         fetchRequest.predicate = NSPredicate(format: "id = %@", NSNumber(value: id))
         return fetchRequest
     }
-
+    
     fileprivate func contextSave(onSuccess: ((Bool) -> Void)) {
         do {
             try context.save()
