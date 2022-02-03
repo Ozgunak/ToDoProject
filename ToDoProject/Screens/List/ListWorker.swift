@@ -17,7 +17,6 @@ import UIKit
 
 protocol TodosStoreProtocol {
     func fetchTodos(completionHandler: @escaping (() throws -> [TodoItem]) -> Void)
-//    func fetchTodo(id: Int, completionHandler: @escaping (() throws -> TodoItem?) -> Void)
 //    func createTodo(title: String, content: String, completionHandler: @escaping (() throws -> Bool?) -> Void)
 //    func checkTodo(todoIdToCheck: Int, completionHandler: @escaping (() throws -> Int, TodoItem?) -> Void)
 }
@@ -44,21 +43,7 @@ class ListWorker {
             }
         }
     }
-
-//    func fetchTodo(id: Int, completionHandler: @escaping (TodoItem?) -> Void) {
-//        todosStore.fetchTodo(id: id) { (todo: () throws -> TodoItem?) -> Void in
-//            do {
-//                let todo = try todo()
-//                DispatchQueue.main.async {
-//                    completionHandler(todo)
-//                }
-//            } catch {
-//                DispatchQueue.main.async {
-//                    completionHandler(nil)
-//                }
-//            }
-//        }
-//    }
+   
 
 
 //    func createTodo(title: String, content: String, completionHandler: @escaping (Bool?) -> Void) {

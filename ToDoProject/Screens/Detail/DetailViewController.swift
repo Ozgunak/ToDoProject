@@ -13,10 +13,12 @@
 import UIKit
 
 protocol DetailDisplayLogic: AnyObject {
-  func displayCreateTodo(viewModel: CreateTodo.CreateTodo.ViewModel)
+    func displayCreateTodo(viewModel: CreateTodo.CreateTodo.ViewModel)
+    func displayTodo(viewModel: CreateTodo.FetchTodo.ViewModel)
 }
 
 class DetailViewController: UIViewController, DetailDisplayLogic {
+   
   var interactor: DetailBusinessLogic?
   var router: (NSObjectProtocol & DetailRoutingLogic & DetailDataPassing)?
 
@@ -65,8 +67,8 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
   // MARK: View lifecycle
   
   override func viewDidLoad() {
-    super.viewDidLoad()
-
+      super.viewDidLoad()
+      fetchDetail()
   }
   
     deinit {
@@ -84,7 +86,11 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
         }
         
     }
-    
+    func fetchDetail() {
+        let request = CreateTodo.FetchTodo.Request()
+        interactor?.fetchTodo(request: request)
+    }
+
     func displayCreateTodo(viewModel: CreateTodo.CreateTodo.ViewModel) {
         print(viewModel.isSuccess as Any)
         guard let isSuccess = viewModel.isSuccess else {
@@ -92,12 +98,17 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
             return
         }
         if isSuccess {
-            navigationController?.popToRootViewController(animated: true)
+            router?.routeToTodoList(segue: nil)
+            print("success")
 //            router?.routeToTodoList(segue: nil)
         } else {
             // log alert
         }
 
+    }
+    func displayTodo(viewModel: CreateTodo.FetchTodo.ViewModel) {
+        titleTextField.text = viewModel.title
+        descriptionTextField.text = viewModel.descriptions
     }
 
 }

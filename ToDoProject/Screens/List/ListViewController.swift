@@ -68,8 +68,14 @@ class ListViewController: UIViewController, ListDisplayLogic {
   override func viewDidLoad() {
     super.viewDidLoad()
       fetchTodos()
+      print("fetched didload")
   }
   
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        fetchTodos()
+    }
+    
   // MARK: Do something
   
   
@@ -85,13 +91,12 @@ class ListViewController: UIViewController, ListDisplayLogic {
         interactor?.fetchTodos(request: request)
     }
 
-    func displayTodoList(viewModel: List.FetchTodos.ViewModel)
-    {
+    func displayTodoList(viewModel: List.FetchTodos.ViewModel) {
         displayedTodos = viewModel.displayedTodos
+        print("displayed todos")
     }
 
-    func displayUpdatedTodoList(viewModel: List.CheckTodo.ViewModel)
-    {
+    func displayUpdatedTodoList(viewModel: List.CheckTodo.ViewModel) {
         displayedTodos[viewModel.row].isDone = viewModel.todo.isDone
         tableView.reloadData()
     }
@@ -117,6 +122,6 @@ extension ListViewController: UITableViewDataSource {
 //MARK: - Table View Delegate
 extension ListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(indexPath)
+        router?.routeToDetailTodo(index: indexPath.row)
     }
 }

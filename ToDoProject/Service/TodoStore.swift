@@ -22,11 +22,11 @@ class TodoStore: TodosStoreProtocol, DetailStoreProtocol {
 
  
 
-//    func fetchTodo(id: Int, completionHandler: @escaping (() throws -> Todo?) -> Void) {
-//
-//        let todo = CoreDataManager.shared.fetchTodo(id: Int64(id))
-//        completionHandler { return todo }
-//    }
+    func fetchTodo(id: Int, completionHandler: @escaping (() throws -> TodoItem?) -> Void) {
+
+        let todo = CoreDataManager().fetchTodo(id: Int64(id))
+        completionHandler { return todo }
+    }
 
 
     func createTodo(title: String, description: String, completionHandler: @escaping (() throws -> Bool?) -> Void) {

@@ -35,12 +35,12 @@ enum CreateTodo {
       struct Request {
       }
       struct Response {
-          var todo: Todo
+          var todo: TodoItem?
       }
       struct ViewModel {
           var title: String
-          var content: String
-          var creationDate: String
+          var descriptions: String
+//          var notificationDate: String
       }
     }
 }

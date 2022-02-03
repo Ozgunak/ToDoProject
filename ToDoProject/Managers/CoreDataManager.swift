@@ -14,6 +14,7 @@ protocol CoreDataManagerProtocol {
     func fetchTodoList() -> [TodoItem]
     func updateTodo(with todoId: UUID, title: String, description: String?, completionDate: Date?)
     func deleteTodo(todo: Todos)
+    func fetchTodo(id: Int64) -> TodoItem?
 }
 
 class CoreDataManager: CoreDataManagerProtocol {
@@ -96,7 +97,25 @@ class CoreDataManager: CoreDataManagerProtocol {
     func deleteTodo(todo: Todos) {
         
     }
-    
+    func fetchTodo(id: Int64) -> TodoItem? {
+
+        var todo: TodoItem?
+
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = filteredRequest(id: id)
+
+        do {
+            if let results: [Todos] = try context.fetch(fetchRequest) as? [Todos] {
+                if results.count != 0 {
+                    let result = results[0]
+                    todo = TodoItem(id: Int(result.id), title: result.title!, descriptions: result.descriptions, notificationDate: result.notificationDate, isDone: result.isDone)
+                }
+            }
+        } catch let error as NSError {
+            print("Could not fatch🥺: \(error), \(error.userInfo)")
+        }
+        return todo
+
+    }
     
     
     
