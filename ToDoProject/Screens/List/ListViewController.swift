@@ -66,9 +66,10 @@ class ListViewController: UIViewController, ListDisplayLogic {
   // MARK: View lifecycle
   
   override func viewDidLoad() {
-    super.viewDidLoad()
+      super.viewDidLoad()
       fetchTodos()
-      print("fetched didload")
+      let nib = UINib(nibName: K.nibName, bundle: nil)
+      tableView.register(nib, forCellReuseIdentifier: K.listCell)
   }
   
     override func viewWillAppear(_ animated: Bool) {
@@ -110,9 +111,9 @@ extension ListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: K.cellId, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: K.listCell, for: indexPath) as! ListTableViewCell
         let displatedData = displayedTodos[indexPath.row]
-        cell.textLabel?.text = displatedData.title
+        cell.listLabel.text = displatedData.title
         return cell
     }
     
