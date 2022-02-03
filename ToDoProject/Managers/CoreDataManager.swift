@@ -117,6 +117,28 @@ class CoreDataManager: CoreDataManagerProtocol {
 
     }
     
+    func checkTodo(id: Int64, onSuccess: @escaping ((Bool) -> Void)) {
+
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = filteredRequest(id: id)
+
+        do {
+            if let results: [Todos] = try context.fetch(fetchRequest) as? [Todos] {
+                if results.count != 0 {
+                    let objectUpdate = results[0] as NSManagedObject
+                    objectUpdate.setValue(!results[0].isDone, forKey: "isDone")
+                    try context.save()
+                }
+            }
+        } catch let error as NSError {
+            print("Could not fatch🥺: \(error), \(error.userInfo)")
+            onSuccess(false)
+        }
+        contextSave { success in
+            onSuccess(success)
+        }
+
+    }
+    
     
     
     // MARK: - Core Data stack

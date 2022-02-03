@@ -17,8 +17,7 @@ import UIKit
 
 protocol TodosStoreProtocol {
     func fetchTodos(completionHandler: @escaping (() throws -> [TodoItem]) -> Void)
-//    func createTodo(title: String, content: String, completionHandler: @escaping (() throws -> Bool?) -> Void)
-//    func checkTodo(todoIdToCheck: Int, completionHandler: @escaping (() throws -> Int, TodoItem?) -> Void)
+    func checkTodo(todoIdToCheck: Int, completionHandler: @escaping (() throws -> Int, TodoItem?) -> Void)
 }
 
 class ListWorker {
@@ -45,39 +44,22 @@ class ListWorker {
     }
    
 
+    func checkTodo(todoIdToCheck: Int, todoRowToCheck: Int, completionHandler: @escaping (Int, TodoItem?) -> Void) {
+        todosStore.checkTodo(todoIdToCheck: todoIdToCheck) {
+            (row: () throws -> Int, todo: TodoItem?) -> Void in
 
-//    func createTodo(title: String, content: String, completionHandler: @escaping (Bool?) -> Void) {
-//        todosStore.createTodo(title: title, content: content) {
-//            (success: () throws -> Bool?) -> Void in
-//            do {
-//                let success = try success()
-//                DispatchQueue.main.async {
-//                    completionHandler(success)
-//                }
-//            } catch {
-//                DispatchQueue.main.async {
-//                    completionHandler(nil)
-//                }
-//            }
-//        }
-//    }
-
-//    func checkTodo(todoIdToCheck: Int, todoRowToCheck: Int, completionHandler: @escaping (Int, TodoItem?) -> Void) {
-//        todosStore.checkTodo(todoIdToCheck: todoIdToCheck) {
-//            (row: () throws -> Int, todo: TodoItem?) -> Void in
-//
-//            do {
-//                let row = try row()
-//                DispatchQueue.main.async {
-//                    completionHandler(row, todo)
-//                }
-//            } catch {
-//                DispatchQueue.main.async {
-//                    completionHandler(0, nil)
-//                }
-//            }
-//        }
-//    }
+            do {
+                let row = try row()
+                DispatchQueue.main.async {
+                    completionHandler(row, todo)
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    completionHandler(0, nil)
+                }
+            }
+        }
+    }
 }
 
 

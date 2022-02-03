@@ -136,12 +136,12 @@
 		EF8E504327A873480088612E /* List */ = {
 			isa = PBXGroup;
 			children = (
+				EF8E504827A873740088612E /* ListViewController.swift */,
+				EF8E504927A873740088612E /* ListInteractor.swift */,
 				EF8E504427A873740088612E /* ListPresenter.swift */,
 				EF8E504527A873740088612E /* ListWorker.swift */,
 				EF8E504627A873740088612E /* ListRouter.swift */,
 				EF8E504727A873740088612E /* ListModels.swift */,
-				EF8E504827A873740088612E /* ListViewController.swift */,
-				EF8E504927A873740088612E /* ListInteractor.swift */,
 				EF40F00E27AC012D00D63756 /* ListTableViewCell.swift */,
 				EF40F00F27AC012D00D63756 /* ListTableViewCell.xib */,
 			);
@@ -151,12 +151,12 @@
 		EF8E505427A8739B0088612E /* Detail */ = {
 			isa = PBXGroup;
 			children = (
+				EF8E505927A8741E0088612E /* DetailViewController.swift */,
+				EF8E505A27A8741E0088612E /* DetailInteractor.swift */,
 				EF8E505527A8741E0088612E /* DetailPresenter.swift */,
 				EF8E505627A8741E0088612E /* DetailWorker.swift */,
 				EF8E505727A8741E0088612E /* DetailRouter.swift */,
 				EF8E505827A8741E0088612E /* DetailModels.swift */,
-				EF8E505927A8741E0088612E /* DetailViewController.swift */,
-				EF8E505A27A8741E0088612E /* DetailInteractor.swift */,
 			);
 			path = Detail;
 			sourceTree = "<group>";

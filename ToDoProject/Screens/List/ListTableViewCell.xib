@@ -38,14 +38,27 @@
                                     </imageView>
                                 </subviews>
                             </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BYi-28-5ey">
+                                <rect key="frame" x="271" y="10" width="40" height="40"/>
+                                <color key="tintColor" red="0.0" green="0.66666668650000005" blue="0.24725772530000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain"/>
+                                <connections>
+                                    <action selector="doneButtonPressed:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="oHx-Bu-Qvl"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="linkColor"/>
                         <constraints>
                             <constraint firstItem="0k5-ec-0IR" firstAttribute="top" secondItem="7A3-h2-hWM" secondAttribute="top" id="ECa-rM-ISX"/>
                             <constraint firstItem="0k5-ec-0IR" firstAttribute="leading" secondItem="7A3-h2-hWM" secondAttribute="leading" constant="16" id="YMr-e7-i7i"/>
+                            <constraint firstItem="BYi-28-5ey" firstAttribute="centerX" secondItem="zbD-4N-jBd" secondAttribute="centerX" id="aYx-GY-yhP"/>
                             <constraint firstAttribute="trailing" secondItem="0k5-ec-0IR" secondAttribute="trailing" constant="16" id="dEh-cf-igv"/>
                             <constraint firstAttribute="bottom" secondItem="0k5-ec-0IR" secondAttribute="bottom" id="gOh-7k-FHl"/>
                             <constraint firstAttribute="height" constant="60" id="l7k-oU-6aC"/>
+                            <constraint firstItem="BYi-28-5ey" firstAttribute="width" secondItem="zbD-4N-jBd" secondAttribute="width" id="pRk-Gh-UQv"/>
+                            <constraint firstItem="BYi-28-5ey" firstAttribute="height" secondItem="zbD-4N-jBd" secondAttribute="height" id="rov-Ls-sB5"/>
+                            <constraint firstItem="BYi-28-5ey" firstAttribute="centerY" secondItem="zbD-4N-jBd" secondAttribute="centerY" id="u25-sM-9qF"/>
                         </constraints>
                     </view>
                 </subviews>
@@ -59,6 +72,8 @@
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="bubbleView" destination="7A3-h2-hWM" id="eul-U2-cBg"/>
+                <outlet property="doneButton" destination="BYi-28-5ey" id="586-Sz-nGX"/>
+                <outlet property="doneImageView" destination="zbD-4N-jBd" id="6dY-mj-tJp"/>
                 <outlet property="listLabel" destination="S8s-yx-cLK" id="tpk-mz-xWy"/>
             </connections>
             <point key="canvasLocation" x="157.24637681159422" y="168.41517857142856"/>

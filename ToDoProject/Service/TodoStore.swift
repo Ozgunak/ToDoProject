@@ -38,12 +38,12 @@ class TodoStore: TodosStoreProtocol, DetailStoreProtocol {
         }
     }
     
-//    func checkTodo(todoIdToCheck: Int, completionHandler: @escaping (() throws -> Int, Todo?) -> Void) {
-//        
-//        CoreDataManager().checkTodo(id: Int64(todoIdToCheck)){
-//            onSuccess in
-//            print("update =\(onSuccess)")
-//        }
-//    }
+    func checkTodo(todoIdToCheck: Int, completionHandler: @escaping (() throws -> Int, TodoItem?) -> Void) {
+        
+        CoreDataManager().checkTodo(id: Int64(todoIdToCheck)){
+            onSuccess in
+            print("update =\(onSuccess)")
+        }
+    }
     
 }

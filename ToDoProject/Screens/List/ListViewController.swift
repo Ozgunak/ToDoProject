@@ -113,10 +113,23 @@ extension ListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: K.listCell, for: indexPath) as! ListTableViewCell
         let displatedData = displayedTodos[indexPath.row]
-        cell.listLabel.text = displatedData.title
+        cell.getData(title: displatedData.title, isDone: displatedData.isDone)
+        
+        cell.doneButton.tag = indexPath.row
+        cell.doneButton.addTarget(self, action: #selector(checkButtonConnected), for: .touchUpInside)
         return cell
     }
     
+    @objc func checkButtonConnected(sender : UIButton!) {
+//        sender.isSelected = !sender.isSelected
+        
+        self.displayedTodos[sender.tag].isDone = !self.displayedTodos[sender.tag].isDone
+
+        let request = List.CheckTodo.Request(id: self.displayedTodos[sender.tag].id, row: sender.tag)
+
+        interactor?.checkTodo(request: request)
+        tableView.reloadData()
+    }
     
 }
 
