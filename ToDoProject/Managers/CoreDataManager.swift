@@ -12,7 +12,7 @@ import CoreData
 protocol CoreDataManagerProtocol {
     func saveTodo(title: String, description: String, isDone: Bool, onSuccess: @escaping ((Bool) -> Void))
     func fetchTodoList() -> [TodoItem]
-    func updateTodo(with todoId: UUID, title: String, description: String?, completionDate: Date?)
+    func editTodo(id: Int64, title: String, description: String?, onSuccess: @escaping ((Bool) -> Void))
     func deleteTodo(todo: Todos)
     func fetchTodo(id: Int64) -> TodoItem?
 }
@@ -21,82 +21,35 @@ class CoreDataManager: CoreDataManagerProtocol {
     
     lazy var context = persistentContainer.viewContext
     
-    func saveTodo(title: String, description: String, isDone: Bool, onSuccess: @escaping ((Bool) -> Void)) {
-        if let entity: NSEntityDescription
-            = NSEntityDescription.entity(forEntityName: "Todos", in: context) {
-            
-            // id get value
-            var lastId: Int = 0
-            let fetchRequest: NSFetchRequest<NSManagedObject>
-            = NSFetchRequest<NSManagedObject>(entityName: "Todos")
-            do {
-                if let fetchResult: [Todos] = try context.fetch(fetchRequest) as? [Todos] {
-                    
-                    if fetchResult.count != 0 {
-                        lastId = Int(fetchResult[fetchResult.count-1].id)
-                    } else {
-                        lastId = 0
-                    }
-                }
-            } catch let error as NSError {
-                print("Could not fetch🥺: \(error), \(error.userInfo)")
-            }
-            
-            if let todo: Todos = NSManagedObject(entity: entity, insertInto: context) as? Todos {
-                todo.id = Int32(lastId + 1)
-                todo.title = title
-                todo.descriptions = description
-                todo.isDone = isDone
-                //                todo.creationDate = creationDate
-                
-                contextSave { success in
-                    
-                    onSuccess(success)
-                }
-            }
-        }
-    }
-    
-    func fetchTodoList() -> [TodoItem] {
-        
-        var models = [TodoItem]()
-        
-        let idSort: NSSortDescriptor = NSSortDescriptor(key: "id", ascending: false)
-        let fetchRequest: NSFetchRequest<NSManagedObject>
-        = NSFetchRequest<NSManagedObject>(entityName: "Todos")
-        fetchRequest.sortDescriptors = [idSort]
+   
+    //MARK: - edit todo
+
+    func editTodo(id: Int64, title: String, description: String?, onSuccess: @escaping ((Bool) -> Void)) {
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = filteredRequest(id: id)
         
         do {
-            if let fetchResult: [Todos] = try context.fetch(fetchRequest) as? [Todos] {
-                for item in fetchResult {
-                    let todo = TodoItem(id: Int(item.id), title: item.title ?? "", descriptions: item.descriptions, isDone: item.isDone)
-                    models.append(todo)
+            if let results: [Todos] = try context.fetch(fetchRequest) as? [Todos] {
+                if results.count != 0 {
+                    let result = results[0]
+                    result.title = title
+                    result.descriptions = description
                 }
-                
             }
         } catch let error as NSError {
-            print("Could not fetch🥺: \(error), \(error.userInfo)")
+            print("Could not edit: \(error), \(error.userInfo)")
         }
-        
-        //        var todoList = [TodoItem]()
-        //        let fetchRequest: NSFetchRequest<Todos> = Todos.fetchRequest()
-        //
-        //        do {
-        //            todoList = try context.fetch(fetchRequest)
-        //        } catch {
-        //            print(error.localizedDescription)
-        //        }
-        //
-        return models
-    }
-    
-    func updateTodo(with todoId: UUID, title: String, description: String?, completionDate: Date?) {
-        
+        contextSave { success in
+            onSuccess(success)
+        }
+
     }
     
     func deleteTodo(todo: Todos) {
         
     }
+    
+    //MARK: - fetch by id
+
     func fetchTodo(id: Int64) -> TodoItem? {
 
         var todo: TodoItem?
@@ -138,7 +91,77 @@ class CoreDataManager: CoreDataManagerProtocol {
         }
 
     }
-    
+    //MARK: - save todo
+
+    func saveTodo(title: String, description: String, isDone: Bool, onSuccess: @escaping ((Bool) -> Void)) {
+        if let entity: NSEntityDescription
+            = NSEntityDescription.entity(forEntityName: "Todos", in: context) {
+            
+            // id get value
+            var lastId: Int = 0
+            let fetchRequest: NSFetchRequest<NSManagedObject>
+            = NSFetchRequest<NSManagedObject>(entityName: "Todos")
+            do {
+                if let fetchResult: [Todos] = try context.fetch(fetchRequest) as? [Todos] {
+                    
+                    if fetchResult.count != 0 {
+                        lastId = Int(fetchResult[fetchResult.count-1].id)
+                    } else {
+                        lastId = 0
+                    }
+                }
+            } catch let error as NSError {
+                print("Could not fetch🥺: \(error), \(error.userInfo)")
+            }
+            
+            if let todo: Todos = NSManagedObject(entity: entity, insertInto: context) as? Todos {
+                todo.id = Int32(lastId + 1)
+                todo.title = title
+                todo.descriptions = description
+                todo.isDone = isDone
+                //                todo.creationDate = creationDate
+                
+                contextSave { success in
+                    
+                    onSuccess(success)
+                }
+            }
+        }
+    }
+    //MARK: - fetch todo
+
+    func fetchTodoList() -> [TodoItem] {
+        
+        var models = [TodoItem]()
+        
+        let idSort: NSSortDescriptor = NSSortDescriptor(key: "id", ascending: false)
+        let fetchRequest: NSFetchRequest<NSManagedObject>
+        = NSFetchRequest<NSManagedObject>(entityName: "Todos")
+        fetchRequest.sortDescriptors = [idSort]
+        
+        do {
+            if let fetchResult: [Todos] = try context.fetch(fetchRequest) as? [Todos] {
+                for item in fetchResult {
+                    let todo = TodoItem(id: Int(item.id), title: item.title ?? "", descriptions: item.descriptions, isDone: item.isDone)
+                    models.append(todo)
+                }
+                
+            }
+        } catch let error as NSError {
+            print("Could not fetch🥺: \(error), \(error.userInfo)")
+        }
+        
+        //        var todoList = [TodoItem]()
+        //        let fetchRequest: NSFetchRequest<Todos> = Todos.fetchRequest()
+        //
+        //        do {
+        //            todoList = try context.fetch(fetchRequest)
+        //        } catch {
+        //            print(error.localizedDescription)
+        //        }
+        //
+        return models
+    }
     
     
     // MARK: - Core Data stack

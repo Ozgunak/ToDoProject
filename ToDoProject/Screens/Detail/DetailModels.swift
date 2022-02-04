@@ -17,9 +17,20 @@ enum CreateTodo {
         var title: String
         var description: String
     }
-
+    
     // MARK: Use cases
     enum CreateTodo {
+        struct Request {
+            var todoField: TodoField
+        }
+        struct Response {
+            var isSuccess: Bool?
+        }
+        struct ViewModel {
+            var isSuccess: Bool?
+        }
+    }
+    enum EditTodo {
         struct Request {
             var todoField: TodoField
         }

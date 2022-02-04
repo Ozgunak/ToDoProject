@@ -101,6 +101,11 @@ class ListViewController: UIViewController, ListDisplayLogic {
         displayedTodos[viewModel.row].isDone = viewModel.todo.isDone
         tableView.reloadData()
     }
+    
+    @IBAction func createButtonPressed(_ sender: UIBarButtonItem) {
+        router?.routeToCreateTodo(segue: nil)
+    }
+    
 }
 
 //MARK: - Table View Data Source
@@ -136,6 +141,6 @@ extension ListViewController: UITableViewDataSource {
 //MARK: - Table View Delegate
 extension ListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        router?.routeToDetailTodo(index: indexPath.row)
+        router?.routeToDetailTodo(index: indexPath.row, id: self.displayedTodos[indexPath.row].id)
     }
 }
