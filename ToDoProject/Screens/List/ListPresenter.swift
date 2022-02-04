@@ -23,12 +23,12 @@ class ListPresenter: ListPresentationLogic {
   
     
     let todayDateFormatter : DateFormatter = {
-
         let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ko_KR")
-        dateFormatter.dateFormat = "M월 d일"
+        dateFormatter.locale = Locale.current
+        dateFormatter.dateFormat = ""
         return dateFormatter
     }()
+    
   // MARK: - Present Todos
   
     func presentTodos(response: List.FetchTodos.Response) {
@@ -36,7 +36,6 @@ class ListPresenter: ListPresentationLogic {
 
         for todo in response.todos {
             let displayedTodo = List.FetchTodos.ViewModel.DisplayedTodo(id: Int(todo.id), title: todo.title , isDone: todo.isDone)
-
             displayedTodos.append(displayedTodo)
         }
 

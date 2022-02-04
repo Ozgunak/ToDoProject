@@ -12,8 +12,7 @@
 
 import UIKit
 
-@objc protocol DetailRoutingLogic
-{
+@objc protocol DetailRoutingLogic {
   func routeToTodoList(segue: UIStoryboardSegue?)
 }
 
@@ -26,34 +25,21 @@ class DetailRouter: NSObject, DetailRoutingLogic, DetailDataPassing
   weak var viewController: DetailViewController?
   var dataStore: DetailDataStore?
   
-  // MARK: Routing
+  // MARK: - Routing
   
   func routeToTodoList(segue: UIStoryboardSegue?) {
-    if let segue = segue {
-      let destinationVC = segue.destination as! ListViewController
-      var destinationDS = destinationVC.router!.dataStore!
-      passDataToSomewhere(source: dataStore!, destination: &destinationDS)
-    } else {
+    if segue == nil {
       let storyboard = UIStoryboard(name: "Main", bundle: nil)
       let destinationVC = storyboard.instantiateViewController(withIdentifier: "ListViewController") as! ListViewController
-      var destinationDS = destinationVC.router!.dataStore!
-        destinationVC.fetchTodos()
-      passDataToSomewhere(source: dataStore!, destination: &destinationDS)
       navigateToList(source: viewController!, destination: destinationVC)
     }
   }
 
-  // MARK: Navigation
+  // MARK: - Navigation
   
-  func navigateToList(source: DetailViewController, destination: ListViewController)
-  {
+  func navigateToList(source: DetailViewController, destination: ListViewController) {
       source.navigationController?.popToRootViewController(animated: true)
   }
   
-  // MARK: Passing data
   
-  func passDataToSomewhere(source: DetailDataStore, destination: inout ListDataStore)
-  {
-//      destination.todos = source.todo
-  }
 }

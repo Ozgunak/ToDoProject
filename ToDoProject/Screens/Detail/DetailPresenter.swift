@@ -13,9 +13,9 @@
 import UIKit
 
 protocol DetailPresentationLogic {
-    func presentCreateTodo(response: CreateTodo.CreateTodo.Response)
-    func presentTodo(response: CreateTodo.FetchTodo.Response)
-    func presentEditTodo(response: CreateTodo.EditTodo.Response)
+    func presentCreateTodo(response: DetailTodo.CreateTodo.Response)
+    func presentTodo(response: DetailTodo.FetchTodo.Response)
+    func presentEditTodo(response: DetailTodo.EditTodo.Response)
 
 }
 
@@ -24,19 +24,19 @@ class DetailPresenter: DetailPresentationLogic {
     weak var viewController: DetailDisplayLogic?
     
     
-    func presentCreateTodo(response: CreateTodo.CreateTodo.Response) {
-        let viewModel = CreateTodo.CreateTodo.ViewModel(isSuccess: response.isSuccess)
+    func presentCreateTodo(response: DetailTodo.CreateTodo.Response) {
+        let viewModel = DetailTodo.CreateTodo.ViewModel(isSuccess: response.isSuccess)
         viewController?.displayCreateTodo(viewModel: viewModel)
     }
     
-    func presentTodo(response: CreateTodo.FetchTodo.Response) {
+    func presentTodo(response: DetailTodo.FetchTodo.Response) {
         
-        let viewModel = CreateTodo.FetchTodo.ViewModel(title: response.todo?.title ?? "", descriptions: response.todo?.descriptions ?? "")
+        let viewModel = DetailTodo.FetchTodo.ViewModel(title: response.todo?.title ?? "", descriptions: response.todo?.descriptions ?? "")
         viewController?.displayTodo(viewModel: viewModel)
     }
-    func presentEditTodo(response: CreateTodo.EditTodo.Response) {
+    func presentEditTodo(response: DetailTodo.EditTodo.Response) {
         
-        let viewModel = CreateTodo.EditTodo.ViewModel(isSuccess: response.isSuccess)
+        let viewModel = DetailTodo.EditTodo.ViewModel(isSuccess: response.isSuccess)
         viewController?.displayEditTodo(viewModel: viewModel)
     }
 }

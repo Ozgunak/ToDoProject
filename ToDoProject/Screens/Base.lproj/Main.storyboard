@@ -36,6 +36,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="6YJ-Cv-DLy">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="z8u-IC-Z7F">
+                            <color key="tintColor" red="0.63776493069999995" green="0.69853734970000003" blue="0.36855733390000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             <connections>
                                 <action selector="createButtonPressed:" destination="1dn-38-fTW" id="8qD-sl-sR0"/>
                             </connections>
@@ -209,6 +210,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="dFg-mj-hIK">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" red="0.63776493069999995" green="0.69853734970000003" blue="0.36855733390000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>

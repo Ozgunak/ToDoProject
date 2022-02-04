@@ -13,7 +13,6 @@
 import UIKit
 
 enum List {
-  // MARK: Use cases
   
     enum FetchTodos {
         struct Request {
@@ -47,14 +46,5 @@ enum List {
         }
     }
 
-    enum FetchTodayDate {
-        struct Request {
-        }
-        struct Response {
-            var date: Date
-        }
-        struct ViewModel {
-            var todayString: String
-        }
-    }
+
 }

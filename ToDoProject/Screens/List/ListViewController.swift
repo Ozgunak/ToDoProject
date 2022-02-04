@@ -77,12 +77,10 @@ class ListViewController: UIViewController, ListDisplayLogic {
         fetchTodos()
     }
     
-  // MARK: Do something
-  
+  // MARK: - Display Functions
   
     var displayedTodos: [List.FetchTodos.ViewModel.DisplayedTodo] = []{
         didSet{
-            print("didset")
             self.tableView.reloadData()
         }
     }
@@ -94,7 +92,6 @@ class ListViewController: UIViewController, ListDisplayLogic {
 
     func displayTodoList(viewModel: List.FetchTodos.ViewModel) {
         displayedTodos = viewModel.displayedTodos
-        print("displayed todos")
     }
 
     func displayUpdatedTodoList(viewModel: List.CheckTodo.ViewModel) {
@@ -106,6 +103,12 @@ class ListViewController: UIViewController, ListDisplayLogic {
         router?.routeToCreateTodo(segue: nil)
     }
     
+    @objc func checkButtonConnected(sender : UIButton!) {
+        self.displayedTodos[sender.tag].isDone = !self.displayedTodos[sender.tag].isDone
+        let request = List.CheckTodo.Request(id: self.displayedTodos[sender.tag].id, row: sender.tag)
+        interactor?.checkTodo(request: request)
+        tableView.reloadData()
+    }
 }
 
 //MARK: - Table View Data Source
@@ -119,26 +122,17 @@ extension ListViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: K.listCell, for: indexPath) as! ListTableViewCell
         let displatedData = displayedTodos[indexPath.row]
         cell.getData(title: displatedData.title, isDone: displatedData.isDone)
-        
         cell.doneButton.tag = indexPath.row
         cell.doneButton.addTarget(self, action: #selector(checkButtonConnected), for: .touchUpInside)
         return cell
     }
     
-    @objc func checkButtonConnected(sender : UIButton!) {
-//        sender.isSelected = !sender.isSelected
-        
-        self.displayedTodos[sender.tag].isDone = !self.displayedTodos[sender.tag].isDone
-
-        let request = List.CheckTodo.Request(id: self.displayedTodos[sender.tag].id, row: sender.tag)
-
-        interactor?.checkTodo(request: request)
-        tableView.reloadData()
-    }
+   
     
 }
 
 //MARK: - Table View Delegate
+
 extension ListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         router?.routeToDetailTodo(index: indexPath.row, id: self.displayedTodos[indexPath.row].id)

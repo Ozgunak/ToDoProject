@@ -22,13 +22,12 @@ protocol ListDataStore {
 }
 
 class ListInteractor: ListBusinessLogic, ListDataStore {
-    
     var todos: [TodoItem]?
-    
     
     var presenter: ListPresentationLogic?
     var worker: ListWorker?
     var todosWorker = ListWorker(todosStore: TodoStore())
+    
     // MARK: - Fetch Todos
     
     func fetchTodos(request: List.FetchTodos.Request) {
@@ -38,10 +37,10 @@ class ListInteractor: ListBusinessLogic, ListDataStore {
             self.presenter?.presentTodos(response: response)
         }
     }
+    //MARK: - Check Todos
 
     func checkTodo(request: List.CheckTodo.Request) {
         todosWorker.checkTodo(todoIdToCheck: request.id, todoRowToCheck: request.row) { (row, todo) -> Void in
-
             let response = List.CheckTodo.Response(row: row, todo: todo!)
             self.presenter?.updateTodo(response: response)
         }

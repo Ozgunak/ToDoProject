@@ -12,7 +12,7 @@
 
 import UIKit
 
-enum CreateTodo {
+enum DetailTodo {
     struct TodoField {
         var title: String
         var description: String

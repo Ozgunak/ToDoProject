@@ -10,6 +10,7 @@
 		EF40F00D27AA940000D63756 /* TodoStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF40F00C27AA940000D63756 /* TodoStore.swift */; };
 		EF40F01027AC012D00D63756 /* ListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF40F00E27AC012D00D63756 /* ListTableViewCell.swift */; };
 		EF40F01127AC012D00D63756 /* ListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EF40F00F27AC012D00D63756 /* ListTableViewCell.xib */; };
+		EF40F01527AD515E00D63756 /* UIViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF40F01427AD515E00D63756 /* UIViewController+.swift */; };
 		EF8E502C27A8731C0088612E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF8E502B27A8731C0088612E /* AppDelegate.swift */; };
 		EF8E502E27A8731C0088612E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF8E502D27A8731C0088612E /* SceneDelegate.swift */; };
 		EF8E503327A8731C0088612E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EF8E503127A8731C0088612E /* Main.storyboard */; };
@@ -37,6 +38,7 @@
 		EF40F00C27AA940000D63756 /* TodoStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoStore.swift; sourceTree = "<group>"; };
 		EF40F00E27AC012D00D63756 /* ListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTableViewCell.swift; sourceTree = "<group>"; };
 		EF40F00F27AC012D00D63756 /* ListTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ListTableViewCell.xib; sourceTree = "<group>"; };
+		EF40F01427AD515E00D63756 /* UIViewController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+.swift"; sourceTree = "<group>"; };
 		EF8E502827A8731C0088612E /* ToDoProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToDoProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF8E502B27A8731C0088612E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EF8E502D27A8731C0088612E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -88,6 +90,14 @@
 			path = Service;
 			sourceTree = "<group>";
 		};
+		EF40F01227AD513700D63756 /* Extentions */ = {
+			isa = PBXGroup;
+			children = (
+				EF40F01427AD515E00D63756 /* UIViewController+.swift */,
+			);
+			path = Extentions;
+			sourceTree = "<group>";
+		};
 		EF8E501F27A8731C0088612E = {
 			isa = PBXGroup;
 			children = (
@@ -110,6 +120,7 @@
 				EF8E502B27A8731C0088612E /* AppDelegate.swift */,
 				EF8E502D27A8731C0088612E /* SceneDelegate.swift */,
 				EF8E506227A87EF60088612E /* Constants.swift */,
+				EF40F01227AD513700D63756 /* Extentions */,
 				EF8E506927A8896A0088612E /* Managers */,
 				EF40F00B27AA93D600D63756 /* Service */,
 				EF40F00A27A9534300D63756 /* Workers */,
@@ -263,6 +274,7 @@
 				EF8E505E27A8741E0088612E /* DetailModels.swift in Sources */,
 				EF8E503627A8731C0088612E /* ToDoProject.xcdatamodeld in Sources */,
 				EF8E504E27A873740088612E /* ListViewController.swift in Sources */,
+				EF40F01527AD515E00D63756 /* UIViewController+.swift in Sources */,
 				EF40F00D27AA940000D63756 /* TodoStore.swift in Sources */,
 				EF8E504B27A873740088612E /* ListWorker.swift in Sources */,
 				EF8E506027A8741E0088612E /* DetailInteractor.swift in Sources */,

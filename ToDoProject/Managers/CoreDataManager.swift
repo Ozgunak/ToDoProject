@@ -64,7 +64,7 @@ class CoreDataManager: CoreDataManagerProtocol {
                 }
             }
         } catch let error as NSError {
-            print("Could not fatch🥺: \(error), \(error.userInfo)")
+            print("Could not fatch: \(error), \(error.userInfo)")
         }
         return todo
 
@@ -83,7 +83,7 @@ class CoreDataManager: CoreDataManagerProtocol {
                 }
             }
         } catch let error as NSError {
-            print("Could not fatch🥺: \(error), \(error.userInfo)")
+            print("Could not check: \(error), \(error.userInfo)")
             onSuccess(false)
         }
         contextSave { success in
@@ -111,7 +111,7 @@ class CoreDataManager: CoreDataManagerProtocol {
                     }
                 }
             } catch let error as NSError {
-                print("Could not fetch🥺: \(error), \(error.userInfo)")
+                print("Could not create: \(error), \(error.userInfo)")
             }
             
             if let todo: Todos = NSManagedObject(entity: entity, insertInto: context) as? Todos {
@@ -131,35 +131,21 @@ class CoreDataManager: CoreDataManagerProtocol {
     //MARK: - fetch todo
 
     func fetchTodoList() -> [TodoItem] {
-        
         var models = [TodoItem]()
-        
         let idSort: NSSortDescriptor = NSSortDescriptor(key: "id", ascending: false)
         let fetchRequest: NSFetchRequest<NSManagedObject>
         = NSFetchRequest<NSManagedObject>(entityName: "Todos")
         fetchRequest.sortDescriptors = [idSort]
-        
         do {
             if let fetchResult: [Todos] = try context.fetch(fetchRequest) as? [Todos] {
                 for item in fetchResult {
                     let todo = TodoItem(id: Int(item.id), title: item.title ?? "", descriptions: item.descriptions, isDone: item.isDone)
                     models.append(todo)
                 }
-                
             }
         } catch let error as NSError {
-            print("Could not fetch🥺: \(error), \(error.userInfo)")
+            print("Could not fetch: \(error), \(error.userInfo)")
         }
-        
-        //        var todoList = [TodoItem]()
-        //        let fetchRequest: NSFetchRequest<Todos> = Todos.fetchRequest()
-        //
-        //        do {
-        //            todoList = try context.fetch(fetchRequest)
-        //        } catch {
-        //            print(error.localizedDescription)
-        //        }
-        //
         return models
     }
     

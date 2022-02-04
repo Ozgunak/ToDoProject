@@ -15,15 +15,9 @@ class ListTableViewCell: UITableViewCell {
     @IBOutlet weak var bubbleView: UIView!
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
-        bubbleView.layer.cornerRadius = bubbleView.frame.height / 5
+        bubbleView.layer.cornerRadius = bubbleView.frame.height / 10
     }
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
     func getData(title: String, isDone: Bool){
         listLabel.text = title
         doneImageView.image = isDone ? UIImage(named: K.done) : UIImage(named: K.notDone)

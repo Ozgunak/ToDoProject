@@ -13,4 +13,5 @@ struct K {
     static let done = "full"
     static let nibName = "ListTableViewCell"
     static let segueDetail = "routeToDetailTodo"
+    static let main = "Main"
 }

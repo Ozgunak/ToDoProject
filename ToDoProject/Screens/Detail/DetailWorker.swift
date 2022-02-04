@@ -20,8 +20,7 @@ protocol DetailStoreProtocol {
 }
 class DetailWorker {
     var todosStore: DetailStoreProtocol
-    init(todosStore: DetailStoreProtocol)
-    {
+    init(todosStore: DetailStoreProtocol) {
         self.todosStore = todosStore
     }
     

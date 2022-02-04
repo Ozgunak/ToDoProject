@@ -13,9 +13,9 @@
 import UIKit
 
 protocol DetailBusinessLogic {
-    func createTodo(request: CreateTodo.CreateTodo.Request)
-    func fetchTodo(request: CreateTodo.FetchTodo.Request)
-    func editTodo(request: CreateTodo.EditTodo.Request)
+    func createTodo(request: DetailTodo.CreateTodo.Request)
+    func fetchTodo(request: DetailTodo.FetchTodo.Request)
+    func editTodo(request: DetailTodo.EditTodo.Request)
 }
 
 protocol DetailDataStore {
@@ -30,34 +30,25 @@ class DetailInteractor: DetailBusinessLogic, DetailDataStore {
     var presenter: DetailPresentationLogic?
     var worker = DetailWorker(todosStore: TodoStore())
   
-  // MARK: Do something
+  // MARK: CRUD operations
   
-    func createTodo(request: CreateTodo.CreateTodo.Request) {
+    func createTodo(request: DetailTodo.CreateTodo.Request) {
         let title = request.todoField.title
         let description = request.todoField.description
         worker.createTodo(title: title, description: description) { (isSuccess: Bool?) in
-            let response = CreateTodo.CreateTodo.Response(isSuccess: isSuccess)
+            let response = DetailTodo.CreateTodo.Response(isSuccess: isSuccess)
             self.presenter?.presentCreateTodo(response: response)
         }
     }
                                               
-    func fetchTodo(request: CreateTodo.FetchTodo.Request) {
+    func fetchTodo(request: DetailTodo.FetchTodo.Request) {
         self.presenter?.presentTodo(response: .init(todo: todo))
-
-        if id != nil {
-//            worker.fetchTodo(id: id!) { (todo) -> Void in
-//                self.todo = todo!
-//
-//                let response = CreateTodo.FetchTodo.Response(todo: todo!)
-//                self.presenter?.presentTodo(response: response)
-//            }
-        }
     }
-    func editTodo(request: CreateTodo.EditTodo.Request) {
+    func editTodo(request: DetailTodo.EditTodo.Request) {
         let title = request.todoField.title
         let description = request.todoField.description
         worker.editTodo(id: id!, title: title, description: description) { (isSuccess: Bool?) in
-            let response = CreateTodo.EditTodo.Response(isSuccess: isSuccess)
+            let response = DetailTodo.EditTodo.Response(isSuccess: isSuccess)
             self.presenter?.presentEditTodo(response: response)
         }
     }

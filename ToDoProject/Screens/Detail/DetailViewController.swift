@@ -13,9 +13,9 @@
 import UIKit
 
 protocol DetailDisplayLogic: AnyObject {
-    func displayCreateTodo(viewModel: CreateTodo.CreateTodo.ViewModel)
-    func displayTodo(viewModel: CreateTodo.FetchTodo.ViewModel)
-    func displayEditTodo(viewModel: CreateTodo.EditTodo.ViewModel)
+    func displayCreateTodo(viewModel: DetailTodo.CreateTodo.ViewModel)
+    func displayTodo(viewModel: DetailTodo.FetchTodo.ViewModel)
+    func displayEditTodo(viewModel: DetailTodo.EditTodo.ViewModel)
 }
 
 class DetailViewController: UIViewController, DetailDisplayLogic {
@@ -79,19 +79,19 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
         self.editButton.title = "Edit"
     }
     
-  // MARK: Do something
   
-  // date eklenecek
+    //MARK: - Save and Edit Button actions
+
     @IBAction func saveButtonTapped(_ sender: UIBarButtonItem) {
         if titleTextField.text != "" {
             let title = titleTextField.text
             let description = descriptionTextField.text
             if title != nil {
-                let request = CreateTodo.CreateTodo.Request( todoField: CreateTodo.TodoField(title: title!, description: description ?? ""))
+                let request = DetailTodo.CreateTodo.Request( todoField: DetailTodo.TodoField(title: title!, description: description ?? ""))
                 interactor?.createTodo(request: request)
             }
         }else {
-            // alert
+            shortAlert(title: "Title Empty", message: "Title can not be empty")
         }
     }
     
@@ -100,62 +100,61 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
             let title = titleTextField.text
             let description = descriptionTextField.text
             if title != nil {
-                let request = CreateTodo.EditTodo.Request(todoField: CreateTodo.TodoField(title: title!, description: description ?? ""))
+                let request = DetailTodo.EditTodo.Request(todoField: DetailTodo.TodoField(title: title!, description: description ?? ""))
                 interactor?.editTodo(request: request)
             }
         }else {
-            // alert
+            shortAlert(title: "Title Empty", message: "Title can not be empty")
         }
         
     }
     
     
+    //MARK: - Data functions
+
     func fetchDetail() {
-        let request = CreateTodo.FetchTodo.Request()
+        let request = DetailTodo.FetchTodo.Request()
         interactor?.fetchTodo(request: request)
     }
 
-    func displayCreateTodo(viewModel: CreateTodo.CreateTodo.ViewModel) {
+    func displayCreateTodo(viewModel: DetailTodo.CreateTodo.ViewModel) {
         print(viewModel.isSuccess as Any)
         guard let isSuccess = viewModel.isSuccess else {
-            //log alert
+            self.shortAlert(title: "Failed", message: "Failed creating Todo")
             return
         }
         if isSuccess {
-            router?.routeToTodoList(segue: nil)
-        } else {
-            // log alert
-        }
-    }
-    func displayTodo(viewModel: CreateTodo.FetchTodo.ViewModel) {
-        titleTextField.text = viewModel.title
-        descriptionTextField.text = viewModel.descriptions
-    }
-    
-    func displayEditTodo(viewModel: CreateTodo.EditTodo.ViewModel) {
-        print(viewModel.isSuccess as Any)
-        guard let isSuccess = viewModel.isSuccess else {
-            //log alert
-            return
-        }
-        if isSuccess {
-            shortAlert(title: "Succesfully Editted", message: "Routing to main")
+            self.shortAlert(title: "Succesfully Created", message: "Routing to main")
             Timer.scheduledTimer(withTimeInterval: 1.5, repeats: false) { _ in
                 self.router?.routeToTodoList(segue: nil)
             }
             
         } else {
-            // log alert
+            self.shortAlert(title: "Failed", message: "Failed creating Todo")
+        }
+    }
+    func displayTodo(viewModel: DetailTodo.FetchTodo.ViewModel) {
+        titleTextField.text = viewModel.title
+        descriptionTextField.text = viewModel.descriptions
+    }
+    
+    func displayEditTodo(viewModel: DetailTodo.EditTodo.ViewModel) {
+        print(viewModel.isSuccess as Any)
+        guard let isSuccess = viewModel.isSuccess else {
+            self.shortAlert(title: "Failed", message: "Failed editing Todo")
+            return
+        }
+        if isSuccess {
+            self.shortAlert(title: "Succesfully Editted", message: "Routing to main")
+            Timer.scheduledTimer(withTimeInterval: 1.5, repeats: false) { _ in
+                self.router?.routeToTodoList(segue: nil)
+            }
+            
+        } else {
+            self.shortAlert(title: "Failed", message: "Failed editing Todo")
         }
     }
     
-    func shortAlert(title: String, message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        self.present(alert, animated: true, completion: nil)
-        let when = DispatchTime.now() + 1.4
-        DispatchQueue.main.asyncAfter(deadline: when){
-          alert.dismiss(animated: true, completion: nil)
-        }
-    }
+    
 
 }
