@@ -27,7 +27,7 @@ class ListTableViewCell: UITableViewCell {
     func getData(title: String, isDone: Bool){
         listLabel.text = title
         doneImageView.image = isDone ? UIImage(named: K.done) : UIImage(named: K.notDone)
-        listLabel.textColor = isDone ? .lightGray : .white
+        listLabel.textColor = isDone ? .gray : .white
     }
     
     @IBAction func doneButtonPressed(_ sender: UIButton) {

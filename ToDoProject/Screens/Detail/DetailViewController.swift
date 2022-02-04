@@ -78,14 +78,24 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
   
   // date eklenecek
     @IBAction func saveButtonTapped(_ sender: UIBarButtonItem) {
-        let title = titleTextField.text
-        let description = descriptionTextField.text
-        if title != nil {
-            let request = CreateTodo.CreateTodo.Request( todoField: CreateTodo.TodoField(title: title!, description: description ?? ""))
-            interactor?.createTodo(request: request)
+        if titleTextField.text != "" {
+            let title = titleTextField.text
+            let description = descriptionTextField.text
+            if title != nil {
+                let request = CreateTodo.CreateTodo.Request( todoField: CreateTodo.TodoField(title: title!, description: description ?? ""))
+                interactor?.createTodo(request: request)
+            }
+        }else {
+            // alert
         }
+    }
+    
+    @IBAction func editButtonTapped(_ sender: UIBarButtonItem) {
+        
         
     }
+    
+    
     func fetchDetail() {
         let request = CreateTodo.FetchTodo.Request()
         interactor?.fetchTodo(request: request)
