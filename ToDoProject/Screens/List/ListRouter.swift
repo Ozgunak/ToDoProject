@@ -14,7 +14,7 @@ import UIKit
 
 @objc protocol ListRoutingLogic {
     func routeToCreateTodo(segue: UIStoryboardSegue?)
-    func routeToDetailTodo(index: Int)
+    func routeToDetailTodo(index: Int, id: Int)
 
 }
 
@@ -24,10 +24,12 @@ protocol ListDataPassing {
 
 class ListRouter: NSObject, ListRoutingLogic, ListDataPassing {
     
-    func routeToDetailTodo(index: Int) {
+    func routeToDetailTodo(index: Int, id: Int) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let destinationVC = storyboard.instantiateViewController(withIdentifier: "DetailViewController") as! DetailViewController
         destinationVC.router?.dataStore?.todo = dataStore?.todos?[index]
+        destinationVC.router?.dataStore?.id = id
+        destinationVC.saveButton.title = "Create New"
         self.viewController?.navigationController?.pushViewController(destinationVC, animated: true)
     }
     
@@ -42,6 +44,7 @@ class ListRouter: NSObject, ListRoutingLogic, ListDataPassing {
         if segue == nil {
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let destinationVC = storyboard.instantiateViewController(withIdentifier: "DetailViewController") as! DetailViewController
+            destinationVC.editButton.title = ""
             navigateToDetailTodo(source: viewController!, destination: destinationVC)
         }
     }

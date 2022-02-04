@@ -15,6 +15,7 @@ import UIKit
 protocol DetailDisplayLogic: AnyObject {
     func displayCreateTodo(viewModel: CreateTodo.CreateTodo.ViewModel)
     func displayTodo(viewModel: CreateTodo.FetchTodo.ViewModel)
+    func displayEditTodo(viewModel: CreateTodo.EditTodo.ViewModel)
 }
 
 class DetailViewController: UIViewController, DetailDisplayLogic {
@@ -22,6 +23,8 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
   var interactor: DetailBusinessLogic?
   var router: (NSObjectProtocol & DetailRoutingLogic & DetailDataPassing)?
 
+    @IBOutlet weak var editButton: UIBarButtonItem!
+    @IBOutlet weak var saveButton: UIBarButtonItem!
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var descriptionTextField: UITextField!
     @IBOutlet weak var datePicker: UIDatePicker!
@@ -70,10 +73,12 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
       super.viewDidLoad()
       fetchDetail()
   }
-  
+    
     deinit {
-        print("denitited")
+        self.saveButton.title = "Save"
+        self.editButton.title = "Edit"
     }
+    
   // MARK: Do something
   
   // date eklenecek
@@ -91,7 +96,16 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
     }
     
     @IBAction func editButtonTapped(_ sender: UIBarButtonItem) {
-        
+        if titleTextField.text != "" {
+            let title = titleTextField.text
+            let description = descriptionTextField.text
+            if title != nil {
+                let request = CreateTodo.EditTodo.Request(todoField: CreateTodo.TodoField(title: title!, description: description ?? ""))
+                interactor?.editTodo(request: request)
+            }
+        }else {
+            // alert
+        }
         
     }
     
@@ -109,16 +123,39 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
         }
         if isSuccess {
             router?.routeToTodoList(segue: nil)
-            print("success")
-//            router?.routeToTodoList(segue: nil)
         } else {
             // log alert
         }
-
     }
     func displayTodo(viewModel: CreateTodo.FetchTodo.ViewModel) {
         titleTextField.text = viewModel.title
         descriptionTextField.text = viewModel.descriptions
+    }
+    
+    func displayEditTodo(viewModel: CreateTodo.EditTodo.ViewModel) {
+        print(viewModel.isSuccess as Any)
+        guard let isSuccess = viewModel.isSuccess else {
+            //log alert
+            return
+        }
+        if isSuccess {
+            shortAlert(title: "Succesfully Editted", message: "Routing to main")
+            Timer.scheduledTimer(withTimeInterval: 1.5, repeats: false) { _ in
+                self.router?.routeToTodoList(segue: nil)
+            }
+            
+        } else {
+            // log alert
+        }
+    }
+    
+    func shortAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        self.present(alert, animated: true, completion: nil)
+        let when = DispatchTime.now() + 1.4
+        DispatchQueue.main.asyncAfter(deadline: when){
+          alert.dismiss(animated: true, completion: nil)
+        }
     }
 
 }

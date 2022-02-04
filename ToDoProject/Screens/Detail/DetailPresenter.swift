@@ -15,6 +15,8 @@ import UIKit
 protocol DetailPresentationLogic {
     func presentCreateTodo(response: CreateTodo.CreateTodo.Response)
     func presentTodo(response: CreateTodo.FetchTodo.Response)
+    func presentEditTodo(response: CreateTodo.EditTodo.Response)
+
 }
 
 class DetailPresenter: DetailPresentationLogic {
@@ -31,6 +33,11 @@ class DetailPresenter: DetailPresentationLogic {
         
         let viewModel = CreateTodo.FetchTodo.ViewModel(title: response.todo?.title ?? "", descriptions: response.todo?.descriptions ?? "")
         viewController?.displayTodo(viewModel: viewModel)
+    }
+    func presentEditTodo(response: CreateTodo.EditTodo.Response) {
+        
+        let viewModel = CreateTodo.EditTodo.ViewModel(isSuccess: response.isSuccess)
+        viewController?.displayEditTodo(viewModel: viewModel)
     }
 }
 

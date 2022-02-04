@@ -15,6 +15,8 @@ import UIKit
 protocol DetailStoreProtocol {
     func createTodo(title: String, description: String, completionHandler: @escaping (() throws -> Bool?) -> Void)
     func fetchTodo(id: Int, completionHandler: @escaping (() throws -> TodoItem?) -> Void)
+    func editTodo(id: Int, title: String, description: String, completionHandler: @escaping (() throws -> Bool?) -> Void)
+
 }
 class DetailWorker {
     var todosStore: DetailStoreProtocol
@@ -46,6 +48,22 @@ class DetailWorker {
                 let todo = try todo()
                 DispatchQueue.main.async {
                     completionHandler(todo)
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    completionHandler(nil)
+                }
+            }
+        }
+    }
+    
+    func editTodo(id: Int, title: String, description: String, completionHandler: @escaping (Bool?) -> Void) {
+        todosStore.editTodo(id: id, title: title, description: description) {
+            (success: () throws -> Bool?) -> Void in
+            do {
+                let success = try success()
+                DispatchQueue.main.async {
+                    completionHandler(success)
                 }
             } catch {
                 DispatchQueue.main.async {
