@@ -14,6 +14,8 @@ import UIKit
 
 @objc protocol ListRoutingLogic {
     func routeToCreateTodo(segue: UIStoryboardSegue?)
+    func routeToDetailTodo(index: Int)
+
 }
 
 protocol ListDataPassing {
@@ -21,6 +23,14 @@ protocol ListDataPassing {
 }
 
 class ListRouter: NSObject, ListRoutingLogic, ListDataPassing {
+    
+    func routeToDetailTodo(index: Int) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let destinationVC = storyboard.instantiateViewController(withIdentifier: "DetailViewController") as! DetailViewController
+        destinationVC.router?.dataStore?.todo = dataStore?.todos?[index]
+        self.viewController?.navigationController?.pushViewController(destinationVC, animated: true)
+    }
+    
     
     
   weak var viewController: ListViewController?

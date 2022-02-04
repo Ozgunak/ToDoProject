@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		EF40F00D27AA940000D63756 /* TodoStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF40F00C27AA940000D63756 /* TodoStore.swift */; };
+		EF40F01027AC012D00D63756 /* ListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF40F00E27AC012D00D63756 /* ListTableViewCell.swift */; };
+		EF40F01127AC012D00D63756 /* ListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EF40F00F27AC012D00D63756 /* ListTableViewCell.xib */; };
 		EF8E502C27A8731C0088612E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF8E502B27A8731C0088612E /* AppDelegate.swift */; };
 		EF8E502E27A8731C0088612E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF8E502D27A8731C0088612E /* SceneDelegate.swift */; };
 		EF8E503327A8731C0088612E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EF8E503127A8731C0088612E /* Main.storyboard */; };
@@ -33,6 +35,8 @@
 
 /* Begin PBXFileReference section */
 		EF40F00C27AA940000D63756 /* TodoStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoStore.swift; sourceTree = "<group>"; };
+		EF40F00E27AC012D00D63756 /* ListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTableViewCell.swift; sourceTree = "<group>"; };
+		EF40F00F27AC012D00D63756 /* ListTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ListTableViewCell.xib; sourceTree = "<group>"; };
 		EF8E502827A8731C0088612E /* ToDoProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToDoProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF8E502B27A8731C0088612E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EF8E502D27A8731C0088612E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -132,12 +136,14 @@
 		EF8E504327A873480088612E /* List */ = {
 			isa = PBXGroup;
 			children = (
+				EF8E504827A873740088612E /* ListViewController.swift */,
+				EF8E504927A873740088612E /* ListInteractor.swift */,
 				EF8E504427A873740088612E /* ListPresenter.swift */,
 				EF8E504527A873740088612E /* ListWorker.swift */,
 				EF8E504627A873740088612E /* ListRouter.swift */,
 				EF8E504727A873740088612E /* ListModels.swift */,
-				EF8E504827A873740088612E /* ListViewController.swift */,
-				EF8E504927A873740088612E /* ListInteractor.swift */,
+				EF40F00E27AC012D00D63756 /* ListTableViewCell.swift */,
+				EF40F00F27AC012D00D63756 /* ListTableViewCell.xib */,
 			);
 			path = List;
 			sourceTree = "<group>";
@@ -145,12 +151,12 @@
 		EF8E505427A8739B0088612E /* Detail */ = {
 			isa = PBXGroup;
 			children = (
+				EF8E505927A8741E0088612E /* DetailViewController.swift */,
+				EF8E505A27A8741E0088612E /* DetailInteractor.swift */,
 				EF8E505527A8741E0088612E /* DetailPresenter.swift */,
 				EF8E505627A8741E0088612E /* DetailWorker.swift */,
 				EF8E505727A8741E0088612E /* DetailRouter.swift */,
 				EF8E505827A8741E0088612E /* DetailModels.swift */,
-				EF8E505927A8741E0088612E /* DetailViewController.swift */,
-				EF8E505A27A8741E0088612E /* DetailInteractor.swift */,
 			);
 			path = Detail;
 			sourceTree = "<group>";
@@ -230,6 +236,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EF8E503B27A8731E0088612E /* LaunchScreen.storyboard in Resources */,
+				EF40F01127AC012D00D63756 /* ListTableViewCell.xib in Resources */,
 				EF8E503827A8731E0088612E /* Assets.xcassets in Resources */,
 				EF8E503327A8731C0088612E /* Main.storyboard in Resources */,
 			);
@@ -251,6 +258,7 @@
 				EF8E506827A889660088612E /* CoreDataManager.swift in Sources */,
 				EF8E506527A882AA0088612E /* TodoItem.swift in Sources */,
 				EF8E504D27A873740088612E /* ListModels.swift in Sources */,
+				EF40F01027AC012D00D63756 /* ListTableViewCell.swift in Sources */,
 				EF8E506327A87EF60088612E /* Constants.swift in Sources */,
 				EF8E505E27A8741E0088612E /* DetailModels.swift in Sources */,
 				EF8E503627A8731C0088612E /* ToDoProject.xcdatamodeld in Sources */,

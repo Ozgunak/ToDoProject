@@ -14,16 +14,23 @@ import UIKit
 
 protocol DetailPresentationLogic {
     func presentCreateTodo(response: CreateTodo.CreateTodo.Response)
+    func presentTodo(response: CreateTodo.FetchTodo.Response)
 }
 
 class DetailPresenter: DetailPresentationLogic {
     
-    
     weak var viewController: DetailDisplayLogic?
-  
-  
+    
+    
     func presentCreateTodo(response: CreateTodo.CreateTodo.Response) {
         let viewModel = CreateTodo.CreateTodo.ViewModel(isSuccess: response.isSuccess)
         viewController?.displayCreateTodo(viewModel: viewModel)
     }
+    
+    func presentTodo(response: CreateTodo.FetchTodo.Response) {
+        
+        let viewModel = CreateTodo.FetchTodo.ViewModel(title: response.todo?.title ?? "", descriptions: response.todo?.descriptions ?? "")
+        viewController?.displayTodo(viewModel: viewModel)
+    }
 }
+

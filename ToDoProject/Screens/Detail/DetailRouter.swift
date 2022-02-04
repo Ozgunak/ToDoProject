@@ -14,12 +14,11 @@ import UIKit
 
 @objc protocol DetailRoutingLogic
 {
-  //func routeToSomewhere(segue: UIStoryboardSegue?)
+  func routeToTodoList(segue: UIStoryboardSegue?)
 }
 
-protocol DetailDataPassing
-{
-  var dataStore: DetailDataStore? { get }
+protocol DetailDataPassing: AnyObject {
+  var dataStore: DetailDataStore? { get set }
 }
 
 class DetailRouter: NSObject, DetailRoutingLogic, DetailDataPassing
@@ -29,32 +28,32 @@ class DetailRouter: NSObject, DetailRoutingLogic, DetailDataPassing
   
   // MARK: Routing
   
-  //func routeToSomewhere(segue: UIStoryboardSegue?)
-  //{
-  //  if let segue = segue {
-  //    let destinationVC = segue.destination as! SomewhereViewController
-  //    var destinationDS = destinationVC.router!.dataStore!
-  //    passDataToSomewhere(source: dataStore!, destination: &destinationDS)
-  //  } else {
-  //    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-  //    let destinationVC = storyboard.instantiateViewController(withIdentifier: "SomewhereViewController") as! SomewhereViewController
-  //    var destinationDS = destinationVC.router!.dataStore!
-  //    passDataToSomewhere(source: dataStore!, destination: &destinationDS)
-  //    navigateToSomewhere(source: viewController!, destination: destinationVC)
-  //  }
-  //}
+  func routeToTodoList(segue: UIStoryboardSegue?) {
+    if let segue = segue {
+      let destinationVC = segue.destination as! ListViewController
+      var destinationDS = destinationVC.router!.dataStore!
+      passDataToSomewhere(source: dataStore!, destination: &destinationDS)
+    } else {
+      let storyboard = UIStoryboard(name: "Main", bundle: nil)
+      let destinationVC = storyboard.instantiateViewController(withIdentifier: "ListViewController") as! ListViewController
+      var destinationDS = destinationVC.router!.dataStore!
+        destinationVC.fetchTodos()
+      passDataToSomewhere(source: dataStore!, destination: &destinationDS)
+      navigateToList(source: viewController!, destination: destinationVC)
+    }
+  }
 
   // MARK: Navigation
   
-  //func navigateToSomewhere(source: DetailViewController, destination: SomewhereViewController)
-  //{
-  //  source.show(destination, sender: nil)
-  //}
+  func navigateToList(source: DetailViewController, destination: ListViewController)
+  {
+      source.navigationController?.popToRootViewController(animated: true)
+  }
   
   // MARK: Passing data
   
-  //func passDataToSomewhere(source: DetailDataStore, destination: inout SomewhereDataStore)
-  //{
-  //  destination.name = source.name
-  //}
+  func passDataToSomewhere(source: DetailDataStore, destination: inout ListDataStore)
+  {
+//      destination.todos = source.todo
+  }
 }
