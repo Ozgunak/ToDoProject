@@ -75,6 +75,7 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
       super.viewDidLoad()
       fetchDetail()
       configurePhoneTextField()
+      setBackButtonTitle()
   }
     
     deinit {
@@ -130,6 +131,11 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
         interactor?.editTime(request: request)
     }
     
+    func setBackButtonTitle() {
+        let backButton = UIBarButtonItem()
+        backButton.title = "Cancel"
+        self.navigationController?.navigationBar.topItem?.backBarButtonItem = backButton
+    }
     func createPhoneTextFieldKeyboardToolbar() -> UIToolbar {
         let flexibleSpace = UIBarButtonItem.flexibleSpace()
         let doneBarButton = UIBarButtonItem()
