@@ -16,13 +16,12 @@ protocol DetailPresentationLogic {
     func presentCreateTodo(response: DetailTodo.CreateTodo.Response)
     func presentTodo(response: DetailTodo.FetchTodo.Response)
     func presentEditTodo(response: DetailTodo.EditTodo.Response)
+    func presentEditTime(response: DetailTodo.EditTime.Response)
 
 }
 
 class DetailPresenter: DetailPresentationLogic {
-    
     weak var viewController: DetailDisplayLogic?
-    
     
     func presentCreateTodo(response: DetailTodo.CreateTodo.Response) {
         let viewModel = DetailTodo.CreateTodo.ViewModel(isSuccess: response.isSuccess)
@@ -38,6 +37,11 @@ class DetailPresenter: DetailPresentationLogic {
         
         let viewModel = DetailTodo.EditTodo.ViewModel(isSuccess: response.isSuccess)
         viewController?.displayEditTodo(viewModel: viewModel)
+    }
+    func presentEditTime(response: DetailTodo.EditTime.Response) {
+        
+        let viewModel = DetailTodo.EditTime.ViewModel(isSuccess: response.isSuccess)
+        viewController?.displayEditTime(viewModel: viewModel)
     }
 }
 

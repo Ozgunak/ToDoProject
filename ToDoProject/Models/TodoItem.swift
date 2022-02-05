@@ -12,4 +12,6 @@ struct TodoItem {
     var descriptions: String?
     var notificationDate: Date?
     var isDone: Bool
+    var timerSet: Bool
+    var lastModifiedDate: Double
 }

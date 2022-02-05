@@ -8,8 +8,9 @@
 import Foundation
 import CoreData
 
+
+
 class TodoStore: TodosStoreProtocol, DetailStoreProtocol {
-    
 
     // MARK: - CRUD operations - Inner closure
 
@@ -35,6 +36,12 @@ class TodoStore: TodosStoreProtocol, DetailStoreProtocol {
     func editTodo(id: Int, title: String, description: String, completionHandler: @escaping (() throws -> Bool?) -> Void) {
         CoreDataManager().editTodo(id: Int64(id), title: title, description: description, onSuccess: { onSuccess in
             print("update =\(onSuccess)")
+            completionHandler { return onSuccess }
+        })
+    }
+    func editTime(id: Int, time: Double, completionHandler: @escaping (() throws -> Bool?) -> Void) {
+        CoreDataManager().editTime(id: Int64(id), time: time, onSuccess: { onSuccess in
+            print("time =\(onSuccess)")
             completionHandler { return onSuccess }
         })
     }

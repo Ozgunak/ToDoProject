@@ -70,11 +70,13 @@ class ListViewController: UIViewController, ListDisplayLogic {
       fetchTodos()
       let nib = UINib(nibName: K.nibName, bundle: nil)
       tableView.register(nib, forCellReuseIdentifier: K.listCell)
+      
   }
   
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchTodos()
+        
     }
     
   // MARK: - Display Functions
@@ -122,12 +124,15 @@ extension ListViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: K.listCell, for: indexPath) as! ListTableViewCell
         let displatedData = displayedTodos[indexPath.row]
         cell.getData(title: displatedData.title, isDone: displatedData.isDone)
+        cell.timerSet(isSet: displatedData.timerSet)
         cell.doneButton.tag = indexPath.row
         cell.doneButton.addTarget(self, action: #selector(checkButtonConnected), for: .touchUpInside)
         return cell
     }
     
-   
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return "Tasks"
+    }
     
 }
 

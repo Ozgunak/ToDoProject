@@ -15,10 +15,7 @@ import UIKit
 
 // MARK: - Todos store API
 
-protocol TodosStoreProtocol {
-    func fetchTodos(completionHandler: @escaping (() throws -> [TodoItem]) -> Void)
-    func checkTodo(todoIdToCheck: Int, completionHandler: @escaping (() throws -> Int, TodoItem?) -> Void)
-}
+
 
 class ListWorker {
     var todosStore: TodosStoreProtocol

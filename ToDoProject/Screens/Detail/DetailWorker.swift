@@ -16,15 +16,24 @@ protocol DetailStoreProtocol {
     func createTodo(title: String, description: String, completionHandler: @escaping (() throws -> Bool?) -> Void)
     func fetchTodo(id: Int, completionHandler: @escaping (() throws -> TodoItem?) -> Void)
     func editTodo(id: Int, title: String, description: String, completionHandler: @escaping (() throws -> Bool?) -> Void)
-
+    func editTime(id: Int, time: Double, completionHandler: @escaping (() throws -> Bool?) -> Void)
+}
+protocol TodosStoreProtocol {
+    func fetchTodos(completionHandler: @escaping (() throws -> [TodoItem]) -> Void)
+    func checkTodo(todoIdToCheck: Int, completionHandler: @escaping (() throws -> Int, TodoItem?) -> Void)
 }
 class DetailWorker {
+    var coreData = CoreDataManager()
     var todosStore: DetailStoreProtocol
     init(todosStore: DetailStoreProtocol) {
         self.todosStore = todosStore
     }
     
     func createTodo(title: String, description: String, completionHandler: @escaping (Bool?) -> Void) {
+//        coreData.saveTodo(title: title, description: description, isDone: false) { onSuccess in
+//            print("saved =\(onSuccess)")
+//            completionHandler { return onSuccess }
+//        }
         todosStore.createTodo(title: title, description: description) {
             (success: () throws -> Bool?) -> Void in
             do {
@@ -71,4 +80,21 @@ class DetailWorker {
             }
         }
     }
+    
+    func editTime(id: Int, time: Double, completionHandler: @escaping (Bool?) -> Void) {
+        todosStore.editTime(id: id, time: time) {
+            (success: () throws -> Bool?) -> Void in
+            do {
+                let success = try success()
+                DispatchQueue.main.async {
+                    completionHandler(success)
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    completionHandler(nil)
+                }
+            }
+        }
+    }
+
 }

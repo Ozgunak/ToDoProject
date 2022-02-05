@@ -28,7 +28,7 @@ class ListRouter: NSObject, ListRoutingLogic, ListDataPassing {
         let destinationVC = storyboard.instantiateViewController(withIdentifier: "DetailViewController") as! DetailViewController
         destinationVC.router?.dataStore?.todo = dataStore?.todos?[index]
         destinationVC.router?.dataStore?.id = id
-        destinationVC.saveButton.title = "Create New"
+        destinationVC.saveButton.title = ""
         self.viewController?.navigationController?.pushViewController(destinationVC, animated: true)
     }
     

@@ -9,6 +9,7 @@ import UIKit
 
 class ListTableViewCell: UITableViewCell {
 
+    @IBOutlet weak var timerSetLabel: UILabel!
     @IBOutlet weak var doneImageView: UIImageView!
     @IBOutlet weak var listLabel: UILabel!
     @IBOutlet weak var doneButton: UIButton!
@@ -18,10 +19,14 @@ class ListTableViewCell: UITableViewCell {
         bubbleView.layer.cornerRadius = bubbleView.frame.height / 10
     }
 
-    func getData(title: String, isDone: Bool){
+    func getData(title: String, isDone: Bool) {
         listLabel.text = title
         doneImageView.image = isDone ? UIImage(named: K.done) : UIImage(named: K.notDone)
         listLabel.textColor = isDone ? .gray : .white
+    }
+    
+    func timerSet(isSet: Bool) {
+        timerSetLabel.isHidden = !isSet
     }
     
     @IBAction func doneButtonPressed(_ sender: UIButton) {

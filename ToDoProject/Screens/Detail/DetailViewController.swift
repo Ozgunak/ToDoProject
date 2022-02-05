@@ -16,6 +16,7 @@ protocol DetailDisplayLogic: AnyObject {
     func displayCreateTodo(viewModel: DetailTodo.CreateTodo.ViewModel)
     func displayTodo(viewModel: DetailTodo.FetchTodo.ViewModel)
     func displayEditTodo(viewModel: DetailTodo.EditTodo.ViewModel)
+    func displayEditTime(viewModel: DetailTodo.EditTime.ViewModel)
 }
 
 class DetailViewController: UIViewController, DetailDisplayLogic {
@@ -23,6 +24,7 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
   var interactor: DetailBusinessLogic?
   var router: (NSObjectProtocol & DetailRoutingLogic & DetailDataPassing)?
 
+    @IBOutlet weak var notificationDateLabel: UILabel!
     @IBOutlet weak var editButton: UIBarButtonItem!
     @IBOutlet weak var saveButton: UIBarButtonItem!
     @IBOutlet weak var titleTextField: UITextField!
@@ -87,7 +89,7 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
             let title = titleTextField.text
             let description = descriptionTextField.text
             if title != nil {
-                let request = DetailTodo.CreateTodo.Request( todoField: DetailTodo.TodoField(title: title!, description: description ?? ""))
+                let request = DetailTodo.CreateTodo.Request( todoField: DetailTodo.TodoField(title: title!, description: description ?? "", lastModifiedDate: NSTimeIntervalSince1970))
                 interactor?.createTodo(request: request)
             }
         }else {
@@ -100,13 +102,31 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
             let title = titleTextField.text
             let description = descriptionTextField.text
             if title != nil {
-                let request = DetailTodo.EditTodo.Request(todoField: DetailTodo.TodoField(title: title!, description: description ?? ""))
+                let request = DetailTodo.EditTodo.Request(todoField: DetailTodo.TodoField(title: title!, description: description ?? "", lastModifiedDate: NSTimeIntervalSince1970))
                 interactor?.editTodo(request: request)
             }
         }else {
             shortAlert(title: "Title Empty", message: "Title can not be empty")
         }
+    }
+    @IBAction func notificationSwitch(_ sender: UISwitch) {
+        datePicker.isHidden = sender.isOn ? false : true
+        notificationDateLabel.isHidden = sender.isOn ? false : true
+        if sender.isOn {
+            let time = NSTimeIntervalSince1970
+            let request = DetailTodo.EditTime.Request(todoField: DetailTodo.TodoTime(notificationDate: time))
+            interactor?.editTime(request: request)
+        }else {
+            let time = 0.0
+            let request = DetailTodo.EditTime.Request(todoField: DetailTodo.TodoTime(notificationDate: time))
+            interactor?.editTime(request: request)
+        }
         
+    }
+    @IBAction func datePickerTapped(_ sender: UIDatePicker) {
+        let time = NSTimeIntervalSince1970
+        let request = DetailTodo.EditTime.Request(todoField: DetailTodo.TodoTime(notificationDate: time))
+        interactor?.editTime(request: request)
     }
     
     
@@ -128,7 +148,6 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
             Timer.scheduledTimer(withTimeInterval: 1.5, repeats: false) { _ in
                 self.router?.routeToTodoList(segue: nil)
             }
-            
         } else {
             self.shortAlert(title: "Failed", message: "Failed creating Todo")
         }
@@ -136,6 +155,9 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
     func displayTodo(viewModel: DetailTodo.FetchTodo.ViewModel) {
         titleTextField.text = viewModel.title
         descriptionTextField.text = viewModel.descriptions
+    }
+    func displayEditTime(viewModel: DetailTodo.EditTime.ViewModel) {
+        notificationDateLabel.text = "Time set to: \(datePicker.date.description)"
     }
     
     func displayEditTodo(viewModel: DetailTodo.EditTodo.ViewModel) {

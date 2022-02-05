@@ -13,6 +13,7 @@ protocol CoreDataManagerProtocol {
     func saveTodo(title: String, description: String, isDone: Bool, onSuccess: @escaping ((Bool) -> Void))
     func fetchTodoList() -> [TodoItem]
     func editTodo(id: Int64, title: String, description: String?, onSuccess: @escaping ((Bool) -> Void))
+    func editTime(id: Int64, time: Double, onSuccess: @escaping ((Bool) -> Void))
     func deleteTodo(todo: Todos)
     func fetchTodo(id: Int64) -> TodoItem?
 }
@@ -33,6 +34,7 @@ class CoreDataManager: CoreDataManagerProtocol {
                     let result = results[0]
                     result.title = title
                     result.descriptions = description
+                    result.lastModifiedDate = NSTimeIntervalSince1970
                 }
             }
         } catch let error as NSError {
@@ -41,8 +43,31 @@ class CoreDataManager: CoreDataManagerProtocol {
         contextSave { success in
             onSuccess(success)
         }
-
     }
+    func editTime(id: Int64, time: Double, onSuccess: @escaping ((Bool) -> Void)) {
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = filteredRequest(id: id)
+        
+        do {
+            if let results: [Todos] = try context.fetch(fetchRequest) as? [Todos] {
+                if results.count != 0 {
+                    let result = results[0]
+                    if time == 0.0 {
+                        result.timerOn = false
+                        result.notificationDate = nil
+                    }else {
+                        result.notificationDate = Date(timeIntervalSince1970: time)
+                        result.timerOn = true
+                    }
+                }
+            }
+        } catch let error as NSError {
+            print("Could not edit time: \(error), \(error.userInfo)")
+        }
+        contextSave { success in
+            onSuccess(success)
+        }
+    }
+
     
     func deleteTodo(todo: Todos) {
         
@@ -60,7 +85,7 @@ class CoreDataManager: CoreDataManagerProtocol {
             if let results: [Todos] = try context.fetch(fetchRequest) as? [Todos] {
                 if results.count != 0 {
                     let result = results[0]
-                    todo = TodoItem(id: Int(result.id), title: result.title!, descriptions: result.descriptions, notificationDate: result.notificationDate, isDone: result.isDone)
+                    todo = TodoItem(id: Int(result.id), title: result.title!, descriptions: result.descriptions, notificationDate: result.notificationDate, isDone: result.isDone, timerSet: result.timerOn, lastModifiedDate: result.lastModifiedDate)
                 }
             }
         } catch let error as NSError {
@@ -119,6 +144,7 @@ class CoreDataManager: CoreDataManagerProtocol {
                 todo.title = title
                 todo.descriptions = description
                 todo.isDone = isDone
+                todo.lastModifiedDate = NSTimeIntervalSince1970
                 //                todo.creationDate = creationDate
                 
                 contextSave { success in
@@ -129,9 +155,10 @@ class CoreDataManager: CoreDataManagerProtocol {
         }
     }
     //MARK: - fetch todo
-
+    
+    
     func fetchTodoList() -> [TodoItem] {
-        var models = [TodoItem]()
+        var todos = [TodoItem]()
         let idSort: NSSortDescriptor = NSSortDescriptor(key: "id", ascending: false)
         let fetchRequest: NSFetchRequest<NSManagedObject>
         = NSFetchRequest<NSManagedObject>(entityName: "Todos")
@@ -139,14 +166,14 @@ class CoreDataManager: CoreDataManagerProtocol {
         do {
             if let fetchResult: [Todos] = try context.fetch(fetchRequest) as? [Todos] {
                 for item in fetchResult {
-                    let todo = TodoItem(id: Int(item.id), title: item.title ?? "", descriptions: item.descriptions, isDone: item.isDone)
-                    models.append(todo)
+                    let todo = TodoItem(id: Int(item.id), title: item.title ?? "", descriptions: item.descriptions, isDone: item.isDone, timerSet: item.timerOn, lastModifiedDate: item.lastModifiedDate)
+                    todos.append(todo)
                 }
             }
         } catch let error as NSError {
             print("Could not fetch: \(error), \(error.userInfo)")
         }
-        return models
+        return todos
     }
     
     

@@ -16,6 +16,7 @@ protocol DetailBusinessLogic {
     func createTodo(request: DetailTodo.CreateTodo.Request)
     func fetchTodo(request: DetailTodo.FetchTodo.Request)
     func editTodo(request: DetailTodo.EditTodo.Request)
+    func editTime(request: DetailTodo.EditTime.Request)
 }
 
 protocol DetailDataStore {
@@ -24,6 +25,8 @@ protocol DetailDataStore {
 }
 
 class DetailInteractor: DetailBusinessLogic, DetailDataStore {
+    
+    
     var id: Int?
     var todo: TodoItem?
     
@@ -41,6 +44,7 @@ class DetailInteractor: DetailBusinessLogic, DetailDataStore {
         }
     }
                                               
+    
     func fetchTodo(request: DetailTodo.FetchTodo.Request) {
         self.presenter?.presentTodo(response: .init(todo: todo))
     }
@@ -52,4 +56,12 @@ class DetailInteractor: DetailBusinessLogic, DetailDataStore {
             self.presenter?.presentEditTodo(response: response)
         }
     }
+    func editTime(request: DetailTodo.EditTime.Request) {
+        let time = request.todoField.notificationDate
+        worker.editTime(id: id!, time: time) { (isSuccess: Bool?) in
+            let response = DetailTodo.EditTime.Response(isSuccess: isSuccess)
+            self.presenter?.presentEditTime(response: response)
+        }
+    }
+    
 }

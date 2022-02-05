@@ -75,13 +75,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		EF40F00A27A9534300D63756 /* Workers */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Workers;
-			sourceTree = "<group>";
-		};
 		EF40F00B27AA93D600D63756 /* Service */ = {
 			isa = PBXGroup;
 			children = (
@@ -123,7 +116,6 @@
 				EF40F01227AD513700D63756 /* Extentions */,
 				EF8E506927A8896A0088612E /* Managers */,
 				EF40F00B27AA93D600D63756 /* Service */,
-				EF40F00A27A9534300D63756 /* Workers */,
 				EF8E506627A882AF0088612E /* Models */,
 				EF8E504227A8733D0088612E /* Screens */,
 				EF8E503727A8731E0088612E /* Assets.xcassets */,

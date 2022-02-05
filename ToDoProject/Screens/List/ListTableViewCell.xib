@@ -37,6 +37,12 @@
                                     </imageView>
                                 </subviews>
                             </stackView>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="⏱" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mb9-yx-8Og">
+                                <rect key="frame" x="223" y="10" width="28" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BYi-28-5ey">
                                 <rect key="frame" x="271" y="5" width="40" height="40"/>
                                 <color key="tintColor" red="0.0" green="0.66666668650000005" blue="0.24725772530000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
@@ -50,11 +56,13 @@
                         <color key="backgroundColor" red="0.63776493069999995" green="0.69853734970000003" blue="0.36855733390000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
                             <constraint firstItem="0k5-ec-0IR" firstAttribute="top" secondItem="7A3-h2-hWM" secondAttribute="top" id="ECa-rM-ISX"/>
+                            <constraint firstItem="BYi-28-5ey" firstAttribute="leading" secondItem="Mb9-yx-8Og" secondAttribute="trailing" constant="20" id="YDJ-Ji-Y34"/>
                             <constraint firstItem="0k5-ec-0IR" firstAttribute="leading" secondItem="7A3-h2-hWM" secondAttribute="leading" constant="24" id="YMr-e7-i7i"/>
                             <constraint firstItem="BYi-28-5ey" firstAttribute="centerX" secondItem="zbD-4N-jBd" secondAttribute="centerX" id="aYx-GY-yhP"/>
                             <constraint firstAttribute="trailing" secondItem="0k5-ec-0IR" secondAttribute="trailing" constant="16" id="dEh-cf-igv"/>
                             <constraint firstAttribute="bottom" secondItem="0k5-ec-0IR" secondAttribute="bottom" id="gOh-7k-FHl"/>
                             <constraint firstAttribute="height" constant="50" id="l7k-oU-6aC"/>
+                            <constraint firstItem="Mb9-yx-8Og" firstAttribute="centerY" secondItem="BYi-28-5ey" secondAttribute="centerY" id="mqD-GY-xwa"/>
                             <constraint firstItem="BYi-28-5ey" firstAttribute="width" secondItem="zbD-4N-jBd" secondAttribute="width" id="pRk-Gh-UQv"/>
                             <constraint firstItem="BYi-28-5ey" firstAttribute="height" secondItem="zbD-4N-jBd" secondAttribute="height" id="rov-Ls-sB5"/>
                             <constraint firstItem="BYi-28-5ey" firstAttribute="centerY" secondItem="zbD-4N-jBd" secondAttribute="centerY" id="u25-sM-9qF"/>
@@ -74,6 +82,7 @@
                 <outlet property="doneButton" destination="BYi-28-5ey" id="586-Sz-nGX"/>
                 <outlet property="doneImageView" destination="zbD-4N-jBd" id="6dY-mj-tJp"/>
                 <outlet property="listLabel" destination="S8s-yx-cLK" id="tpk-mz-xWy"/>
+                <outlet property="timerSetLabel" destination="Mb9-yx-8Og" id="WVM-xN-zP8"/>
             </connections>
             <point key="canvasLocation" x="157.24637681159422" y="166.40625"/>
         </tableViewCell>
