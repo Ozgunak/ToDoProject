@@ -74,6 +74,7 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
   override func viewDidLoad() {
       super.viewDidLoad()
       fetchDetail()
+      configurePhoneTextField()
   }
     
     deinit {
@@ -129,7 +130,32 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
         interactor?.editTime(request: request)
     }
     
+    func createPhoneTextFieldKeyboardToolbar() -> UIToolbar {
+        let flexibleSpace = UIBarButtonItem.flexibleSpace()
+        let doneBarButton = UIBarButtonItem()
+        doneBarButton.target = self
+        doneBarButton.action = #selector(doneBarButtonTapped(_:))
+        doneBarButton.title = "Done"
+        doneBarButton.style = .plain
+        
+        let toolbar = UIToolbar()
+        toolbar.items = [flexibleSpace, doneBarButton]
+        toolbar.sizeToFit()
+        return toolbar
+    }
     
+    func configurePhoneTextField() {
+        let toolbar = createPhoneTextFieldKeyboardToolbar()
+        titleTextField.inputAccessoryView = toolbar
+        descriptionTextField.inputAccessoryView = toolbar
+        
+    }
+    @objc func doneBarButtonTapped(_ sender: UIBarButtonItem) {
+        //firstTextField.resignFirstResponder()
+        //textField.becomeFirstResponder()
+        titleTextField.resignFirstResponder()
+        descriptionTextField.resignFirstResponder()
+    }
     //MARK: - Data functions
 
     func fetchDetail() {
