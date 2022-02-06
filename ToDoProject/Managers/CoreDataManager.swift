@@ -16,6 +16,7 @@ protocol CoreDataManagerProtocol {
     func editTime(id: Int64, time: Double, onSuccess: @escaping ((Bool) -> Void))
     func deleteTodo(id: Int64, onSuccess: @escaping ((Bool) -> Void))
     func fetchTodo(id: Int64) -> TodoItem?
+    func searchTodo(with text: String) -> [TodoItem]
 }
 
 class CoreDataManager: CoreDataManagerProtocol {
@@ -108,6 +109,40 @@ class CoreDataManager: CoreDataManagerProtocol {
             print("Could not fatch: \(error), \(error.userInfo)")
         }
         return todo
+
+    }
+//    func searchData(with : String) -> [TodoTasks]{
+//        let manageContext = persistentContainer.viewContext
+//        let request = NSFetchRequest<TodoTasks>(entityName: "TodoTasks")
+//        request.predicate = NSPredicate(format: "title contains[c] '\(with)'")
+//
+//        do {
+//            let data = try manageContext.fetch(request)
+//            return data
+//        } catch  {
+//            debugPrint("Arama hatasi: \(error.localizedDescription)")
+//        }
+//        return []
+//    }
+    
+    func searchTodo(with text: String) -> [TodoItem] {
+        var todos = [TodoItem]()
+
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Todos")
+        fetchRequest.predicate = NSPredicate(format: "title contains[c] '\(text)'")
+
+
+        do {
+            if let fetchResult: [Todos] = try context.fetch(fetchRequest) as? [Todos] {
+                for item in fetchResult {
+                    let todo = TodoItem(id: Int(item.id), title: item.title ?? "", descriptions: item.descriptions, isDone: item.isDone, timerSet: item.timerOn, lastModifiedDate: item.lastModifiedDate)
+                    todos.append(todo)
+                }
+            }
+        } catch let error as NSError {
+            print("Could not fatch: \(error), \(error.userInfo)")
+        }
+        return todos
 
     }
     

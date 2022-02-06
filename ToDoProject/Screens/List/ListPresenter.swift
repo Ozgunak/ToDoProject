@@ -16,7 +16,6 @@ protocol ListPresentationLogic {
     func presentTodos(response: List.FetchTodos.Response)
     func updateTodo(response: List.CheckTodo.Response)
     func deleteTodo(response: List.DeleteTodo.Response)
-    
 }
 
 class ListPresenter: ListPresentationLogic {
@@ -43,7 +42,7 @@ class ListPresenter: ListPresentationLogic {
         let viewModel = List.FetchTodos.ViewModel(displayedTodos: displayedTodos)
         viewController?.displayTodoList(viewModel: viewModel)
     }
-    
+
     func updateTodo(response: List.CheckTodo.Response) {
         let viewModel = List.CheckTodo.ViewModel(row: response.row, todo: response.todo)
         viewController?.displayUpdatedTodoList(viewModel: viewModel)

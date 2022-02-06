@@ -16,6 +16,7 @@ protocol ListDisplayLogic: AnyObject {
     func displayTodoList(viewModel: List.FetchTodos.ViewModel)
     func displayUpdatedTodoList(viewModel: List.CheckTodo.ViewModel)
     func displayDeletedTodoList(viewModel: List.DeleteTodo.ViewModel)
+//    func displaySearchTodoList(viewModel: List.SearchTodos.ViewModel)
 }
 
 class ListViewController: UIViewController, ListDisplayLogic {
@@ -100,6 +101,9 @@ class ListViewController: UIViewController, ListDisplayLogic {
     func displayTodoList(viewModel: List.FetchTodos.ViewModel) {
         displayedTodos = viewModel.displayedTodos
     }
+//    func displaySearchTodoList(viewModel: List.SearchTodos.ViewModel) {
+//        displayedTodos = viewModel.displayedTodos
+//    }
     
     func displayUpdatedTodoList(viewModel: List.CheckTodo.ViewModel) {
         displayedTodos[viewModel.row].isDone = viewModel.todo.isDone
@@ -173,3 +177,19 @@ extension ListViewController: UITableViewDelegate {
         router?.routeToDetailTodo(index: indexPath.row, id: self.displayedTodos[indexPath.row].id)
     }
 }
+
+
+extension ListViewController: UISearchBarDelegate{
+
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+
+                if searchBar.text?.count == 0 { //fetches all items if search field is empty
+                    fetchTodos()
+                    DispatchQueue.main.async {
+                        searchBar.resignFirstResponder()
+                    }        }else { // searches with predicate
+                        interactor?.fetchTodos(request: List.FetchTodos.Request(text: searchBar.text ?? ""))
+                    }
+    }
+}
+

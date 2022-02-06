@@ -16,6 +16,7 @@ enum List {
   
     enum FetchTodos {
         struct Request {
+            var text: String?
         }
         struct Response {
             var todos: [TodoItem]

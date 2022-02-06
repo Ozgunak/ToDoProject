@@ -11,6 +11,7 @@ import CoreData
 
 protocol TodosStoreProtocol {
     func fetchTodos(completionHandler: @escaping (() throws -> [TodoItem]) -> Void)
+    func fetchTodos(with text: String, completionHandler: @escaping (() throws -> [TodoItem]) -> Void)
     func checkTodo(id: Int, completionHandler: @escaping (() throws -> Int, TodoItem?) -> Void)
     func deleteTodo(id: Int, row: Int, completionHandler: @escaping (() throws -> Int) -> Void)
 }
@@ -55,6 +56,11 @@ class TodoStore: TodosStoreProtocol, DetailStoreProtocol {
         let todos = CoreDataManager().fetchTodoList()
         completionHandler { return todos }
     }
+    func fetchTodos(with text: String, completionHandler: @escaping (() throws -> [TodoItem]) -> Void) {
+        let todos = CoreDataManager().searchTodo(with: text)
+        completionHandler { return todos }
+    }
+
     
     func deleteTodo(id: Int, row: Int, completionHandler: @escaping (() throws -> Int) -> Void) {
         CoreDataManager().deleteTodo(id: Int64(id)){
