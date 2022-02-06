@@ -15,6 +15,7 @@ import UIKit
 protocol ListPresentationLogic {
     func presentTodos(response: List.FetchTodos.Response)
     func updateTodo(response: List.CheckTodo.Response)
+    func deleteTodo(response: List.DeleteTodo.Response)
     
 }
 
@@ -35,7 +36,7 @@ class ListPresenter: ListPresentationLogic {
         var displayedTodos : [List.FetchTodos.ViewModel.DisplayedTodo] = []
 
         for todo in response.todos {
-            let displayedTodo = List.FetchTodos.ViewModel.DisplayedTodo(id: Int(todo.id), title: todo.title , isDone: todo.isDone, timerSet: todo.timerSet)
+            let displayedTodo = List.FetchTodos.ViewModel.DisplayedTodo(id: Int(todo.id), title: todo.title , isDone: todo.isDone, timerSet: todo.timerSet, lastModifiedDate: todo.lastModifiedDate)
             displayedTodos.append(displayedTodo)
         }
 
@@ -46,6 +47,11 @@ class ListPresenter: ListPresentationLogic {
     func updateTodo(response: List.CheckTodo.Response) {
         let viewModel = List.CheckTodo.ViewModel(row: response.row, todo: response.todo)
         viewController?.displayUpdatedTodoList(viewModel: viewModel)
+    }
+    
+    func deleteTodo(response: List.DeleteTodo.Response) {
+        let viewModel = List.DeleteTodo.ViewModel(row: response.row)
+        viewController?.displayDeletedTodoList(viewModel: viewModel)
     }
   
 }

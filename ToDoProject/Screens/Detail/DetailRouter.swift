@@ -13,32 +13,32 @@
 import UIKit
 
 @objc protocol DetailRoutingLogic {
-  func routeToTodoList(segue: UIStoryboardSegue?)
+    func routeToTodoList(segue: UIStoryboardSegue?)
 }
 
 protocol DetailDataPassing: AnyObject {
-  var dataStore: DetailDataStore? { get set }
+    var dataStore: DetailDataStore? { get set }
 }
 
-class DetailRouter: NSObject, DetailRoutingLogic, DetailDataPassing
-{
-  weak var viewController: DetailViewController?
-  var dataStore: DetailDataStore?
+class DetailRouter: NSObject, DetailRoutingLogic, DetailDataPassing {
+      weak var viewController: DetailViewController?
+      var dataStore: DetailDataStore?
   
   // MARK: - Routing
   
   func routeToTodoList(segue: UIStoryboardSegue?) {
     if segue == nil {
-      let storyboard = UIStoryboard(name: "Main", bundle: nil)
-      let destinationVC = storyboard.instantiateViewController(withIdentifier: "ListViewController") as! ListViewController
-      navigateToList(source: viewController!, destination: destinationVC)
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let destinationVC = storyboard.instantiateViewController(withIdentifier: "ListViewController") as! ListViewController
+        destinationVC.fetchTodos()
+        navigateToList(source: viewController!, destination: destinationVC)
     }
   }
 
   // MARK: - Navigation
   
   func navigateToList(source: DetailViewController, destination: ListViewController) {
-      source.navigationController?.popToRootViewController(animated: true)
+        source.navigationController?.popToRootViewController(animated: true)
   }
   
   

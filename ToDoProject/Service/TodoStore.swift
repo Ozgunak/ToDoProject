@@ -9,6 +9,11 @@ import Foundation
 import CoreData
 
 
+protocol TodosStoreProtocol {
+    func fetchTodos(completionHandler: @escaping (() throws -> [TodoItem]) -> Void)
+    func checkTodo(id: Int, completionHandler: @escaping (() throws -> Int, TodoItem?) -> Void)
+    func deleteTodo(id: Int, row: Int, completionHandler: @escaping (() throws -> Int) -> Void)
+}
 
 class TodoStore: TodosStoreProtocol, DetailStoreProtocol {
 
@@ -27,8 +32,8 @@ class TodoStore: TodosStoreProtocol, DetailStoreProtocol {
         }
     }
     
-    func checkTodo(todoIdToCheck: Int, completionHandler: @escaping (() throws -> Int, TodoItem?) -> Void) {
-        CoreDataManager().checkTodo(id: Int64(todoIdToCheck)){
+    func checkTodo(id: Int, completionHandler: @escaping (() throws -> Int, TodoItem?) -> Void) {
+        CoreDataManager().checkTodo(id: Int64(id)){
             onSuccess in
             print("update =\(onSuccess)")
         }
@@ -49,5 +54,12 @@ class TodoStore: TodosStoreProtocol, DetailStoreProtocol {
     func fetchTodos(completionHandler: @escaping (() throws -> [TodoItem]) -> Void) {
         let todos = CoreDataManager().fetchTodoList()
         completionHandler { return todos }
+    }
+    
+    func deleteTodo(id: Int, row: Int, completionHandler: @escaping (() throws -> Int) -> Void) {
+        CoreDataManager().deleteTodo(id: Int64(id)){
+            onSuccess in
+            print("update =\(onSuccess)")
+        }
     }
 }

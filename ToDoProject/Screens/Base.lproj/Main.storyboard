@@ -35,6 +35,11 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="6YJ-Cv-DLy">
+                        <barButtonItem key="leftBarButtonItem" title="Sort" image="arrow.up.arrow.down" catalog="system" id="Z0n-KV-bzf">
+                            <connections>
+                                <action selector="sortButtonTapped:" destination="1dn-38-fTW" id="41x-6S-3gC"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="z8u-IC-Z7F">
                             <color key="tintColor" red="0.63776493069999995" green="0.69853734970000003" blue="0.36855733390000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             <connections>
@@ -244,6 +249,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="arrow.up.arrow.down" catalog="system" width="128" height="98"/>
         <image name="bg2" width="1080" height="1920"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

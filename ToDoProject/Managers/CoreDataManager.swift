@@ -14,7 +14,7 @@ protocol CoreDataManagerProtocol {
     func fetchTodoList() -> [TodoItem]
     func editTodo(id: Int64, title: String, description: String?, onSuccess: @escaping ((Bool) -> Void))
     func editTime(id: Int64, time: Double, onSuccess: @escaping ((Bool) -> Void))
-    func deleteTodo(todo: Todos)
+    func deleteTodo(id: Int64, onSuccess: @escaping ((Bool) -> Void))
     func fetchTodo(id: Int64) -> TodoItem?
 }
 
@@ -34,7 +34,7 @@ class CoreDataManager: CoreDataManagerProtocol {
                     let result = results[0]
                     result.title = title
                     result.descriptions = description
-                    result.lastModifiedDate = NSTimeIntervalSince1970
+                    result.lastModifiedDate = NSDate.timeIntervalSinceReferenceDate
                 }
             }
         } catch let error as NSError {
@@ -69,8 +69,24 @@ class CoreDataManager: CoreDataManagerProtocol {
     }
 
     
-    func deleteTodo(todo: Todos) {
-        
+    func deleteTodo(id: Int64, onSuccess: @escaping ((Bool) -> Void)) {
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = filteredRequest(id: id)
+
+        do {
+            if let results: [Todos] = try context.fetch(fetchRequest) as? [Todos] {
+                if results.count != 0 {
+                    let objectUpdate = results[0] as NSManagedObject
+                    context.delete(objectUpdate)
+                    try context.save()
+                }
+            }
+        } catch let error as NSError {
+            print("Could not check: \(error), \(error.userInfo)")
+            onSuccess(false)
+        }
+        contextSave { success in
+            onSuccess(success)
+        }
     }
     
     //MARK: - fetch by id
@@ -104,6 +120,7 @@ class CoreDataManager: CoreDataManagerProtocol {
                 if results.count != 0 {
                     let objectUpdate = results[0] as NSManagedObject
                     objectUpdate.setValue(!results[0].isDone, forKey: "isDone")
+                    results[0].lastModifiedDate = NSDate.timeIntervalSinceReferenceDate
                     try context.save()
                 }
             }
@@ -144,8 +161,7 @@ class CoreDataManager: CoreDataManagerProtocol {
                 todo.title = title
                 todo.descriptions = description
                 todo.isDone = isDone
-                todo.lastModifiedDate = NSTimeIntervalSince1970
-                //                todo.creationDate = creationDate
+                todo.lastModifiedDate = NSDate.timeIntervalSinceReferenceDate
                 
                 contextSave { success in
                     

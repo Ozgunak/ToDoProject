@@ -15,94 +15,122 @@ import UIKit
 protocol ListDisplayLogic: AnyObject {
     func displayTodoList(viewModel: List.FetchTodos.ViewModel)
     func displayUpdatedTodoList(viewModel: List.CheckTodo.ViewModel)
+    func displayDeletedTodoList(viewModel: List.DeleteTodo.ViewModel)
 }
 
 class ListViewController: UIViewController, ListDisplayLogic {
-
     
     @IBOutlet weak var tableView: UITableView!
     
     var interactor: ListBusinessLogic?
-  var router: (NSObjectProtocol & ListRoutingLogic & ListDataPassing)?
-
-  // MARK: Object lifecycle
-  
-  override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-    super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-    setup()
-  }
-  
-  required init?(coder aDecoder: NSCoder) {
-    super.init(coder: aDecoder)
-    setup()
-  }
-  
-  // MARK: Setup
-  
-  private func setup() {
-    let viewController = self
-    let interactor = ListInteractor()
-    let presenter = ListPresenter()
-    let router = ListRouter()
-    viewController.interactor = interactor
-    viewController.router = router
-    interactor.presenter = presenter
-    presenter.viewController = viewController
-    router.viewController = viewController
-    router.dataStore = interactor
-  }
-  
-  // MARK: Routing
-  
-  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    if let scene = segue.identifier {
-      let selector = NSSelectorFromString("routeTo\(scene)WithSegue:")
-      if let router = router, router.responds(to: selector) {
-        router.perform(selector, with: segue)
-      }
+    var router: (NSObjectProtocol & ListRoutingLogic & ListDataPassing)?
+    
+    // MARK: Object lifecycle
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        setup()
     }
-  }
-  
-  // MARK: View lifecycle
-  
-  override func viewDidLoad() {
-      super.viewDidLoad()
-      fetchTodos()
-      let nib = UINib(nibName: K.nibName, bundle: nil)
-      tableView.register(nib, forCellReuseIdentifier: K.listCell)
-      
-  }
-  
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        setup()
+    }
+    
+    // MARK: Setup
+    
+    private func setup() {
+        let viewController = self
+        let interactor = ListInteractor()
+        let presenter = ListPresenter()
+        let router = ListRouter()
+        viewController.interactor = interactor
+        viewController.router = router
+        interactor.presenter = presenter
+        presenter.viewController = viewController
+        router.viewController = viewController
+        router.dataStore = interactor
+    }
+    
+    // MARK: Routing
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let scene = segue.identifier {
+            let selector = NSSelectorFromString("routeTo\(scene)WithSegue:")
+            if let router = router, router.responds(to: selector) {
+                router.perform(selector, with: segue)
+            }
+        }
+    }
+    
+    // MARK: View lifecycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        fetchTodos()
+        let nib = UINib(nibName: K.nibName, bundle: nil)
+        tableView.register(nib, forCellReuseIdentifier: K.listCell)
+        print("loaded")
+    }
+    deinit {
+        print("deinited list")
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchTodos()
+        print("will appear")
         
     }
     
-  // MARK: - Display Functions
-  
+    // MARK: - Display Functions
+    
     var displayedTodos: [List.FetchTodos.ViewModel.DisplayedTodo] = []{
         didSet{
             self.tableView.reloadData()
         }
     }
-
+    
     func fetchTodos() {
+        print("activated")
         let request = List.FetchTodos.Request()
         interactor?.fetchTodos(request: request)
     }
-
+    
     func displayTodoList(viewModel: List.FetchTodos.ViewModel) {
         displayedTodos = viewModel.displayedTodos
     }
-
+    
     func displayUpdatedTodoList(viewModel: List.CheckTodo.ViewModel) {
         displayedTodos[viewModel.row].isDone = viewModel.todo.isDone
+    }
+    
+    func displayDeletedTodoList(viewModel: List.DeleteTodo.ViewModel) {
         tableView.reloadData()
     }
     
     @IBAction func createButtonPressed(_ sender: UIBarButtonItem) {
         router?.routeToCreateTodo(segue: nil)
+    }
+    
+    @IBAction func sortButtonTapped(_ sender: UIBarButtonItem) {
+        sortByLastMotifiedDate()
+    }
+    
+    func sortByLastMotifiedDate() {
+        if displayedTodos.isEmpty {
+            shortAlert(title: "Empty List", message: "Can not sort Empty List")
+        }else {
+            if displayedTodos[0].lastModifiedDate > displayedTodos[displayedTodos.count - 1].lastModifiedDate {
+                displayedTodos = displayedTodos.sorted() { $0.lastModifiedDate < $1.lastModifiedDate }
+                shortAlert(title: "Sort by first", message: "Sorted by first motified date")
+            }else {
+                displayedTodos = displayedTodos.sorted() { $0.lastModifiedDate > $1.lastModifiedDate }
+                shortAlert(title: "Sort by last", message: "Sorted by last motified date")
+            }
+            tableView.reloadData()
+            
+        }
     }
     
     @objc func checkButtonConnected(sender : UIButton!) {
@@ -126,6 +154,7 @@ extension ListViewController: UITableViewDataSource {
         cell.getData(title: displatedData.title, isDone: displatedData.isDone)
         cell.timerSet(isSet: displatedData.timerSet)
         cell.doneButton.tag = indexPath.row
+        print("\(displayedTodos[indexPath.row].title): \(displayedTodos[indexPath.row].lastModifiedDate)")
         cell.doneButton.addTarget(self, action: #selector(checkButtonConnected), for: .touchUpInside)
         return cell
     }
@@ -140,6 +169,7 @@ extension ListViewController: UITableViewDataSource {
 
 extension ListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        //        interactor?.deleteTodo(request: List.DeleteTodo.Request.init(id: displayedTodos[indexPath.row].id, row: 0))
         router?.routeToDetailTodo(index: indexPath.row, id: self.displayedTodos[indexPath.row].id)
     }
 }

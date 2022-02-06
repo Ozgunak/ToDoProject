@@ -18,10 +18,7 @@ protocol DetailStoreProtocol {
     func editTodo(id: Int, title: String, description: String, completionHandler: @escaping (() throws -> Bool?) -> Void)
     func editTime(id: Int, time: Double, completionHandler: @escaping (() throws -> Bool?) -> Void)
 }
-protocol TodosStoreProtocol {
-    func fetchTodos(completionHandler: @escaping (() throws -> [TodoItem]) -> Void)
-    func checkTodo(todoIdToCheck: Int, completionHandler: @escaping (() throws -> Int, TodoItem?) -> Void)
-}
+
 class DetailWorker {
     var coreData = CoreDataManager()
     var todosStore: DetailStoreProtocol
@@ -29,6 +26,9 @@ class DetailWorker {
         self.todosStore = todosStore
     }
     
+    func createTodo2(title: String, description: String, completionHandler: @escaping (Bool?) -> Void) {
+        
+    }
     func createTodo(title: String, description: String, completionHandler: @escaping (Bool?) -> Void) {
 //        coreData.saveTodo(title: title, description: description, isDone: false) { onSuccess in
 //            print("saved =\(onSuccess)")

@@ -26,12 +26,26 @@ enum List {
                 var title: String
                 var isDone: Bool
                 var timerSet: Bool
+                var lastModifiedDate: Double
             }
 
             var displayedTodos: [DisplayedTodo]
         }
     }
 
+    enum DeleteTodo {
+        struct Request {
+            var id: Int
+            var row: Int
+        }
+        struct Response {
+            var row: Int
+        }
+        struct ViewModel {
+            var row: Int
+        }
+    }
+    
     enum CheckTodo {
         struct Request {
             var id: Int

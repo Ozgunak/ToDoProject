@@ -41,8 +41,8 @@ class ListWorker {
     }
    
 
-    func checkTodo(todoIdToCheck: Int, todoRowToCheck: Int, completionHandler: @escaping (Int, TodoItem?) -> Void) {
-        todosStore.checkTodo(todoIdToCheck: todoIdToCheck) {
+    func checkTodo(id: Int, row: Int, completionHandler: @escaping (Int, TodoItem?) -> Void) {
+        todosStore.checkTodo(id: id) {
             (row: () throws -> Int, todo: TodoItem?) -> Void in
 
             do {
@@ -53,6 +53,23 @@ class ListWorker {
             } catch {
                 DispatchQueue.main.async {
                     completionHandler(0, nil)
+                }
+            }
+        }
+    }
+    
+    func deleteTodo(id: Int, row: Int, completionHandler: @escaping (Int) -> Void) {
+        todosStore.deleteTodo(id: id, row: row) {
+            (row: () throws -> Int) -> Void in
+
+            do {
+                let row = try row()
+                DispatchQueue.main.async {
+                    completionHandler(row)
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    completionHandler(0)
                 }
             }
         }

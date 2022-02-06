@@ -91,7 +91,7 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
             let title = titleTextField.text
             let description = descriptionTextField.text
             if title != nil {
-                let request = DetailTodo.CreateTodo.Request( todoField: DetailTodo.TodoField(title: title!, description: description ?? "", lastModifiedDate: NSTimeIntervalSince1970))
+                let request = DetailTodo.CreateTodo.Request( todoField: DetailTodo.TodoField(title: title!, description: description ?? "", lastModifiedDate: NSDate.timeIntervalSinceReferenceDate))
                 interactor?.createTodo(request: request)
             }
         }else {
@@ -104,7 +104,7 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
             let title = titleTextField.text
             let description = descriptionTextField.text
             if title != nil {
-                let request = DetailTodo.EditTodo.Request(todoField: DetailTodo.TodoField(title: title!, description: description ?? "", lastModifiedDate: NSTimeIntervalSince1970))
+                let request = DetailTodo.EditTodo.Request(todoField: DetailTodo.TodoField(title: title!, description: description ?? "", lastModifiedDate: NSDate.timeIntervalSinceReferenceDate))
                 interactor?.editTodo(request: request)
             }
         }else {
@@ -157,8 +157,6 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
         
     }
     @objc func doneBarButtonTapped(_ sender: UIBarButtonItem) {
-        //firstTextField.resignFirstResponder()
-        //textField.becomeFirstResponder()
         titleTextField.resignFirstResponder()
         descriptionTextField.resignFirstResponder()
     }

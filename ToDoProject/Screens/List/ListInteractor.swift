@@ -15,6 +15,7 @@ import UIKit
 protocol ListBusinessLogic {
     func fetchTodos(request: List.FetchTodos.Request)
     func checkTodo(request: List.CheckTodo.Request)
+    func deleteTodo(request: List.DeleteTodo.Request)
 }
 
 protocol ListDataStore {
@@ -40,9 +41,16 @@ class ListInteractor: ListBusinessLogic, ListDataStore {
     //MARK: - Check Todos
 
     func checkTodo(request: List.CheckTodo.Request) {
-        todosWorker.checkTodo(todoIdToCheck: request.id, todoRowToCheck: request.row) { (row, todo) -> Void in
+        todosWorker.checkTodo(id: request.id, row: request.row) { (row, todo) -> Void in
             let response = List.CheckTodo.Response(row: row, todo: todo!)
             self.presenter?.updateTodo(response: response)
+        }
+    }
+    
+    func deleteTodo(request: List.DeleteTodo.Request) {
+        todosWorker.deleteTodo(id: request.id, row: request.row) { (row) in
+            let response = List.DeleteTodo.Response(row: row)
+            self.presenter?.deleteTodo(response: response)
         }
     }
 
