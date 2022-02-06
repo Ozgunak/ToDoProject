@@ -110,7 +110,7 @@ class ListViewController: UIViewController, ListDisplayLogic {
     }
     
     func displayDeletedTodoList(viewModel: List.DeleteTodo.ViewModel) {
-        tableView.reloadData()
+        displayedTodos.remove(at: viewModel.row)
     }
     
     @IBAction func createButtonPressed(_ sender: UIBarButtonItem) {
@@ -173,8 +173,15 @@ extension ListViewController: UITableViewDataSource {
 
 extension ListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //        interactor?.deleteTodo(request: List.DeleteTodo.Request.init(id: displayedTodos[indexPath.row].id, row: 0))
         router?.routeToDetailTodo(index: indexPath.row, id: self.displayedTodos[indexPath.row].id)
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let delete = UIContextualAction(style: .destructive, title: "Delete") { (contextualAction, view, actionPerformed: (Bool) -> Void) in
+            self.interactor?.deleteTodo(request: List.DeleteTodo.Request.init(id: self.displayedTodos[indexPath.row].id, row: indexPath.row))
+            actionPerformed(true)
+        }
+        return UISwipeActionsConfiguration(actions: [delete])
     }
 }
 
@@ -182,12 +189,11 @@ extension ListViewController: UITableViewDelegate {
 extension ListViewController: UISearchBarDelegate{
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-
-                if searchBar.text?.count == 0 { //fetches all items if search field is empty
+                if searchBar.text?.count == 0 {
                     fetchTodos()
                     DispatchQueue.main.async {
                         searchBar.resignFirstResponder()
-                    }        }else { // searches with predicate
+                    }        }else {
                         interactor?.fetchTodos(request: List.FetchTodos.Request(text: searchBar.text ?? ""))
                     }
     }
