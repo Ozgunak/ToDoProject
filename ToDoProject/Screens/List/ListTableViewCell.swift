@@ -16,14 +16,15 @@ class ListTableViewCell: UITableViewCell {
     @IBOutlet weak var bubbleView: UIView!
     override func awakeFromNib() {
         super.awakeFromNib()
-        bubbleView.layer.cornerRadius = bubbleView.frame.height / 10
+        bubbleView.addShadowAndCornerRadius()
     }
 
-    func getData(title: String, isDone: Bool) {
-        listLabel.text = title
-        doneImageView.image = isDone ? UIImage(named: K.done) : UIImage(named: K.notDone)
-        listLabel.textColor = isDone ? .gray : .white
+    func getModel(item: List.FetchTodos.ViewModel.DisplayedTodo) {
+        listLabel.text = item.title
+        doneImageView.image = item.isDone ? UIImage(named: K.done) : UIImage(named: K.notDone)
+//        listLabel.textColor = item.isDone ?  : .white
     }
+    
     
     func timerSet(isSet: Bool) {
         timerSetLabel.isHidden = !isSet
