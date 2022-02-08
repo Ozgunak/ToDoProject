@@ -28,6 +28,7 @@ enum List {
                 var isDone: Bool
                 var timerSet: Bool
                 var lastModifiedDate: Double
+                var notificationDate: Date?
             }
 
             var displayedTodos: [DisplayedTodo]

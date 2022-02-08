@@ -29,6 +29,11 @@ class ListRouter: NSObject, ListRoutingLogic, ListDataPassing {
         destinationVC.router?.dataStore?.todo = dataStore?.todos?[index]
         destinationVC.router?.dataStore?.id = id
         destinationVC.saveButton.title = ""
+//        if let date = dataStore?.todos?[index].notificationDate {
+//            destinationVC.notificationSwitch.isOn = true
+//            destinationVC.notificationDateLabel.text = date.timeToString()
+//            destinationVC.datePicker.date = date
+//        }
         self.viewController?.navigationController?.pushViewController(destinationVC, animated: true)
     }
     

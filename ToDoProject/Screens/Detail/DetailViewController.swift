@@ -23,6 +23,7 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
   var interactor: DetailBusinessLogic?
   var router: (NSObjectProtocol & DetailRoutingLogic & DetailDataPassing)?
 
+    @IBOutlet weak var notificationSwitch: UISwitch!
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var containerViewDetail: UIView!
     @IBOutlet weak var notificationDateLabel: UILabel!
@@ -93,8 +94,9 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
         if titleTextField.text != "" {
             let title = titleTextField.text
             let description = descriptionTextField.text
+            let date = datePicker.date
             if title != nil {
-                let request = DetailTodo.CreateTodo.Request( todoField: DetailTodo.TodoField(title: title!, description: description ?? "", lastModifiedDate: NSDate.timeIntervalSinceReferenceDate))
+                let request = DetailTodo.CreateTodo.Request( todoField: DetailTodo.TodoField(title: title!, description: description ?? "", notificationDate: date))
                 interactor?.createTodo(request: request)
             }
         }else {
@@ -106,8 +108,9 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
         if titleTextField.text != "" {
             let title = titleTextField.text
             let description = descriptionTextField.text
+            let date = datePicker.date
             if title != nil {
-                let request = DetailTodo.EditTodo.Request(todoField: DetailTodo.TodoField(title: title!, description: description ?? "", lastModifiedDate: NSDate.timeIntervalSinceReferenceDate))
+                let request = DetailTodo.EditTodo.Request(todoField: DetailTodo.TodoField(title: title!, description: description ?? "", notificationDate: date))
                 interactor?.editTodo(request: request)
             }
         }else {
@@ -115,19 +118,21 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
         }
     }
     @IBAction func notificationSwitch(_ sender: UISwitch) {
-        datePicker.isHidden = sender.isOn ? false : true
-        notificationDateLabel.isHidden = sender.isOn ? false : true
         if sender.isOn {
-            let time = NSTimeIntervalSince1970
+            datePicker.isHidden = false
+            notificationDateLabel.isHidden = false
 
         }else {
-            let time = 0.0
+            notificationDateLabel.isHidden = true
+            datePicker.isHidden = true
+            // delete notification
 
         }
         
     }
     @IBAction func datePickerTapped(_ sender: UIDatePicker) {
-        let time = NSTimeIntervalSince1970
+        let date = sender.date
+        
 
     }
     
@@ -185,6 +190,11 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
     func displayTodo(viewModel: DetailTodo.FetchTodo.ViewModel) {
         titleTextField.text = viewModel.title
         descriptionTextField.text = viewModel.descriptions
+        if viewModel.notificationDate != NSDate.distantPast {
+            notificationSwitch.isOn = true
+            notificationDateLabel.text = viewModel.notificationDate.timeToString()
+            datePicker.date = viewModel.notificationDate
+        }
     }
     
     func displayEditTodo(viewModel: DetailTodo.EditTodo.ViewModel) {

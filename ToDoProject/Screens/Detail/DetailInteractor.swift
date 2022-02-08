@@ -31,18 +31,26 @@ class DetailInteractor: DetailBusinessLogic, DetailDataStore {
     
     var presenter: DetailPresentationLogic?
     var worker = DetailWorker(coreData: CoreDataManager())
-  
-  // MARK: CRUD operations
-  
+    
+    // MARK: CRUD operations
+    
     func createTodo(request: DetailTodo.CreateTodo.Request) {
         let title = request.todoField.title
         let description = request.todoField.description
-        worker.createTodo(title: title, description: description) { isSuccess in
-            let response = DetailTodo.CreateTodo.Response(isSuccess: isSuccess)
-            self.presenter?.presentCreateTodo(response: response)
+        if let date = request.todoField.notificationDate {
+            worker.createTodo(title: title, description: description, notificationDate: date) { isSuccess in
+                let response = DetailTodo.CreateTodo.Response(isSuccess: isSuccess)
+                self.presenter?.presentCreateTodo(response: response)
+            }
+        }else {
+            worker.createTodo(title: title, description: description) { isSuccess in
+                let response = DetailTodo.CreateTodo.Response(isSuccess: isSuccess)
+                self.presenter?.presentCreateTodo(response: response)
+            }
         }
+        
     }
-                                              
+    
     
     func fetchTodo(request: DetailTodo.FetchTodo.Request) {
         self.presenter?.presentTodo(response: .init(todo: todo))
@@ -56,5 +64,5 @@ class DetailInteractor: DetailBusinessLogic, DetailDataStore {
             self.presenter?.presentEditTodo(response: response)
         }
     }
-
+    
 }

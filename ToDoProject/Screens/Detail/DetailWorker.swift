@@ -14,6 +14,7 @@ import UIKit
 
 protocol DetailWorkerProtocol {
     func createTodo(title: String, description: String, completionHandler: @escaping (Bool?) -> Void)
+    func createTodo(title: String, description: String, notificationDate: Date, completionHandler: @escaping (Bool?) -> Void)
     func editTodo(id: Int, title: String, description: String, completionHandler: @escaping (Bool?) -> Void)
 }
 
@@ -24,7 +25,13 @@ class DetailWorker: DetailWorkerProtocol {
     }
     
     func createTodo(title: String, description: String, completionHandler: @escaping (Bool?) -> Void) {
-        coreData.saveTodo(title: title, description: description, isDone: false) { onSuccess in
+        coreData.saveTodo(title: title, description: description, isDone: false, notificationDate: nil) { onSuccess in
+            completionHandler(onSuccess)
+        }
+    }
+    
+    func createTodo(title: String, description: String, notificationDate: Date, completionHandler: @escaping (Bool?) -> Void) {
+        coreData.saveTodo(title: title, description: description, isDone: false, notificationDate: notificationDate) { onSuccess in
             completionHandler(onSuccess)
         }
     }

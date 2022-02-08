@@ -29,7 +29,7 @@ class DetailPresenter: DetailPresentationLogic {
     
     func presentTodo(response: DetailTodo.FetchTodo.Response) {
         
-        let viewModel = DetailTodo.FetchTodo.ViewModel(title: response.todo?.title ?? "", descriptions: response.todo?.descriptions ?? "")
+        let viewModel = DetailTodo.FetchTodo.ViewModel(title: response.todo?.title ?? "", descriptions: response.todo?.descriptions ?? "", notificationDate: response.todo?.notificationDate ?? NSDate.distantPast)
         viewController?.displayTodo(viewModel: viewModel)
     }
     func presentEditTodo(response: DetailTodo.EditTodo.Response) {

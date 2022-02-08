@@ -10,7 +10,7 @@ import CoreData
 
 
 protocol CoreDataManagerProtocol {
-    func saveTodo(title: String, description: String, isDone: Bool, onSuccess: @escaping ((Bool) -> Void))
+    func saveTodo(title: String, description: String, isDone: Bool, notificationDate: Date?, onSuccess: @escaping ((Bool) -> Void))
     func fetchTodoList() -> [TodoItem]
     func editTodo(id: Int64, title: String, description: String?, onSuccess: @escaping ((Bool) -> Void))
     func deleteTodo(id: Int64, onSuccess: @escaping ((Bool) -> Void))
@@ -139,7 +139,7 @@ class CoreDataManager: CoreDataManagerProtocol {
     }
     //MARK: - save todo
 
-    func saveTodo(title: String, description: String, isDone: Bool, onSuccess: @escaping ((Bool) -> Void)) {
+    func saveTodo(title: String, description: String, isDone: Bool, notificationDate: Date?, onSuccess: @escaping ((Bool) -> Void)) {
         if let entity: NSEntityDescription
             = NSEntityDescription.entity(forEntityName: "Todos", in: context) {
             
@@ -166,7 +166,12 @@ class CoreDataManager: CoreDataManagerProtocol {
                 todo.descriptions = description
                 todo.isDone = isDone
                 todo.lastModifiedDate = NSDate.timeIntervalSinceReferenceDate
-                
+                if notificationDate != nil {
+                    todo.notificationDate = notificationDate
+                    todo.timerOn = true
+                }else {
+                    todo.timerOn = false
+                }
                 contextSave { success in
                     
                     onSuccess(success)
@@ -175,41 +180,41 @@ class CoreDataManager: CoreDataManagerProtocol {
         }
     }
     
-    func saveTodo2(title: String, description: String, isDone: Bool, onSuccess: @escaping ((Bool) -> Void)) {
-        if let entity: NSEntityDescription
-            = NSEntityDescription.entity(forEntityName: "Todos", in: context) {
-            
-            // id get value
-            var lastId: Int = 0
-            let fetchRequest: NSFetchRequest<NSManagedObject>
-            = NSFetchRequest<NSManagedObject>(entityName: "Todos")
-            do {
-                if let fetchResult: [Todos] = try context.fetch(fetchRequest) as? [Todos] {
-                    
-                    if fetchResult.count != 0 {
-                        lastId = Int(fetchResult[fetchResult.count-1].id)
-                    } else {
-                        lastId = 0
-                    }
-                }
-            } catch let error as NSError {
-                print("Could not create: \(error), \(error.userInfo)")
-            }
-            
-            if let todo: Todos = NSManagedObject(entity: entity, insertInto: context) as? Todos {
-                todo.id = Int32(lastId + 1)
-                todo.title = title
-                todo.descriptions = description
-                todo.isDone = isDone
-                todo.lastModifiedDate = NSDate.timeIntervalSinceReferenceDate
-                
-                contextSave { success in
-                    
-                    onSuccess(success)
-                }
-            }
-        }
-    }
+//    func saveTodo2(title: String, description: String, isDone: Bool, onSuccess: @escaping ((Bool) -> Void)) {
+//        if let entity: NSEntityDescription
+//            = NSEntityDescription.entity(forEntityName: "Todos", in: context) {
+//            
+//            // id get value
+//            var lastId: Int = 0
+//            let fetchRequest: NSFetchRequest<NSManagedObject>
+//            = NSFetchRequest<NSManagedObject>(entityName: "Todos")
+//            do {
+//                if let fetchResult: [Todos] = try context.fetch(fetchRequest) as? [Todos] {
+//                    
+//                    if fetchResult.count != 0 {
+//                        lastId = Int(fetchResult[fetchResult.count-1].id)
+//                    } else {
+//                        lastId = 0
+//                    }
+//                }
+//            } catch let error as NSError {
+//                print("Could not create: \(error), \(error.userInfo)")
+//            }
+//            
+//            if let todo: Todos = NSManagedObject(entity: entity, insertInto: context) as? Todos {
+//                todo.id = Int32(lastId + 1)
+//                todo.title = title
+//                todo.descriptions = description
+//                todo.isDone = isDone
+//                todo.lastModifiedDate = NSDate.timeIntervalSinceReferenceDate
+//                
+//                contextSave { success in
+//                    
+//                    onSuccess(success)
+//                }
+//            }
+//        }
+//    }
     //MARK: - fetch todo
     
     
@@ -222,7 +227,7 @@ class CoreDataManager: CoreDataManagerProtocol {
         do {
             if let fetchResult: [Todos] = try context.fetch(fetchRequest) as? [Todos] {
                 for item in fetchResult {
-                    let todo = TodoItem(id: Int(item.id), title: item.title ?? "", descriptions: item.descriptions, isDone: item.isDone, timerSet: item.timerOn, lastModifiedDate: item.lastModifiedDate)
+                    let todo = TodoItem(id: Int(item.id), title: item.title ?? "", descriptions: item.descriptions, notificationDate: item.notificationDate, isDone: item.isDone, timerSet: item.timerOn, lastModifiedDate: item.lastModifiedDate)
                     todos.append(todo)
                 }
             }
