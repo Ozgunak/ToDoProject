@@ -84,7 +84,7 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
     
     deinit {
         self.saveButton.title = "Save"
-        self.editButton.title = "Edit"
+        self.editButton.title = "Save"
     }
     
   
@@ -94,7 +94,8 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
         if titleTextField.text != "" {
             let title = titleTextField.text
             let description = descriptionTextField.text
-            let date = datePicker.date
+             
+            let date = notificationSwitch.isOn ? datePicker.date : NSDate.distantPast
             if title != nil {
                 let request = DetailTodo.CreateTodo.Request( todoField: DetailTodo.TodoField(title: title!, description: description ?? "", notificationDate: date))
                 interactor?.createTodo(request: request)
@@ -108,7 +109,7 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
         if titleTextField.text != "" {
             let title = titleTextField.text
             let description = descriptionTextField.text
-            let date = datePicker.date
+            let date = notificationSwitch.isOn ? datePicker.date : NSDate.distantPast
             if title != nil {
                 let request = DetailTodo.EditTodo.Request(todoField: DetailTodo.TodoField(title: title!, description: description ?? "", notificationDate: date))
                 interactor?.editTodo(request: request)
@@ -131,9 +132,7 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
         
     }
     @IBAction func datePickerTapped(_ sender: UIDatePicker) {
-        let date = sender.date
-        
-
+//        let date = sender.date
     }
     
     func setBackButtonTitle() {

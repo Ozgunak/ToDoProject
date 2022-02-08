@@ -237,7 +237,7 @@
                                     <action selector="saveButtonTapped:" destination="vIB-vm-VNC" id="3cI-Ce-tPt"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem title="Edit" id="VmW-fI-ciM">
+                            <barButtonItem title="Save" id="VmW-fI-ciM">
                                 <color key="tintColor" name="dark"/>
                                 <connections>
                                     <action selector="editButtonTapped:" destination="vIB-vm-VNC" id="2Xq-3O-k9k"/>

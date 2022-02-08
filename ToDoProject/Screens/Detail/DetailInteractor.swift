@@ -30,17 +30,26 @@ class DetailInteractor: DetailBusinessLogic, DetailDataStore {
     var todo: TodoItem?
     
     var presenter: DetailPresentationLogic?
-    var worker = DetailWorker(coreData: CoreDataManager())
+    var worker = DetailWorker(coreData: CoreDataManager(), notificationManager: NotificationManager())
     
     // MARK: CRUD operations
     
     func createTodo(request: DetailTodo.CreateTodo.Request) {
         let title = request.todoField.title
         let description = request.todoField.description
+        let notificationId = UUID().uuidString
         if let date = request.todoField.notificationDate {
-            worker.createTodo(title: title, description: description, notificationDate: date) { isSuccess in
+            worker.createTodo(title: title, description: description, notificationDate: date, notificationId: notificationId) { isSuccess in
                 let response = DetailTodo.CreateTodo.Response(isSuccess: isSuccess)
                 self.presenter?.presentCreateTodo(response: response)
+//                self.worker.notificationManager.requestNotification() { onSuccess in
+//                    print("request granted? \(onSuccess)")
+//
+//                }
+                self.worker.createNotification(with: notificationId, title: title, description: description, notificationDate: date) { isSuccess in
+                    print("Alert Created: interactor")
+                    
+                }
             }
         }else {
             worker.createTodo(title: title, description: description) { isSuccess in

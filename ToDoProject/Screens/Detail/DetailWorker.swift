@@ -14,34 +14,54 @@ import UIKit
 
 protocol DetailWorkerProtocol {
     func createTodo(title: String, description: String, completionHandler: @escaping (Bool?) -> Void)
-    func createTodo(title: String, description: String, notificationDate: Date, completionHandler: @escaping (Bool?) -> Void)
+    func createTodo(title: String, description: String, notificationDate: Date, notificationId: String, completionHandler: @escaping (Bool?) -> Void)
     func editTodo(id: Int, title: String, description: String, completionHandler: @escaping (Bool?) -> Void)
+    func createNotification(with id: String, title: String, description: String, notificationDate: Date, completionHandler: @escaping (Bool?) -> Void)
 }
 
 class DetailWorker: DetailWorkerProtocol {
     var coreData: CoreDataManagerProtocol
-    init(coreData: CoreDataManagerProtocol) {
+    var notificationManager: NotificationManagerProtocol
+    
+    init(coreData: CoreDataManagerProtocol, notificationManager: NotificationManagerProtocol) {
         self.coreData = coreData
+        self.notificationManager = notificationManager
     }
+
     
     func createTodo(title: String, description: String, completionHandler: @escaping (Bool?) -> Void) {
         coreData.saveTodo(title: title, description: description, isDone: false, notificationDate: nil) { onSuccess in
-            completionHandler(onSuccess)
+            DispatchQueue.main.async {
+                completionHandler(onSuccess)
+            }
         }
     }
     
-    func createTodo(title: String, description: String, notificationDate: Date, completionHandler: @escaping (Bool?) -> Void) {
+    func createTodo(title: String, description: String, notificationDate: Date, notificationId: String, completionHandler: @escaping (Bool?) -> Void) {
         coreData.saveTodo(title: title, description: description, isDone: false, notificationDate: notificationDate) { onSuccess in
-            completionHandler(onSuccess)
+            DispatchQueue.main.async {
+                completionHandler(onSuccess)
+            }
+            
         }
     }
 
 
     func editTodo(id: Int, title: String, description: String, completionHandler: @escaping (Bool?) -> Void) {
-        coreData.editTodo(id: Int64(id), title: title, description: description) { isSuccess in
-            completionHandler(isSuccess)
+        coreData.editTodo(id: Int64(id), title: title, description: description) { onSuccess in
+            DispatchQueue.main.async {
+                completionHandler(onSuccess)
+            }
+            
         }
     }
     
+    func createNotification(with id: String, title: String, description: String, notificationDate: Date, completionHandler: @escaping (Bool?) -> Void) {
+        notificationManager.notifications.append(NotificationItem(id: id, title: title, description: description, date: notificationDate))
+        notificationManager.schedule(with: id) { onSuccess in
+            completionHandler(onSuccess)
+        }
+                                                
+    }
 
 }

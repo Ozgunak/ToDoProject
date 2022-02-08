@@ -18,11 +18,8 @@ extension UIViewController {
         }
     }
     func shortAlert(title: String, message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        self.present(alert, animated: true, completion: nil)
-        let when = DispatchTime.now() + 1.4
-        DispatchQueue.main.asyncAfter(deadline: when){
-          alert.dismiss(animated: true, completion: nil)
-        }
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alertController, animated: true)
     }
 }

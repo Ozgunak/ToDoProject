@@ -17,6 +17,7 @@ enum DetailTodo {
         var title: String
         var description: String
         var notificationDate: Date?
+        var notificationId: String?
     }
     
     
@@ -59,9 +60,4 @@ enum DetailTodo {
     }
 }
 
-enum TodoDetail
-{
-  // MARK: Use cases
-  
-  
-}
+
