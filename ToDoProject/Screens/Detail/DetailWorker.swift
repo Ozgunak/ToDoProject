@@ -12,89 +12,29 @@
 
 import UIKit
 
-protocol DetailStoreProtocol {
-    func createTodo(title: String, description: String, completionHandler: @escaping (() throws -> Bool?) -> Void)
-    func fetchTodo(id: Int, completionHandler: @escaping (() throws -> TodoItem?) -> Void)
-    func editTodo(id: Int, title: String, description: String, completionHandler: @escaping (() throws -> Bool?) -> Void)
-    func editTime(id: Int, time: Double, completionHandler: @escaping (() throws -> Bool?) -> Void)
+protocol DetailWorkerProtocol {
+    func createTodo(title: String, description: String, completionHandler: @escaping (Bool?) -> Void)
+    func editTodo(id: Int, title: String, description: String, completionHandler: @escaping (Bool?) -> Void)
 }
 
-class DetailWorker {
-    var coreData = CoreDataManager()
-    var todosStore: DetailStoreProtocol
-    init(todosStore: DetailStoreProtocol) {
-        self.todosStore = todosStore
+class DetailWorker: DetailWorkerProtocol {
+    var coreData: CoreDataManagerProtocol
+    init(coreData: CoreDataManagerProtocol) {
+        self.coreData = coreData
     }
     
-    func createTodo2(title: String, description: String, completionHandler: @escaping (Bool?) -> Void) {
-        
-    }
     func createTodo(title: String, description: String, completionHandler: @escaping (Bool?) -> Void) {
-//        coreData.saveTodo(title: title, description: description, isDone: false) { onSuccess in
-//            print("saved =\(onSuccess)")
-//            completionHandler { return onSuccess }
-//        }
-        todosStore.createTodo(title: title, description: description) {
-            (success: () throws -> Bool?) -> Void in
-            do {
-                let success = try success()
-                DispatchQueue.main.async {
-                    completionHandler(success)
-                }
-            } catch {
-                DispatchQueue.main.async {
-                    completionHandler(nil)
-                }
-            }
+        coreData.saveTodo(title: title, description: description, isDone: false) { onSuccess in
+            completionHandler(onSuccess)
         }
     }
-    
 
-    func fetchTodo(id: Int, completionHandler: @escaping (TodoItem?) -> Void) {
-        todosStore.fetchTodo(id: id) { (todo: () throws -> TodoItem?) -> Void in
-            do {
-                let todo = try todo()
-                DispatchQueue.main.async {
-                    completionHandler(todo)
-                }
-            } catch {
-                DispatchQueue.main.async {
-                    completionHandler(nil)
-                }
-            }
-        }
-    }
-    
+
     func editTodo(id: Int, title: String, description: String, completionHandler: @escaping (Bool?) -> Void) {
-        todosStore.editTodo(id: id, title: title, description: description) {
-            (success: () throws -> Bool?) -> Void in
-            do {
-                let success = try success()
-                DispatchQueue.main.async {
-                    completionHandler(success)
-                }
-            } catch {
-                DispatchQueue.main.async {
-                    completionHandler(nil)
-                }
-            }
+        coreData.editTodo(id: Int64(id), title: title, description: description) { isSuccess in
+            completionHandler(isSuccess)
         }
     }
     
-    func editTime(id: Int, time: Double, completionHandler: @escaping (Bool?) -> Void) {
-        todosStore.editTime(id: id, time: time) {
-            (success: () throws -> Bool?) -> Void in
-            do {
-                let success = try success()
-                DispatchQueue.main.async {
-                    completionHandler(success)
-                }
-            } catch {
-                DispatchQueue.main.async {
-                    completionHandler(nil)
-                }
-            }
-        }
-    }
 
 }

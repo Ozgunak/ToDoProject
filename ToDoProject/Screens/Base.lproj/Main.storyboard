@@ -3,6 +3,7 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -18,10 +19,12 @@
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="nF5-rF-l7W">
                                 <rect key="frame" x="0.0" y="88" width="414" height="774"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <searchBar key="tableHeaderView" contentMode="redraw" id="UlI-mu-J8b">
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <searchBar key="tableHeaderView" contentMode="redraw" searchBarStyle="minimal" id="UlI-mu-J8b">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <textInputTraits key="textInputTraits"/>
                                     <connections>
                                         <outlet property="delegate" destination="1dn-38-fTW" id="jZa-aH-YbA"/>
@@ -34,7 +37,7 @@
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="r2c-x4-8bC"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" name="bej"/>
                         <constraints>
                             <constraint firstItem="r2c-x4-8bC" firstAttribute="trailing" secondItem="nF5-rF-l7W" secondAttribute="trailing" id="5xz-oJ-1eR"/>
                             <constraint firstItem="nF5-rF-l7W" firstAttribute="leading" secondItem="r2c-x4-8bC" secondAttribute="leading" id="Hfh-VF-GyQ"/>
@@ -44,12 +47,13 @@
                     </view>
                     <navigationItem key="navigationItem" id="6YJ-Cv-DLy">
                         <barButtonItem key="leftBarButtonItem" title="Sort" image="arrow.up.arrow.down" catalog="system" id="Z0n-KV-bzf">
+                            <color key="tintColor" name="dark"/>
                             <connections>
                                 <action selector="sortButtonTapped:" destination="1dn-38-fTW" id="41x-6S-3gC"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="z8u-IC-Z7F">
-                            <color key="tintColor" red="0.63776493069999995" green="0.69853734970000003" blue="0.36855733390000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                            <color key="tintColor" name="dark"/>
                             <connections>
                                 <action selector="createButtonPressed:" destination="1dn-38-fTW" id="8qD-sl-sR0"/>
                             </connections>
@@ -72,8 +76,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.75" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bg2" translatesAutoresizingMaskIntoConstraints="NO" id="NYu-3l-qlO">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="NYu-3l-qlO">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <color key="backgroundColor" name="bej"/>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="50" translatesAutoresizingMaskIntoConstraints="NO" id="fRr-tI-L49">
                                 <rect key="frame" x="50" y="108" width="314" height="603"/>
@@ -87,7 +92,7 @@
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3jy-n8-uED">
                                                         <rect key="frame" x="111" y="0.0" width="60.5" height="23"/>
                                                         <fontDescription key="fontDescription" name="CourierNewPS-BoldMT" family="Courier New" pointSize="20"/>
-                                                        <nil key="textColor"/>
+                                                        <color key="textColor" name="light"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="J1P-ba-NF9">
@@ -102,12 +107,18 @@
                                                 </constraints>
                                             </stackView>
                                         </subviews>
+                                        <color key="backgroundColor" name="main"/>
                                         <constraints>
                                             <constraint firstItem="cWZ-OJ-Vvr" firstAttribute="leading" secondItem="4B4-Ig-n1f" secondAttribute="leading" constant="16" id="QFK-XR-scw"/>
                                             <constraint firstItem="cWZ-OJ-Vvr" firstAttribute="top" secondItem="4B4-Ig-n1f" secondAttribute="top" constant="20" id="cK7-Bh-18R"/>
                                             <constraint firstAttribute="trailing" secondItem="cWZ-OJ-Vvr" secondAttribute="trailing" constant="16" id="caC-6y-hIq"/>
                                             <constraint firstAttribute="bottom" secondItem="cWZ-OJ-Vvr" secondAttribute="bottom" constant="20" id="i8M-CN-KK6"/>
                                         </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="20"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tcy-Kr-zWG">
                                         <rect key="frame" x="0.0" y="178" width="314" height="128"/>
@@ -118,7 +129,7 @@
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bDl-hx-Xe0">
                                                         <rect key="frame" x="75" y="0.0" width="132.5" height="23"/>
                                                         <fontDescription key="fontDescription" name="CourierNewPS-BoldMT" family="Courier New" pointSize="20"/>
-                                                        <nil key="textColor"/>
+                                                        <color key="textColor" name="light"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LS9-ul-Jur">
@@ -133,12 +144,18 @@
                                                 </constraints>
                                             </stackView>
                                         </subviews>
+                                        <color key="backgroundColor" name="main"/>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="kAl-jf-o3r" secondAttribute="trailing" constant="16" id="4HD-ku-He1"/>
                                             <constraint firstItem="kAl-jf-o3r" firstAttribute="leading" secondItem="tcy-Kr-zWG" secondAttribute="leading" constant="16" id="ISo-7e-pFt"/>
                                             <constraint firstItem="kAl-jf-o3r" firstAttribute="top" secondItem="tcy-Kr-zWG" secondAttribute="top" constant="20" id="dVW-nv-cmd"/>
                                             <constraint firstAttribute="bottom" secondItem="kAl-jf-o3r" secondAttribute="bottom" constant="20" id="sik-CD-nMv"/>
                                         </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="20"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dyK-A5-c2P">
                                         <rect key="frame" x="7.5" y="356" width="299.5" height="247"/>
@@ -152,11 +169,14 @@
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notification" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ibf-Qj-dhd">
                                                                 <rect key="frame" x="0.0" y="0.0" width="204.5" height="31"/>
                                                                 <fontDescription key="fontDescription" name="CourierNewPS-BoldMT" family="Courier New" pointSize="20"/>
-                                                                <nil key="textColor"/>
+                                                                <color key="textColor" name="dark"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="rsw-eB-96d">
                                                                 <rect key="frame" x="218.5" y="0.0" width="51" height="31"/>
+                                                                <color key="tintColor" name="dark"/>
+                                                                <color key="onTintColor" name="dark"/>
+                                                                <color key="thumbTintColor" name="bej"/>
                                                                 <connections>
                                                                     <action selector="notificationSwitch:" destination="vIB-vm-VNC" eventType="valueChanged" id="dYk-a9-4fp"/>
                                                                 </connections>
@@ -212,11 +232,13 @@
                     <navigationItem key="navigationItem" id="F2v-1Q-zJl">
                         <rightBarButtonItems>
                             <barButtonItem title="Save" id="APL-3D-TwC">
+                                <color key="tintColor" name="dark"/>
                                 <connections>
                                     <action selector="saveButtonTapped:" destination="vIB-vm-VNC" id="3cI-Ce-tPt"/>
                                 </connections>
                             </barButtonItem>
                             <barButtonItem title="Edit" id="VmW-fI-ciM">
+                                <color key="tintColor" name="dark"/>
                                 <connections>
                                     <action selector="editButtonTapped:" destination="vIB-vm-VNC" id="2Xq-3O-k9k"/>
                                 </connections>
@@ -224,6 +246,8 @@
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
+                        <outlet property="containerView" destination="tcy-Kr-zWG" id="bxv-yk-cS9"/>
+                        <outlet property="containerViewDetail" destination="4B4-Ig-n1f" id="cKF-X0-f2b"/>
                         <outlet property="datePicker" destination="Q2L-7g-QBS" id="J3N-H8-1WU"/>
                         <outlet property="descriptionTextField" destination="LS9-ul-Jur" id="H6o-8z-Lfw"/>
                         <outlet property="editButton" destination="VmW-fI-ciM" id="PbT-s6-ie1"/>
@@ -244,7 +268,8 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="dFg-mj-hIK">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" red="0.0" green="0.66666668650000005" blue="0.24725772530000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <color key="backgroundColor" name="bej"/>
+                        <color key="tintColor" name="dark"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
@@ -258,7 +283,18 @@
     </scenes>
     <resources>
         <image name="arrow.up.arrow.down" catalog="system" width="128" height="98"/>
-        <image name="bg2" width="1080" height="1920"/>
+        <namedColor name="bej">
+            <color red="0.97254901960784312" green="0.92941176470588238" blue="0.8901960784313725" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="dark">
+            <color red="0.47450980392156861" green="0.52941176470588236" blue="0.46666666666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="light">
+            <color red="0.74117647058823533" green="0.82352941176470584" blue="0.71372549019607845" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="main">
+            <color red="0.63529411764705879" green="0.69803921568627447" blue="0.62352941176470589" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

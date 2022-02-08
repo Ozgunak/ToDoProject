@@ -17,7 +17,7 @@ enum DetailTodo {
         var title: String
         var description: String
         var lastModifiedDate: Double
-//        var notificationDate: Double?
+//        var notificationDate: date
     }
     
     struct TodoTime {
@@ -48,17 +48,6 @@ enum DetailTodo {
         }
     }
     
-    enum EditTime {
-        struct Request {
-            var todoField: TodoTime
-        }
-        struct Response {
-            var isSuccess: Bool?
-        }
-        struct ViewModel {
-            var isSuccess: Bool?
-        }
-    }
     
     enum FetchTodo {
       struct Request {

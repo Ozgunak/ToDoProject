@@ -27,7 +27,7 @@ class ListInteractor: ListBusinessLogic, ListDataStore {
     
     var presenter: ListPresentationLogic?
     var worker: ListWorker?
-    var todosWorker = ListWorker(todosStore: TodoStore())
+    var todosWorker = ListWorker(coreData: CoreDataManager())
     
     // MARK: - Fetch Todos
     

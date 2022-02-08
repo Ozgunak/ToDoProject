@@ -18,48 +18,30 @@ import UIKit
 
 
 class ListWorker {
-    var todosStore: TodosStoreProtocol
-
-    init(todosStore: TodosStoreProtocol) {
-        self.todosStore = todosStore
+    var coreData: CoreDataManagerProtocol
+    init(coreData: CoreDataManagerProtocol) {
+        self.coreData = coreData
     }
 
     func fetchTodos(completionHandler: @escaping ([TodoItem]) -> Void) {
-        todosStore.fetchTodos { (todos: () throws -> [TodoItem])
-            -> Void in
-            do {
-                let todos = try todos()
-                DispatchQueue.main.async {
-                    completionHandler(todos)
-                }
-            } catch {
-                DispatchQueue.main.async {
-                    completionHandler([])
-                }
-            }
+        let todos = coreData.fetchTodoList()
+        DispatchQueue.main.async {
+            completionHandler(todos)
         }
+
     }
     func fetchTodos(with text: String, completionHandler: @escaping ([TodoItem]) -> Void) {
-        todosStore.fetchTodos(with: text) { (todos: () throws -> [TodoItem])
-            -> Void in
-            do {
-                let todos = try todos()
-                DispatchQueue.main.async {
-                    completionHandler(todos)
-                }
-            } catch {
-                DispatchQueue.main.async {
-                    completionHandler([])
-                }
-            }
+        let todos = coreData.searchTodo(with: text)
+        DispatchQueue.main.async {
+            completionHandler(todos)
         }
+
     }
    
 
     func checkTodo(with id: Int, row: Int, completionHandler: @escaping (Int, TodoItem?) -> Void) {
-        todosStore.checkTodo(id: id) {
+        coreData.checkTodo2(id: Int64(id)) {
             (row: () throws -> Int, todo: TodoItem?) -> Void in
-
             do {
                 let row = try row()
                 DispatchQueue.main.async {
@@ -70,24 +52,32 @@ class ListWorker {
                     completionHandler(0, nil)
                 }
             }
+            
         }
+        
+//        todosStore.checkTodo(id: id) {
+//            (row: () throws -> Int, todo: TodoItem?) -> Void in
+//
+//            do {
+//                let row = try row()
+//                DispatchQueue.main.async {
+//                    completionHandler(row, todo)
+//                }
+//            } catch {
+//                DispatchQueue.main.async {
+//                    completionHandler(0, nil)
+//                }
+//            }
+//        }
     }
     
     func deleteTodo(with id: Int, row: Int, completionHandler: @escaping (Int) -> Void) {
-        todosStore.deleteTodo(id: id, row: row) {
-            (row: () throws -> Int) -> Void in
-
-            do {
-                let row = try row()
-                DispatchQueue.main.async {
-                    completionHandler(row)
-                }
-            } catch {
-                DispatchQueue.main.async {
-                    completionHandler(0)
-                }
+        coreData.deleteTodo(id: Int64(id)) { onSuccess in
+            DispatchQueue.main.async {
+                completionHandler(row)
             }
         }
+
     }
     
     

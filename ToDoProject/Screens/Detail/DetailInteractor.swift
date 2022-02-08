@@ -16,7 +16,6 @@ protocol DetailBusinessLogic {
     func createTodo(request: DetailTodo.CreateTodo.Request)
     func fetchTodo(request: DetailTodo.FetchTodo.Request)
     func editTodo(request: DetailTodo.EditTodo.Request)
-    func editTime(request: DetailTodo.EditTime.Request)
 }
 
 protocol DetailDataStore {
@@ -31,14 +30,14 @@ class DetailInteractor: DetailBusinessLogic, DetailDataStore {
     var todo: TodoItem?
     
     var presenter: DetailPresentationLogic?
-    var worker = DetailWorker(todosStore: TodoStore())
+    var worker = DetailWorker(coreData: CoreDataManager())
   
   // MARK: CRUD operations
   
     func createTodo(request: DetailTodo.CreateTodo.Request) {
         let title = request.todoField.title
         let description = request.todoField.description
-        worker.createTodo(title: title, description: description) { (isSuccess: Bool?) in
+        worker.createTodo(title: title, description: description) { isSuccess in
             let response = DetailTodo.CreateTodo.Response(isSuccess: isSuccess)
             self.presenter?.presentCreateTodo(response: response)
         }
@@ -48,20 +47,14 @@ class DetailInteractor: DetailBusinessLogic, DetailDataStore {
     func fetchTodo(request: DetailTodo.FetchTodo.Request) {
         self.presenter?.presentTodo(response: .init(todo: todo))
     }
+    
     func editTodo(request: DetailTodo.EditTodo.Request) {
         let title = request.todoField.title
         let description = request.todoField.description
-        worker.editTodo(id: id!, title: title, description: description) { (isSuccess: Bool?) in
+        worker.editTodo(id: id!, title: title, description: description) { (isSuccess) in
             let response = DetailTodo.EditTodo.Response(isSuccess: isSuccess)
             self.presenter?.presentEditTodo(response: response)
         }
     }
-    func editTime(request: DetailTodo.EditTime.Request) {
-        let time = request.todoField.notificationDate
-        worker.editTime(id: id!, time: time) { (isSuccess: Bool?) in
-            let response = DetailTodo.EditTime.Response(isSuccess: isSuccess)
-            self.presenter?.presentEditTime(response: response)
-        }
-    }
-    
+
 }

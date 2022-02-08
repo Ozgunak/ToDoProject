@@ -16,7 +16,7 @@ protocol ListDisplayLogic: AnyObject {
     func displayTodoList(viewModel: List.FetchTodos.ViewModel)
     func displayUpdatedTodoList(viewModel: List.CheckTodo.ViewModel)
     func displayDeletedTodoList(viewModel: List.DeleteTodo.ViewModel)
-//    func displaySearchTodoList(viewModel: List.SearchTodos.ViewModel)
+    //    func displaySearchTodoList(viewModel: List.SearchTodos.ViewModel)
 }
 
 class ListViewController: UIViewController, ListDisplayLogic {
@@ -71,7 +71,6 @@ class ListViewController: UIViewController, ListDisplayLogic {
         fetchTodos()
         let nib = UINib(nibName: K.nibName, bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: K.listCell)
-        print("loaded")
     }
     deinit {
         print("deinited list")
@@ -80,7 +79,6 @@ class ListViewController: UIViewController, ListDisplayLogic {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchTodos()
-        print("will appear")
         
     }
     
@@ -101,9 +99,7 @@ class ListViewController: UIViewController, ListDisplayLogic {
     func displayTodoList(viewModel: List.FetchTodos.ViewModel) {
         displayedTodos = viewModel.displayedTodos
     }
-//    func displaySearchTodoList(viewModel: List.SearchTodos.ViewModel) {
-//        displayedTodos = viewModel.displayedTodos
-//    }
+    
     
     func displayUpdatedTodoList(viewModel: List.CheckTodo.ViewModel) {
         displayedTodos[viewModel.row].isDone = viewModel.todo.isDone
@@ -155,7 +151,7 @@ extension ListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: K.listCell, for: indexPath) as! ListTableViewCell
         let displatedData = displayedTodos[indexPath.row]
-        cell.getData(title: displatedData.title, isDone: displatedData.isDone)
+        cell.getModel(item: displatedData)
         cell.timerSet(isSet: displatedData.timerSet)
         cell.doneButton.tag = indexPath.row
         print("\(displayedTodos[indexPath.row].title): \(displayedTodos[indexPath.row].lastModifiedDate)")
@@ -178,7 +174,9 @@ extension ListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let delete = UIContextualAction(style: .destructive, title: "Delete") { (contextualAction, view, actionPerformed: (Bool) -> Void) in
-            self.interactor?.deleteTodo(request: List.DeleteTodo.Request.init(id: self.displayedTodos[indexPath.row].id, row: indexPath.row))
+            let request = List.DeleteTodo.Request(id: self.displayedTodos[indexPath.row].id, row: indexPath.row)
+            self.interactor?.deleteTodo(request: request)
+            
             actionPerformed(true)
         }
         return UISwipeActionsConfiguration(actions: [delete])
@@ -187,15 +185,15 @@ extension ListViewController: UITableViewDelegate {
 
 
 extension ListViewController: UISearchBarDelegate{
-
+    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-                if searchBar.text?.count == 0 {
-                    fetchTodos()
-                    DispatchQueue.main.async {
-                        searchBar.resignFirstResponder()
-                    }        }else {
-                        interactor?.fetchTodos(request: List.FetchTodos.Request(text: searchBar.text ?? ""))
-                    }
+        if searchBar.text?.count == 0 {
+            fetchTodos()
+            DispatchQueue.main.async {
+                searchBar.resignFirstResponder()
+            }        }else {
+                interactor?.fetchTodos(request: List.FetchTodos.Request(text: searchBar.text ?? ""))
+            }
     }
 }
 

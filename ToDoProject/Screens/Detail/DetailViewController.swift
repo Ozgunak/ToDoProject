@@ -16,7 +16,6 @@ protocol DetailDisplayLogic: AnyObject {
     func displayCreateTodo(viewModel: DetailTodo.CreateTodo.ViewModel)
     func displayTodo(viewModel: DetailTodo.FetchTodo.ViewModel)
     func displayEditTodo(viewModel: DetailTodo.EditTodo.ViewModel)
-    func displayEditTime(viewModel: DetailTodo.EditTime.ViewModel)
 }
 
 class DetailViewController: UIViewController, DetailDisplayLogic {
@@ -24,6 +23,8 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
   var interactor: DetailBusinessLogic?
   var router: (NSObjectProtocol & DetailRoutingLogic & DetailDataPassing)?
 
+    @IBOutlet weak var containerView: UIView!
+    @IBOutlet weak var containerViewDetail: UIView!
     @IBOutlet weak var notificationDateLabel: UILabel!
     @IBOutlet weak var editButton: UIBarButtonItem!
     @IBOutlet weak var saveButton: UIBarButtonItem!
@@ -76,6 +77,8 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
       fetchDetail()
       configurePhoneTextField()
       setBackButtonTitle()
+      containerView.addShadowAndCornerRadius()
+      containerViewDetail.addShadowAndCornerRadius()
   }
     
     deinit {
@@ -116,19 +119,16 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
         notificationDateLabel.isHidden = sender.isOn ? false : true
         if sender.isOn {
             let time = NSTimeIntervalSince1970
-            let request = DetailTodo.EditTime.Request(todoField: DetailTodo.TodoTime(notificationDate: time))
-            interactor?.editTime(request: request)
+
         }else {
             let time = 0.0
-            let request = DetailTodo.EditTime.Request(todoField: DetailTodo.TodoTime(notificationDate: time))
-            interactor?.editTime(request: request)
+
         }
         
     }
     @IBAction func datePickerTapped(_ sender: UIDatePicker) {
         let time = NSTimeIntervalSince1970
-        let request = DetailTodo.EditTime.Request(todoField: DetailTodo.TodoTime(notificationDate: time))
-        interactor?.editTime(request: request)
+
     }
     
     func setBackButtonTitle() {
@@ -185,9 +185,6 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
     func displayTodo(viewModel: DetailTodo.FetchTodo.ViewModel) {
         titleTextField.text = viewModel.title
         descriptionTextField.text = viewModel.descriptions
-    }
-    func displayEditTime(viewModel: DetailTodo.EditTime.ViewModel) {
-        notificationDateLabel.text = "Time set to: \(datePicker.date.description)"
     }
     
     func displayEditTodo(viewModel: DetailTodo.EditTodo.ViewModel) {
