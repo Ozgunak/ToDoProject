@@ -34,7 +34,7 @@ class DetailPresenter: DetailPresentationLogic {
     }
     func presentEditTodo(response: DetailTodo.EditTodo.Response) {
         
-        let viewModel = DetailTodo.EditTodo.ViewModel(isSuccess: response.isSuccess)
+        let viewModel = DetailTodo.EditTodo.ViewModel(isSuccess: response.isSuccess, notificationSuccess: response.notificationSuccess)
         viewController?.displayEditTodo(viewModel: viewModel)
     }
 

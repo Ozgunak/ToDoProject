@@ -60,7 +60,7 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
     router.dataStore = interactor
   }
   
-  // MARK: Routing
+  // MARK: - Routing
   
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if let scene = segue.identifier {
@@ -71,12 +71,12 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
     }
   }
   
-  // MARK: View lifecycle
+  // MARK: - View lifecycle
   
   override func viewDidLoad() {
       super.viewDidLoad()
       fetchDetail()
-      configurePhoneTextField()
+      configureKeyboardToolbar()
       setBackButtonTitle()
       containerView.addShadowAndCornerRadius()
       containerViewDetail.addShadowAndCornerRadius()
@@ -104,7 +104,8 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
             shortAlert(title: "Title Empty", message: "Title can not be empty")
         }
     }
-    
+    //MARK: - Edit Button
+
     @IBAction func editButtonTapped(_ sender: UIBarButtonItem) {
         if titleTextField.text != "" {
             let title = titleTextField.text
@@ -118,6 +119,9 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
             shortAlert(title: "Title Empty", message: "Title can not be empty")
         }
     }
+    
+    //MARK: - Switch
+
     @IBAction func notificationSwitch(_ sender: UISwitch) {
         if sender.isOn {
             datePicker.isHidden = false
@@ -127,20 +131,26 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
             notificationDateLabel.isHidden = true
             datePicker.isHidden = true
             // delete notification
-
         }
         
     }
+    //MARK: - Date Picker
+
     @IBAction func datePickerTapped(_ sender: UIDatePicker) {
 //        let date = sender.date
     }
     
+    //MARK: - Back button as Cancel
+
     func setBackButtonTitle() {
         let backButton = UIBarButtonItem()
         backButton.title = "Cancel"
         self.navigationController?.navigationBar.topItem?.backBarButtonItem = backButton
     }
-    func createPhoneTextFieldKeyboardToolbar() -> UIToolbar {
+    
+    //MARK: - Done button toolbar
+
+    func createKeyboardToolbar() -> UIToolbar {
         let flexibleSpace = UIBarButtonItem.flexibleSpace()
         let doneBarButton = UIBarButtonItem()
         doneBarButton.target = self
@@ -154,8 +164,8 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
         return toolbar
     }
     
-    func configurePhoneTextField() {
-        let toolbar = createPhoneTextFieldKeyboardToolbar()
+    func configureKeyboardToolbar() {
+        let toolbar = createKeyboardToolbar()
         titleTextField.inputAccessoryView = toolbar
         descriptionTextField.inputAccessoryView = toolbar
         
@@ -164,6 +174,7 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
         titleTextField.resignFirstResponder()
         descriptionTextField.resignFirstResponder()
     }
+    
     //MARK: - Data functions
 
     func fetchDetail() {
@@ -202,7 +213,13 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
             self.shortAlert(title: "Failed", message: "Failed editing Todo")
             return
         }
-        if isSuccess {
+        guard let notificationSuccess = viewModel.notificationSuccess else { return }
+        if isSuccess && notificationSuccess {
+            shortAlert(title: "Editted with Notification", message: "Routing to main")
+            Timer.scheduledTimer(withTimeInterval: 1.5, repeats: false) { _ in
+                self.router?.routeToTodoList(segue: nil)
+            }
+        } else if isSuccess {
             self.shortAlert(title: "Succesfully Editted", message: "Routing to main")
             Timer.scheduledTimer(withTimeInterval: 1.5, repeats: false) { _ in
                 self.router?.routeToTodoList(segue: nil)

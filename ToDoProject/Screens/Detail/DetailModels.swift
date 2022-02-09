@@ -16,7 +16,7 @@ enum DetailTodo {
     struct TodoField {
         var title: String
         var description: String
-        var notificationDate: Date?
+        var notificationDate: Date
         var notificationId: String?
     }
     
@@ -39,9 +39,11 @@ enum DetailTodo {
         }
         struct Response {
             var isSuccess: Bool?
+            var notificationSuccess: Bool?
         }
         struct ViewModel {
             var isSuccess: Bool?
+            var notificationSuccess: Bool?
         }
     }
     

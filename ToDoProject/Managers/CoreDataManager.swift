@@ -10,9 +10,10 @@ import CoreData
 
 
 protocol CoreDataManagerProtocol {
-    func saveTodo(title: String, description: String, isDone: Bool, notificationDate: Date?, onSuccess: @escaping ((Bool) -> Void))
+    func saveTodo(title: String, description: String, isDone: Bool, notificationDate: Date, notificationId: String?, onSuccess: @escaping ((Bool) -> Void))
     func fetchTodoList() -> [TodoItem]
     func editTodo(id: Int64, title: String, description: String?, onSuccess: @escaping ((Bool) -> Void))
+    func editTodoWithDate(id: Int64, title: String, description: String?, notificationDate: Date, notificationId: String?, onSuccess: @escaping ((Bool) -> Void))
     func deleteTodo(id: Int64, onSuccess: @escaping ((Bool) -> Void))
     func searchTodo(with text: String) -> [TodoItem]
     func checkTodo(id: Int64, onSuccess: @escaping (() throws -> Int, TodoItem?) -> Void)
@@ -31,10 +32,32 @@ class CoreDataManager: CoreDataManagerProtocol {
         do {
             if let results: [Todos] = try context.fetch(fetchRequest) as? [Todos] {
                 if results.count != 0 {
-                    let result = results[0]
-                    result.title = title
-                    result.descriptions = description
-                    result.lastModifiedDate = NSDate.timeIntervalSinceReferenceDate
+                    let todo = results[0]
+                    todo.title = title
+                    todo.descriptions = description
+                    todo.lastModifiedDate = NSDate.timeIntervalSinceReferenceDate
+                    todo.notificationDate = NSDate.distantPast
+                    todo.notificationId = nil
+                }
+            }
+        } catch let error as NSError {
+            print("Could not edit: \(error), \(error.userInfo)")
+        }
+        contextSave { success in
+            onSuccess(success)
+        }
+    }
+    func editTodoWithDate(id: Int64, title: String, description: String?, notificationDate: Date, notificationId: String?, onSuccess: @escaping ((Bool) -> Void)) {
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = filteredRequest(id: id)
+        do {
+            if let results: [Todos] = try context.fetch(fetchRequest) as? [Todos] {
+                if results.count != 0 {
+                    let todo = results[0]
+                    todo.title = title
+                    todo.descriptions = description
+                    todo.notificationDate = notificationDate
+                    todo.notificationId = notificationId
+                    todo.lastModifiedDate = NSDate.timeIntervalSinceReferenceDate
                 }
             }
         } catch let error as NSError {
@@ -80,7 +103,7 @@ class CoreDataManager: CoreDataManagerProtocol {
         do {
             if let fetchResult: [Todos] = try context.fetch(fetchRequest) as? [Todos] {
                 for item in fetchResult {
-                    let todo = TodoItem(id: Int(item.id), title: item.title ?? "", descriptions: item.descriptions, isDone: item.isDone, timerSet: item.timerOn, lastModifiedDate: item.lastModifiedDate)
+                    let todo = TodoItem(id: Int(item.id), title: item.title ?? "", descriptions: item.descriptions, notificationDate: item.notificationDate!, isDone: item.isDone, lastModifiedDate: item.lastModifiedDate, notificationId: item.notificationId)
                     todos.append(todo)
                 }
             }
@@ -116,7 +139,7 @@ class CoreDataManager: CoreDataManagerProtocol {
     }
     //MARK: - create save todo
 
-    func saveTodo(title: String, description: String, isDone: Bool, notificationDate: Date?, onSuccess: @escaping ((Bool) -> Void)) {
+    func saveTodo(title: String, description: String, isDone: Bool, notificationDate: Date, notificationId: String?, onSuccess: @escaping ((Bool) -> Void)) {
         if let entity: NSEntityDescription
             = NSEntityDescription.entity(forEntityName: "Todos", in: context) {
             
@@ -143,12 +166,8 @@ class CoreDataManager: CoreDataManagerProtocol {
                 todo.descriptions = description
                 todo.isDone = isDone
                 todo.lastModifiedDate = NSDate.timeIntervalSinceReferenceDate
-                if notificationDate != NSDate.distantPast && notificationDate != nil {
-                    todo.notificationDate = notificationDate
-                    todo.timerOn = true
-                }else {
-                    todo.timerOn = false
-                }
+                todo.notificationDate = notificationDate
+                todo.notificationId = notificationId
                 contextSave { success in
                     
                     onSuccess(success)
@@ -169,7 +188,7 @@ class CoreDataManager: CoreDataManagerProtocol {
         do {
             if let fetchResult: [Todos] = try context.fetch(fetchRequest) as? [Todos] {
                 for item in fetchResult {
-                    let todo = TodoItem(id: Int(item.id), title: item.title ?? "", descriptions: item.descriptions, notificationDate: item.notificationDate, isDone: item.isDone, timerSet: item.timerOn, lastModifiedDate: item.lastModifiedDate)
+                    let todo = TodoItem(id: Int(item.id), title: item.title ?? "", descriptions: item.descriptions, notificationDate: item.notificationDate!, isDone: item.isDone, lastModifiedDate: item.lastModifiedDate)
                     todos.append(todo)
                 }
             }
