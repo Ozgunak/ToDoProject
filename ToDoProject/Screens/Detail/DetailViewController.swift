@@ -202,7 +202,7 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
         descriptionTextField.text = viewModel.descriptions
         if viewModel.notificationDate != NSDate.distantPast {
             notificationSwitch.isOn = true
-            notificationDateLabel.text = viewModel.notificationDate.timeToString()
+            notificationDateLabel.text = viewModel.notificationDate.toString()
             datePicker.date = viewModel.notificationDate
         }
     }

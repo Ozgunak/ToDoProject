@@ -7,12 +7,10 @@
 
 import Foundation
 extension Date {
-    func timeToString() -> String {
+    func toString(format: String = "dd MMM yyyy HH:mm") -> String {
         let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .short
-        let formattedString = formatter.string(from: self)
-
-        return formattedString
+        formatter.dateStyle = .short
+        formatter.dateFormat = format
+        return formatter.string(from: self)
     }
 }
