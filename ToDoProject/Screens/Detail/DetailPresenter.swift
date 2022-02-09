@@ -23,7 +23,7 @@ class DetailPresenter: DetailPresentationLogic {
     weak var viewController: DetailDisplayLogic?
     
     func presentCreateTodo(response: DetailTodo.CreateTodo.Response) {
-        let viewModel = DetailTodo.CreateTodo.ViewModel(isSuccess: response.isSuccess)
+        let viewModel = DetailTodo.CreateTodo.ViewModel(isSuccess: response.isSuccess, notificationSuccess: response.notificationSuccess)
         viewController?.displayCreateTodo(viewModel: viewModel)
     }
     

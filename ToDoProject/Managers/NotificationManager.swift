@@ -35,7 +35,10 @@ class NotificationManager: NotificationManagerProtocol{
             if permission == true && error == nil {
                 self.scheduleNotification(with: id) { onSuccess in
                     complation(onSuccess)
-                }            }
+                }
+            } else {
+                complation(false)
+            }
         }
     }
     
@@ -53,9 +56,7 @@ class NotificationManager: NotificationManagerProtocol{
                     complation(onSuccess)
                 }
             default :
-                self.requestAuthorization(with: id) { onSuccess in
-                    complation(onSuccess)
-                }
+                complation(false)
                 print("Izin konusunda handle edilmemis durum")
             }
         }

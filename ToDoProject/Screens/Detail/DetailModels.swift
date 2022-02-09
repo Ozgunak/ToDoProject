@@ -28,9 +28,11 @@ enum DetailTodo {
         }
         struct Response {
             var isSuccess: Bool?
+            var notificationSuccess: Bool?
         }
         struct ViewModel {
             var isSuccess: Bool?
+            var notificationSuccess: Bool?
         }
     }
     enum EditTodo {

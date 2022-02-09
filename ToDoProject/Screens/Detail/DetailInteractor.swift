@@ -41,11 +41,17 @@ class DetailInteractor: DetailBusinessLogic, DetailDataStore {
         let notificationId = UUID().uuidString
         let date = request.todoField.notificationDate
         if date != NSDate.distantPast {
-            worker.createTodoWithDate(title: title, description: description, notificationDate: date, notificationId: notificationId) { isSuccess in
-                let response = DetailTodo.CreateTodo.Response(isSuccess: isSuccess)
-                self.presenter?.presentCreateTodo(response: response)
-                self.worker.createNotification(notificationId: notificationId, title: title, description: description, notificationDate: date) { isSuccess in
-                    
+            worker.createNotification(notificationId: notificationId, title: title, description: description, notificationDate: date) { notificationSuccess in
+                if notificationSuccess == true {
+                    self.worker.createTodoWithDate(title: title, description: description, notificationDate: date, notificationId: notificationId) { isSuccess in
+                        let response = DetailTodo.EditTodo.Response(isSuccess: isSuccess, notificationSuccess: notificationSuccess)
+                        self.presenter?.presentEditTodo(response: response)
+                    }
+                }else {
+                    self.worker.createTodo(title: title, description: description, notificationDate: date) { isSuccess in
+                        let response = DetailTodo.CreateTodo.Response(isSuccess: isSuccess)
+                        self.presenter?.presentCreateTodo(response: response)
+                    }
                 }
             }
         }else {
@@ -73,16 +79,23 @@ class DetailInteractor: DetailBusinessLogic, DetailDataStore {
                 deleteNotification(with: notificationId)
             }
             worker.editTodo(id: id!, title: title, description: description) { (isSuccess) in
-                let response = DetailTodo.EditTodo.Response(isSuccess: isSuccess)
+                let response = DetailTodo.EditTodo.Response(isSuccess: isSuccess, notificationSuccess: nil)
                 self.presenter?.presentEditTodo(response: response)
             }
         }else {
             // if no past notifications
             let newId = UUID().uuidString
-            worker.editTodoWithDate(id: id!, title: title, description: description, notificationDate: notificationDate, notificationId: newId) { isSuccess in
-                self.worker.createNotification(notificationId: newId, title: title, description: description, notificationDate: notificationDate) { notificationSuccess in
-                    let response = DetailTodo.EditTodo.Response(isSuccess: isSuccess, notificationSuccess: notificationSuccess)
-                    self.presenter?.presentEditTodo(response: response)
+            worker.createNotification(notificationId: newId, title: title, description: description, notificationDate: notificationDate) { notificationSuccess in
+                if notificationSuccess == true {
+                    self.worker.editTodoWithDate(id: self.id!, title: title, description: description, notificationDate: notificationDate, notificationId: newId) { isSuccess in
+                        let response = DetailTodo.EditTodo.Response(isSuccess: isSuccess, notificationSuccess: notificationSuccess)
+                        self.presenter?.presentEditTodo(response: response)
+                    }
+                }else {
+                    self.worker.editTodo(id: self.id!, title: title, description: description) { (isSuccess) in
+                        let response = DetailTodo.EditTodo.Response(isSuccess: isSuccess, notificationSuccess: nil)
+                        self.presenter?.presentEditTodo(response: response)
+                    }
                 }
             }
         }

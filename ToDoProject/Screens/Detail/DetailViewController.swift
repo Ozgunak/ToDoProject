@@ -188,6 +188,9 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
             self.shortAlert(title: "Failed", message: "Failed creating Todo")
             return
         }
+        if viewModel.notificationSuccess == false || viewModel.notificationSuccess == nil {
+            showAlertToSettings(title: "Todo saved but notification not set!", message: "Please go settings and give permission")
+        }
         if isSuccess {
             self.shortAlert(title: "Succesfully Created", message: "Routing to main")
             Timer.scheduledTimer(withTimeInterval: 1.5, repeats: false) { _ in
@@ -200,10 +203,13 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
     func displayTodo(viewModel: DetailTodo.FetchTodo.ViewModel) {
         titleTextField.text = viewModel.title
         descriptionTextField.text = viewModel.descriptions
-        if viewModel.notificationDate != NSDate.distantPast {
+        if viewModel.notificationDate != NSDate.distantPast || viewModel.notificationDate >= Date() {
             notificationSwitch.isOn = true
             notificationDateLabel.text = viewModel.notificationDate.toString()
             datePicker.date = viewModel.notificationDate
+        }else {
+            notificationSwitch.isOn = false
+            notificationDateLabel.text = ""
         }
     }
     
@@ -213,18 +219,14 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
             self.shortAlert(title: "Failed", message: "Failed editing Todo")
             return
         }
-        guard let notificationSuccess = viewModel.notificationSuccess else { return }
-        if isSuccess && notificationSuccess {
-            shortAlert(title: "Editted with Notification", message: "Routing to main")
-            Timer.scheduledTimer(withTimeInterval: 1.5, repeats: false) { _ in
-                self.router?.routeToTodoList(segue: nil)
-            }
-        } else if isSuccess {
+        if viewModel.notificationSuccess == false || viewModel.notificationSuccess == nil {
+            showAlertToSettings(title: "Todo saved but notification not set!", message: "Please go settings and give permission")
+        }
+        if isSuccess {
             self.shortAlert(title: "Succesfully Editted", message: "Routing to main")
             Timer.scheduledTimer(withTimeInterval: 1.5, repeats: false) { _ in
                 self.router?.routeToTodoList(segue: nil)
             }
-            
         } else {
             self.shortAlert(title: "Failed", message: "Failed editing Todo")
         }

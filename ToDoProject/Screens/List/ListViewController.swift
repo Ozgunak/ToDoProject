@@ -118,9 +118,12 @@ class ListViewController: UIViewController, ListDisplayLogic {
     }
     
     func sortByLastMotifiedDate() {
-        if displayedTodos.isEmpty {
+        switch displayedTodos.count {
+        case 0:
             shortAlert(title: "Empty List", message: "Can not sort Empty List")
-        }else {
+        case 1:
+            shortAlert(title: "Only 1 Todo to sort", message: "Same List Everytime")
+        default:
             if displayedTodos[0].lastModifiedDate > displayedTodos[displayedTodos.count - 1].lastModifiedDate {
                 displayedTodos = displayedTodos.sorted() { $0.lastModifiedDate < $1.lastModifiedDate }
                 shortAlert(title: "Sort by first", message: "Sorted by first motified date")
@@ -129,7 +132,6 @@ class ListViewController: UIViewController, ListDisplayLogic {
                 shortAlert(title: "Sort by last", message: "Sorted by last motified date")
             }
             tableView.reloadData()
-            
         }
     }
     
