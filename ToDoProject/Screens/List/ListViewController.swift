@@ -152,7 +152,6 @@ extension ListViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: K.listCell, for: indexPath) as! ListTableViewCell
         let displatedData = displayedTodos[indexPath.row]
         cell.getModel(item: displatedData)
-        cell.timerSet(isSet: displatedData.timerSet)
         cell.doneButton.tag = indexPath.row
         print("\(displayedTodos[indexPath.row].title): \(displayedTodos[indexPath.row].lastModifiedDate)")
         cell.doneButton.addTarget(self, action: #selector(checkButtonConnected), for: .touchUpInside)

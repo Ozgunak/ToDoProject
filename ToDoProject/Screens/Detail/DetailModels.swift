@@ -16,13 +16,10 @@ enum DetailTodo {
     struct TodoField {
         var title: String
         var description: String
-        var lastModifiedDate: Double
-//        var notificationDate: date
+        var notificationDate: Date
+        var notificationId: String?
     }
     
-    struct TodoTime {
-        var notificationDate: Double
-    }
     
     // MARK: Use cases
     enum CreateTodo {
@@ -42,9 +39,11 @@ enum DetailTodo {
         }
         struct Response {
             var isSuccess: Bool?
+            var notificationSuccess: Bool?
         }
         struct ViewModel {
             var isSuccess: Bool?
+            var notificationSuccess: Bool?
         }
     }
     
@@ -58,14 +57,9 @@ enum DetailTodo {
       struct ViewModel {
           var title: String
           var descriptions: String
-//          var notificationDate: String
+          var notificationDate: Date
       }
     }
 }
 
-enum TodoDetail
-{
-  // MARK: Use cases
-  
-  
-}
+

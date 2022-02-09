@@ -10,13 +10,13 @@ import CoreData
 
 
 protocol CoreDataManagerProtocol {
-    func saveTodo(title: String, description: String, isDone: Bool, onSuccess: @escaping ((Bool) -> Void))
+    func saveTodo(title: String, description: String, isDone: Bool, notificationDate: Date, notificationId: String?, onSuccess: @escaping ((Bool) -> Void))
     func fetchTodoList() -> [TodoItem]
     func editTodo(id: Int64, title: String, description: String?, onSuccess: @escaping ((Bool) -> Void))
+    func editTodoWithDate(id: Int64, title: String, description: String?, notificationDate: Date, notificationId: String?, onSuccess: @escaping ((Bool) -> Void))
     func deleteTodo(id: Int64, onSuccess: @escaping ((Bool) -> Void))
     func searchTodo(with text: String) -> [TodoItem]
-    func checkTodo(id: Int64, onSuccess: @escaping ((Bool) -> Void))
-    func checkTodo2(id: Int64, onSuccess: @escaping (() throws -> Int, TodoItem?) -> Void)
+    func checkTodo(id: Int64, onSuccess: @escaping (() throws -> Int, TodoItem?) -> Void)
 
 }
 
@@ -32,10 +32,32 @@ class CoreDataManager: CoreDataManagerProtocol {
         do {
             if let results: [Todos] = try context.fetch(fetchRequest) as? [Todos] {
                 if results.count != 0 {
-                    let result = results[0]
-                    result.title = title
-                    result.descriptions = description
-                    result.lastModifiedDate = NSDate.timeIntervalSinceReferenceDate
+                    let todo = results[0]
+                    todo.title = title
+                    todo.descriptions = description
+                    todo.lastModifiedDate = NSDate.timeIntervalSinceReferenceDate
+                    todo.notificationDate = NSDate.distantPast
+                    todo.notificationId = nil
+                }
+            }
+        } catch let error as NSError {
+            print("Could not edit: \(error), \(error.userInfo)")
+        }
+        contextSave { success in
+            onSuccess(success)
+        }
+    }
+    func editTodoWithDate(id: Int64, title: String, description: String?, notificationDate: Date, notificationId: String?, onSuccess: @escaping ((Bool) -> Void)) {
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = filteredRequest(id: id)
+        do {
+            if let results: [Todos] = try context.fetch(fetchRequest) as? [Todos] {
+                if results.count != 0 {
+                    let todo = results[0]
+                    todo.title = title
+                    todo.descriptions = description
+                    todo.notificationDate = notificationDate
+                    todo.notificationId = notificationId
+                    todo.lastModifiedDate = NSDate.timeIntervalSinceReferenceDate
                 }
             }
         } catch let error as NSError {
@@ -81,7 +103,7 @@ class CoreDataManager: CoreDataManagerProtocol {
         do {
             if let fetchResult: [Todos] = try context.fetch(fetchRequest) as? [Todos] {
                 for item in fetchResult {
-                    let todo = TodoItem(id: Int(item.id), title: item.title ?? "", descriptions: item.descriptions, isDone: item.isDone, timerSet: item.timerOn, lastModifiedDate: item.lastModifiedDate)
+                    let todo = TodoItem(id: Int(item.id), title: item.title ?? "", descriptions: item.descriptions, notificationDate: item.notificationDate!, isDone: item.isDone, lastModifiedDate: item.lastModifiedDate, notificationId: item.notificationId)
                     todos.append(todo)
                 }
             }
@@ -94,30 +116,8 @@ class CoreDataManager: CoreDataManagerProtocol {
     
     //MARK: - Check Todo
 
-    func checkTodo(id: Int64, onSuccess: @escaping ((Bool) -> Void)) {
-
-        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = filteredRequest(id: id)
-
-        do {
-            if let results: [Todos] = try context.fetch(fetchRequest) as? [Todos] {
-                if results.count != 0 {
-                    let objectUpdate = results[0] as NSManagedObject
-                    objectUpdate.setValue(!results[0].isDone, forKey: "isDone")
-                    results[0].lastModifiedDate = NSDate.timeIntervalSinceReferenceDate
-                    try context.save()
-                }
-            }
-        } catch let error as NSError {
-            print("Could not check: \(error), \(error.userInfo)")
-            onSuccess(false)
-        }
-        contextSave { success in
-            onSuccess(success)
-        }
-
-    }
     
-    func checkTodo2(id: Int64, onSuccess: @escaping (() throws -> Int, TodoItem?) -> Void) {
+    func checkTodo(id: Int64, onSuccess: @escaping (() throws -> Int, TodoItem?) -> Void) {
 
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = filteredRequest(id: id)
         do {
@@ -137,9 +137,9 @@ class CoreDataManager: CoreDataManagerProtocol {
         }
 
     }
-    //MARK: - save todo
+    //MARK: - create save todo
 
-    func saveTodo(title: String, description: String, isDone: Bool, onSuccess: @escaping ((Bool) -> Void)) {
+    func saveTodo(title: String, description: String, isDone: Bool, notificationDate: Date, notificationId: String?, onSuccess: @escaping ((Bool) -> Void)) {
         if let entity: NSEntityDescription
             = NSEntityDescription.entity(forEntityName: "Todos", in: context) {
             
@@ -166,7 +166,8 @@ class CoreDataManager: CoreDataManagerProtocol {
                 todo.descriptions = description
                 todo.isDone = isDone
                 todo.lastModifiedDate = NSDate.timeIntervalSinceReferenceDate
-                
+                todo.notificationDate = notificationDate
+                todo.notificationId = notificationId
                 contextSave { success in
                     
                     onSuccess(success)
@@ -174,42 +175,7 @@ class CoreDataManager: CoreDataManagerProtocol {
             }
         }
     }
-    
-    func saveTodo2(title: String, description: String, isDone: Bool, onSuccess: @escaping ((Bool) -> Void)) {
-        if let entity: NSEntityDescription
-            = NSEntityDescription.entity(forEntityName: "Todos", in: context) {
-            
-            // id get value
-            var lastId: Int = 0
-            let fetchRequest: NSFetchRequest<NSManagedObject>
-            = NSFetchRequest<NSManagedObject>(entityName: "Todos")
-            do {
-                if let fetchResult: [Todos] = try context.fetch(fetchRequest) as? [Todos] {
-                    
-                    if fetchResult.count != 0 {
-                        lastId = Int(fetchResult[fetchResult.count-1].id)
-                    } else {
-                        lastId = 0
-                    }
-                }
-            } catch let error as NSError {
-                print("Could not create: \(error), \(error.userInfo)")
-            }
-            
-            if let todo: Todos = NSManagedObject(entity: entity, insertInto: context) as? Todos {
-                todo.id = Int32(lastId + 1)
-                todo.title = title
-                todo.descriptions = description
-                todo.isDone = isDone
-                todo.lastModifiedDate = NSDate.timeIntervalSinceReferenceDate
-                
-                contextSave { success in
-                    
-                    onSuccess(success)
-                }
-            }
-        }
-    }
+
     //MARK: - fetch todo
     
     
@@ -222,7 +188,7 @@ class CoreDataManager: CoreDataManagerProtocol {
         do {
             if let fetchResult: [Todos] = try context.fetch(fetchRequest) as? [Todos] {
                 for item in fetchResult {
-                    let todo = TodoItem(id: Int(item.id), title: item.title ?? "", descriptions: item.descriptions, isDone: item.isDone, timerSet: item.timerOn, lastModifiedDate: item.lastModifiedDate)
+                    let todo = TodoItem(id: Int(item.id), title: item.title ?? "", descriptions: item.descriptions, notificationDate: item.notificationDate!, isDone: item.isDone, lastModifiedDate: item.lastModifiedDate)
                     todos.append(todo)
                 }
             }
@@ -236,26 +202,11 @@ class CoreDataManager: CoreDataManagerProtocol {
     // MARK: - Core Data stack
     
     lazy var persistentContainer: NSPersistentContainer = {
-        /*
-         The persistent container for the application. This implementation
-         creates and returns a container, having loaded the store for the
-         application to it. This property is optional since there are legitimate
-         error conditions that could cause the creation of the store to fail.
-         */
+
         let container = NSPersistentContainer(name: "ToDoProject")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                
-                /*
-                 Typical reasons for an error here include:
-                 * The parent directory does not exist, cannot be created, or disallows writing.
-                 * The persistent store is not accessible, due to permissions or data protection when the device is locked.
-                 * The device is out of space.
-                 * The store could not be migrated to the current model version.
-                 Check the error message to determine what the actual problem was.
-                 */
+
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
         })
@@ -270,8 +221,6 @@ class CoreDataManager: CoreDataManagerProtocol {
             do {
                 try context.save()
             } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
                 let nserror = error as NSError
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }

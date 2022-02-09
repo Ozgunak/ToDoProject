@@ -35,7 +35,7 @@ class ListPresenter: ListPresentationLogic {
         var displayedTodos : [List.FetchTodos.ViewModel.DisplayedTodo] = []
 
         for todo in response.todos {
-            let displayedTodo = List.FetchTodos.ViewModel.DisplayedTodo(id: Int(todo.id), title: todo.title , isDone: todo.isDone, timerSet: todo.timerSet, lastModifiedDate: todo.lastModifiedDate)
+            let displayedTodo = List.FetchTodos.ViewModel.DisplayedTodo(id: Int(todo.id), title: todo.title , isDone: todo.isDone, lastModifiedDate: todo.lastModifiedDate, notificationDate: todo.notificationDate)
             displayedTodos.append(displayedTodo)
         }
 

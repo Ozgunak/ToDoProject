@@ -237,7 +237,7 @@
                                     <action selector="saveButtonTapped:" destination="vIB-vm-VNC" id="3cI-Ce-tPt"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem title="Edit" id="VmW-fI-ciM">
+                            <barButtonItem title="Save" id="VmW-fI-ciM">
                                 <color key="tintColor" name="dark"/>
                                 <connections>
                                     <action selector="editButtonTapped:" destination="vIB-vm-VNC" id="2Xq-3O-k9k"/>
@@ -252,6 +252,7 @@
                         <outlet property="descriptionTextField" destination="LS9-ul-Jur" id="H6o-8z-Lfw"/>
                         <outlet property="editButton" destination="VmW-fI-ciM" id="PbT-s6-ie1"/>
                         <outlet property="notificationDateLabel" destination="QcB-EX-VqK" id="fLt-mF-BHS"/>
+                        <outlet property="notificationSwitch" destination="rsw-eB-96d" id="Ree-Fb-ftj"/>
                         <outlet property="saveButton" destination="APL-3D-TwC" id="DLj-om-erI"/>
                         <outlet property="titleTextField" destination="J1P-ba-NF9" id="7n9-dm-4Mn"/>
                     </connections>

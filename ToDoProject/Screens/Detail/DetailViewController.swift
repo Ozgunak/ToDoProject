@@ -23,6 +23,7 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
   var interactor: DetailBusinessLogic?
   var router: (NSObjectProtocol & DetailRoutingLogic & DetailDataPassing)?
 
+    @IBOutlet weak var notificationSwitch: UISwitch!
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var containerViewDetail: UIView!
     @IBOutlet weak var notificationDateLabel: UILabel!
@@ -59,7 +60,7 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
     router.dataStore = interactor
   }
   
-  // MARK: Routing
+  // MARK: - Routing
   
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if let scene = segue.identifier {
@@ -70,12 +71,12 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
     }
   }
   
-  // MARK: View lifecycle
+  // MARK: - View lifecycle
   
   override func viewDidLoad() {
       super.viewDidLoad()
       fetchDetail()
-      configurePhoneTextField()
+      configureKeyboardToolbar()
       setBackButtonTitle()
       containerView.addShadowAndCornerRadius()
       containerViewDetail.addShadowAndCornerRadius()
@@ -83,7 +84,7 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
     
     deinit {
         self.saveButton.title = "Save"
-        self.editButton.title = "Edit"
+        self.editButton.title = "Save"
     }
     
   
@@ -93,50 +94,63 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
         if titleTextField.text != "" {
             let title = titleTextField.text
             let description = descriptionTextField.text
+             
+            let date = notificationSwitch.isOn ? datePicker.date : NSDate.distantPast
             if title != nil {
-                let request = DetailTodo.CreateTodo.Request( todoField: DetailTodo.TodoField(title: title!, description: description ?? "", lastModifiedDate: NSDate.timeIntervalSinceReferenceDate))
+                let request = DetailTodo.CreateTodo.Request( todoField: DetailTodo.TodoField(title: title!, description: description ?? "", notificationDate: date))
                 interactor?.createTodo(request: request)
             }
         }else {
             shortAlert(title: "Title Empty", message: "Title can not be empty")
         }
     }
-    
+    //MARK: - Edit Button
+
     @IBAction func editButtonTapped(_ sender: UIBarButtonItem) {
         if titleTextField.text != "" {
             let title = titleTextField.text
             let description = descriptionTextField.text
+            let date = notificationSwitch.isOn ? datePicker.date : NSDate.distantPast
             if title != nil {
-                let request = DetailTodo.EditTodo.Request(todoField: DetailTodo.TodoField(title: title!, description: description ?? "", lastModifiedDate: NSDate.timeIntervalSinceReferenceDate))
+                let request = DetailTodo.EditTodo.Request(todoField: DetailTodo.TodoField(title: title!, description: description ?? "", notificationDate: date))
                 interactor?.editTodo(request: request)
             }
         }else {
             shortAlert(title: "Title Empty", message: "Title can not be empty")
         }
     }
+    
+    //MARK: - Switch
+
     @IBAction func notificationSwitch(_ sender: UISwitch) {
-        datePicker.isHidden = sender.isOn ? false : true
-        notificationDateLabel.isHidden = sender.isOn ? false : true
         if sender.isOn {
-            let time = NSTimeIntervalSince1970
+            datePicker.isHidden = false
+            notificationDateLabel.isHidden = false
 
         }else {
-            let time = 0.0
-
+            notificationDateLabel.isHidden = true
+            datePicker.isHidden = true
+            // delete notification
         }
         
     }
-    @IBAction func datePickerTapped(_ sender: UIDatePicker) {
-        let time = NSTimeIntervalSince1970
+    //MARK: - Date Picker
 
+    @IBAction func datePickerTapped(_ sender: UIDatePicker) {
+//        let date = sender.date
     }
     
+    //MARK: - Back button as Cancel
+
     func setBackButtonTitle() {
         let backButton = UIBarButtonItem()
         backButton.title = "Cancel"
         self.navigationController?.navigationBar.topItem?.backBarButtonItem = backButton
     }
-    func createPhoneTextFieldKeyboardToolbar() -> UIToolbar {
+    
+    //MARK: - Done button toolbar
+
+    func createKeyboardToolbar() -> UIToolbar {
         let flexibleSpace = UIBarButtonItem.flexibleSpace()
         let doneBarButton = UIBarButtonItem()
         doneBarButton.target = self
@@ -150,8 +164,8 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
         return toolbar
     }
     
-    func configurePhoneTextField() {
-        let toolbar = createPhoneTextFieldKeyboardToolbar()
+    func configureKeyboardToolbar() {
+        let toolbar = createKeyboardToolbar()
         titleTextField.inputAccessoryView = toolbar
         descriptionTextField.inputAccessoryView = toolbar
         
@@ -160,6 +174,7 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
         titleTextField.resignFirstResponder()
         descriptionTextField.resignFirstResponder()
     }
+    
     //MARK: - Data functions
 
     func fetchDetail() {
@@ -185,6 +200,11 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
     func displayTodo(viewModel: DetailTodo.FetchTodo.ViewModel) {
         titleTextField.text = viewModel.title
         descriptionTextField.text = viewModel.descriptions
+        if viewModel.notificationDate != NSDate.distantPast {
+            notificationSwitch.isOn = true
+            notificationDateLabel.text = viewModel.notificationDate.toString()
+            datePicker.date = viewModel.notificationDate
+        }
     }
     
     func displayEditTodo(viewModel: DetailTodo.EditTodo.ViewModel) {
@@ -193,7 +213,13 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
             self.shortAlert(title: "Failed", message: "Failed editing Todo")
             return
         }
-        if isSuccess {
+        guard let notificationSuccess = viewModel.notificationSuccess else { return }
+        if isSuccess && notificationSuccess {
+            shortAlert(title: "Editted with Notification", message: "Routing to main")
+            Timer.scheduledTimer(withTimeInterval: 1.5, repeats: false) { _ in
+                self.router?.routeToTodoList(segue: nil)
+            }
+        } else if isSuccess {
             self.shortAlert(title: "Succesfully Editted", message: "Routing to main")
             Timer.scheduledTimer(withTimeInterval: 1.5, repeats: false) { _ in
                 self.router?.routeToTodoList(segue: nil)

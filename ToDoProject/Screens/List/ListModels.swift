@@ -26,8 +26,8 @@ enum List {
                 var id: Int
                 var title: String
                 var isDone: Bool
-                var timerSet: Bool
                 var lastModifiedDate: Double
+                var notificationDate: Date
             }
 
             var displayedTodos: [DisplayedTodo]

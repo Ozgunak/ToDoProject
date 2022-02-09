@@ -13,28 +13,72 @@
 import UIKit
 
 protocol DetailWorkerProtocol {
-    func createTodo(title: String, description: String, completionHandler: @escaping (Bool?) -> Void)
+    func createTodo(title: String, description: String, notificationDate: Date, completionHandler: @escaping (Bool?) -> Void)
+    func createTodoWithDate(title: String, description: String, notificationDate: Date, notificationId: String?, completionHandler: @escaping (Bool?) -> Void)
     func editTodo(id: Int, title: String, description: String, completionHandler: @escaping (Bool?) -> Void)
+    func editTodoWithDate(id: Int, title: String, description: String, notificationDate: Date, notificationId: String?, completionHandler: @escaping (Bool?) -> Void)
+    func createNotification(notificationId: String, title: String, description: String, notificationDate: Date, completionHandler: @escaping (Bool?) -> Void)
+    func deleteNotification(with notificationId: String)
+    
 }
 
 class DetailWorker: DetailWorkerProtocol {
     var coreData: CoreDataManagerProtocol
-    init(coreData: CoreDataManagerProtocol) {
+    var notificationManager: NotificationManagerProtocol
+    
+    init(coreData: CoreDataManagerProtocol, notificationManager: NotificationManagerProtocol) {
         self.coreData = coreData
+        self.notificationManager = notificationManager
+    }
+
+    
+    func createTodo(title: String, description: String, notificationDate: Date, completionHandler: @escaping (Bool?) -> Void) {
+        coreData.saveTodo(title: title, description: description, isDone: false, notificationDate: notificationDate, notificationId: nil) { onSuccess in
+            DispatchQueue.main.async {
+                completionHandler(onSuccess)
+            }
+        }
     }
     
-    func createTodo(title: String, description: String, completionHandler: @escaping (Bool?) -> Void) {
-        coreData.saveTodo(title: title, description: description, isDone: false) { onSuccess in
-            completionHandler(onSuccess)
+    func createTodoWithDate(title: String, description: String, notificationDate: Date, notificationId: String?, completionHandler: @escaping (Bool?) -> Void) {
+        coreData.saveTodo(title: title, description: description, isDone: false, notificationDate: notificationDate, notificationId: notificationId) { onSuccess in
+            DispatchQueue.main.async {
+                completionHandler(onSuccess)
+            }
+            
         }
     }
 
 
     func editTodo(id: Int, title: String, description: String, completionHandler: @escaping (Bool?) -> Void) {
-        coreData.editTodo(id: Int64(id), title: title, description: description) { isSuccess in
-            completionHandler(isSuccess)
+        coreData.editTodo(id: Int64(id), title: title, description: description) { onSuccess in
+            DispatchQueue.main.async {
+                completionHandler(onSuccess)
+            }
+            
         }
     }
-    
+    func editTodoWithDate(id: Int, title: String, description: String, notificationDate: Date, notificationId: String?, completionHandler: @escaping (Bool?) -> Void) {
+        coreData.editTodoWithDate(id: Int64(id), title: title, description: description, notificationDate: notificationDate, notificationId: notificationId) { onSuccess in
+            DispatchQueue.main.async {
+                completionHandler(onSuccess)
+            }
+            
+        }
+    }
+    func createNotification(notificationId: String, title: String, description: String, notificationDate: Date, completionHandler: @escaping (Bool?) -> Void) {
+        notificationManager.notifications.append(NotificationItem(id: notificationId, title: title, description: description, date: notificationDate))
+        notificationManager.schedule(with: notificationId) { onSuccess in
+            DispatchQueue.main.async {
+                completionHandler(onSuccess)
+            }
+        }
+                                                
+    }
+    func deleteNotification(with notificationId: String) {
+        notificationManager.deleteNotification(with: notificationId) { onSuccess in
+            print(onSuccess)
+        }
+    }
 
 }

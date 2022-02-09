@@ -28,19 +28,17 @@ class ListWorker {
         DispatchQueue.main.async {
             completionHandler(todos)
         }
-
     }
+    
     func fetchTodos(with text: String, completionHandler: @escaping ([TodoItem]) -> Void) {
         let todos = coreData.searchTodo(with: text)
         DispatchQueue.main.async {
             completionHandler(todos)
         }
-
     }
-   
 
     func checkTodo(with id: Int, row: Int, completionHandler: @escaping (Int, TodoItem?) -> Void) {
-        coreData.checkTodo2(id: Int64(id)) {
+        coreData.checkTodo(id: Int64(id)) {
             (row: () throws -> Int, todo: TodoItem?) -> Void in
             do {
                 let row = try row()
@@ -52,23 +50,7 @@ class ListWorker {
                     completionHandler(0, nil)
                 }
             }
-            
         }
-        
-//        todosStore.checkTodo(id: id) {
-//            (row: () throws -> Int, todo: TodoItem?) -> Void in
-//
-//            do {
-//                let row = try row()
-//                DispatchQueue.main.async {
-//                    completionHandler(row, todo)
-//                }
-//            } catch {
-//                DispatchQueue.main.async {
-//                    completionHandler(0, nil)
-//                }
-//            }
-//        }
     }
     
     func deleteTodo(with id: Int, row: Int, completionHandler: @escaping (Int) -> Void) {
@@ -77,7 +59,6 @@ class ListWorker {
                 completionHandler(row)
             }
         }
-
     }
     
     

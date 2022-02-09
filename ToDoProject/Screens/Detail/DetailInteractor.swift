@@ -16,6 +16,7 @@ protocol DetailBusinessLogic {
     func createTodo(request: DetailTodo.CreateTodo.Request)
     func fetchTodo(request: DetailTodo.FetchTodo.Request)
     func editTodo(request: DetailTodo.EditTodo.Request)
+    func deleteNotification(with notificationId: String)
 }
 
 protocol DetailDataStore {
@@ -30,19 +31,32 @@ class DetailInteractor: DetailBusinessLogic, DetailDataStore {
     var todo: TodoItem?
     
     var presenter: DetailPresentationLogic?
-    var worker = DetailWorker(coreData: CoreDataManager())
-  
-  // MARK: CRUD operations
-  
+    var worker = DetailWorker(coreData: CoreDataManager(), notificationManager: NotificationManager())
+    
+    // MARK: CRUD operations
+    
     func createTodo(request: DetailTodo.CreateTodo.Request) {
         let title = request.todoField.title
         let description = request.todoField.description
-        worker.createTodo(title: title, description: description) { isSuccess in
-            let response = DetailTodo.CreateTodo.Response(isSuccess: isSuccess)
-            self.presenter?.presentCreateTodo(response: response)
+        let notificationId = UUID().uuidString
+        let date = request.todoField.notificationDate
+        if date != NSDate.distantPast {
+            worker.createTodoWithDate(title: title, description: description, notificationDate: date, notificationId: notificationId) { isSuccess in
+                let response = DetailTodo.CreateTodo.Response(isSuccess: isSuccess)
+                self.presenter?.presentCreateTodo(response: response)
+                self.worker.createNotification(notificationId: notificationId, title: title, description: description, notificationDate: date) { isSuccess in
+                    
+                }
+            }
+        }else {
+            worker.createTodo(title: title, description: description, notificationDate: date) { isSuccess in
+                let response = DetailTodo.CreateTodo.Response(isSuccess: isSuccess)
+                self.presenter?.presentCreateTodo(response: response)
+            }
         }
+        
     }
-                                              
+    
     
     func fetchTodo(request: DetailTodo.FetchTodo.Request) {
         self.presenter?.presentTodo(response: .init(todo: todo))
@@ -51,10 +65,29 @@ class DetailInteractor: DetailBusinessLogic, DetailDataStore {
     func editTodo(request: DetailTodo.EditTodo.Request) {
         let title = request.todoField.title
         let description = request.todoField.description
-        worker.editTodo(id: id!, title: title, description: description) { (isSuccess) in
-            let response = DetailTodo.EditTodo.Response(isSuccess: isSuccess)
-            self.presenter?.presentEditTodo(response: response)
+        let notificationDate = request.todoField.notificationDate
+        let notificationId = request.todoField.notificationId
+        if notificationDate == NSDate.distantPast || notificationDate < Date(){
+            // while editting if it has id and notification switch is off then delete notification.
+            if let notificationId = notificationId {
+                deleteNotification(with: notificationId)
+            }
+            worker.editTodo(id: id!, title: title, description: description) { (isSuccess) in
+                let response = DetailTodo.EditTodo.Response(isSuccess: isSuccess)
+                self.presenter?.presentEditTodo(response: response)
+            }
+        }else {
+            // if no past notifications
+            let newId = UUID().uuidString
+            worker.editTodoWithDate(id: id!, title: title, description: description, notificationDate: notificationDate, notificationId: newId) { isSuccess in
+                self.worker.createNotification(notificationId: newId, title: title, description: description, notificationDate: notificationDate) { notificationSuccess in
+                    let response = DetailTodo.EditTodo.Response(isSuccess: isSuccess, notificationSuccess: notificationSuccess)
+                    self.presenter?.presentEditTodo(response: response)
+                }
+            }
         }
     }
-
+    func deleteNotification(with notificationId: String) {
+        worker.deleteNotification(with: notificationId)
+    }
 }
