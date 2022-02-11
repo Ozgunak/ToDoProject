@@ -188,7 +188,7 @@ class CoreDataManager: CoreDataManagerProtocol {
         do {
             if let fetchResult: [Todos] = try context.fetch(fetchRequest) as? [Todos] {
                 for item in fetchResult {
-                    let todo = TodoItem(id: Int(item.id), title: item.title ?? "", descriptions: item.descriptions, notificationDate: item.notificationDate!, isDone: item.isDone, lastModifiedDate: item.lastModifiedDate)
+                    let todo = TodoItem(id: Int(item.id), title: item.title ?? "", descriptions: item.descriptions, notificationDate: item.notificationDate!, isDone: item.isDone, lastModifiedDate: item.lastModifiedDate, notificationId: item.notificationId)
                     todos.append(todo)
                 }
             }

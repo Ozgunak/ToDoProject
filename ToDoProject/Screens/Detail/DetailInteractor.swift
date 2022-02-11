@@ -44,8 +44,8 @@ class DetailInteractor: DetailBusinessLogic, DetailDataStore {
             worker.createNotification(notificationId: notificationId, title: title, description: description, notificationDate: date) { notificationSuccess in
                 if notificationSuccess == true {
                     self.worker.createTodoWithDate(title: title, description: description, notificationDate: date, notificationId: notificationId) { isSuccess in
-                        let response = DetailTodo.EditTodo.Response(isSuccess: isSuccess, notificationSuccess: notificationSuccess)
-                        self.presenter?.presentEditTodo(response: response)
+                        let response = DetailTodo.CreateTodo.Response(isSuccess: isSuccess, notificationSuccess: notificationSuccess)
+                        self.presenter?.presentCreateTodo(response: response)
                     }
                 }else {
                     self.worker.createTodo(title: title, description: description, notificationDate: date) { isSuccess in

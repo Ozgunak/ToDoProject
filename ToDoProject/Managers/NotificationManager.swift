@@ -15,12 +15,6 @@ protocol NotificationManagerProtocol {
     func deleteNotification(with id: String, complationHandler: @escaping (Bool) -> Void)
 }
 
-struct NotificationItem {
-    var id : String
-    var title : String
-    var description : String
-    var date: Date
-}
 
 class NotificationManager: NotificationManagerProtocol{
     
@@ -91,6 +85,7 @@ class NotificationManager: NotificationManagerProtocol{
     func deleteNotification(with id: String, complationHandler: @escaping (Bool) -> Void) {
         DispatchQueue.main.async {
             self.notificationCenter.removePendingNotificationRequests(withIdentifiers: [id])
+            print("Remaining notifications: \(self.notifications.count)")
             self.notifications = self.notifications.filter { $0.id != id }
             complationHandler(true)
         }

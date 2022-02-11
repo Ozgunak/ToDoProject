@@ -28,6 +28,7 @@ enum List {
                 var isDone: Bool
                 var lastModifiedDate: Double
                 var notificationDate: Date
+                var notificationId: String?
             }
 
             var displayedTodos: [DisplayedTodo]
@@ -51,6 +52,7 @@ enum List {
         struct Request {
             var id: Int
             var row: Int
+            var notificationId: String?
         }
         struct Response {
             var row: Int

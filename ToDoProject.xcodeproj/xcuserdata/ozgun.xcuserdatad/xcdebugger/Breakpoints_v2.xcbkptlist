@@ -7,32 +7,32 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "01AAEB3D-5231-4227-AA78-5652703B14B9"
-            shouldBeEnabled = "No"
+            uuid = "E0DABD4B-096A-4D00-8AAA-831F732C6235"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ToDoProject/Managers/CoreDataManager.swift"
+            filePath = "ToDoProject/Screens/List/ListWorker.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "173"
-            endingLineNumber = "173"
-            landmarkName = "saveTodo(title:description:isDone:notificationDate:notificationId:onSuccess:)"
+            startingLineNumber = "52"
+            endingLineNumber = "52"
+            landmarkName = "checkTodo(with:row:completionHandler:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "DCA58228-4A9E-4066-B866-24CD51AE08CC"
-            shouldBeEnabled = "No"
+            uuid = "9730398E-2E82-4C9B-856E-CA692C020100"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ToDoProject/Managers/CoreDataManager.swift"
+            filePath = "ToDoProject/Screens/List/ListWorker.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "167"
-            endingLineNumber = "167"
-            landmarkName = "saveTodo(title:description:isDone:notificationDate:notificationId:onSuccess:)"
+            startingLineNumber = "49"
+            endingLineNumber = "49"
+            landmarkName = "checkTodo(with:row:completionHandler:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

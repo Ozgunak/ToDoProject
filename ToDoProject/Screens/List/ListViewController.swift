@@ -16,7 +16,6 @@ protocol ListDisplayLogic: AnyObject {
     func displayTodoList(viewModel: List.FetchTodos.ViewModel)
     func displayUpdatedTodoList(viewModel: List.CheckTodo.ViewModel)
     func displayDeletedTodoList(viewModel: List.DeleteTodo.ViewModel)
-    //    func displaySearchTodoList(viewModel: List.SearchTodos.ViewModel)
 }
 
 class ListViewController: UIViewController, ListDisplayLogic {
@@ -68,7 +67,6 @@ class ListViewController: UIViewController, ListDisplayLogic {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchTodos()
         let nib = UINib(nibName: K.nibName, bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: K.listCell)
     }
@@ -79,7 +77,6 @@ class ListViewController: UIViewController, ListDisplayLogic {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchTodos()
-        
     }
     
     // MARK: - Display Functions
@@ -114,10 +111,10 @@ class ListViewController: UIViewController, ListDisplayLogic {
     }
     
     @IBAction func sortButtonTapped(_ sender: UIBarButtonItem) {
-        sortByLastMotifiedDate()
+        sortByMotifiedDate()
     }
     
-    func sortByLastMotifiedDate() {
+    func sortByMotifiedDate() {
         switch displayedTodos.count {
         case 0:
             shortAlert(title: "Empty List", message: "Can not sort Empty List")
@@ -137,7 +134,7 @@ class ListViewController: UIViewController, ListDisplayLogic {
     
     @objc func checkButtonConnected(sender : UIButton!) {
         self.displayedTodos[sender.tag].isDone = !self.displayedTodos[sender.tag].isDone
-        let request = List.CheckTodo.Request(id: self.displayedTodos[sender.tag].id, row: sender.tag)
+        let request = List.CheckTodo.Request(id: self.displayedTodos[sender.tag].id, row: sender.tag, notificationId:  self.displayedTodos[sender.tag].notificationId)
         interactor?.checkTodo(request: request)
         tableView.reloadData()
     }
@@ -152,10 +149,9 @@ extension ListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: K.listCell, for: indexPath) as! ListTableViewCell
-        let displatedData = displayedTodos[indexPath.row]
-        cell.getModel(item: displatedData)
+        let displayedData = displayedTodos[indexPath.row]
+        cell.getModel(item: displayedData)
         cell.doneButton.tag = indexPath.row
-        print("\(displayedTodos[indexPath.row].title): \(displayedTodos[indexPath.row].lastModifiedDate)")
         cell.doneButton.addTarget(self, action: #selector(checkButtonConnected), for: .touchUpInside)
         return cell
     }
@@ -170,6 +166,7 @@ extension ListViewController: UITableViewDataSource {
 
 extension ListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("\(displayedTodos[indexPath.row].title): \(String(describing: displayedTodos[indexPath.row].notificationId)) - \(displayedTodos[indexPath.row].notificationDate)")
         router?.routeToDetailTodo(index: indexPath.row, id: self.displayedTodos[indexPath.row].id)
     }
     

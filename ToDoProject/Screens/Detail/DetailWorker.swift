@@ -76,6 +76,7 @@ class DetailWorker: DetailWorkerProtocol {
                                                 
     }
     func deleteNotification(with notificationId: String) {
+        
         notificationManager.deleteNotification(with: notificationId) { onSuccess in
             print(onSuccess)
         }

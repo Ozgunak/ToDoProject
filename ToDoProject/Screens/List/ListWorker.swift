@@ -19,8 +19,11 @@ import UIKit
 
 class ListWorker {
     var coreData: CoreDataManagerProtocol
-    init(coreData: CoreDataManagerProtocol) {
+    var notificationManager: NotificationManagerProtocol
+    
+    init(coreData: CoreDataManagerProtocol, notificationManager: NotificationManagerProtocol) {
         self.coreData = coreData
+        self.notificationManager = notificationManager
     }
 
     func fetchTodos(completionHandler: @escaping ([TodoItem]) -> Void) {
@@ -38,8 +41,7 @@ class ListWorker {
     }
 
     func checkTodo(with id: Int, row: Int, completionHandler: @escaping (Int, TodoItem?) -> Void) {
-        coreData.checkTodo(id: Int64(id)) {
-            (row: () throws -> Int, todo: TodoItem?) -> Void in
+        coreData.checkTodo(id: Int64(id)) { (row: () throws -> Int, todo: TodoItem?) -> Void in
             do {
                 let row = try row()
                 DispatchQueue.main.async {
@@ -58,6 +60,13 @@ class ListWorker {
             DispatchQueue.main.async {
                 completionHandler(row)
             }
+        }
+    }
+    
+    func deleteNotification(with notificationId: String) {
+        
+        notificationManager.deleteNotification(with: notificationId) { onSuccess in
+            print(onSuccess)
         }
     }
     

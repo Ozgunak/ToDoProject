@@ -23,15 +23,6 @@ protocol ListDataPassing {
 
 class ListRouter: NSObject, ListRoutingLogic, ListDataPassing {
     
-    func routeToDetailTodo(index: Int, id: Int) {
-        let storyboard = UIStoryboard(name: K.main, bundle: nil)
-        let destinationVC = storyboard.instantiateViewController(withIdentifier: "DetailViewController") as! DetailViewController
-        destinationVC.router?.dataStore?.todo = dataStore?.todos?[index]
-        destinationVC.router?.dataStore?.id = id
-        destinationVC.saveButton.title = ""
-        self.viewController?.navigationController?.pushViewController(destinationVC, animated: true)
-    }
-    
       weak var viewController: ListViewController?
       var dataStore: ListDataStore?
   
@@ -46,6 +37,15 @@ class ListRouter: NSObject, ListRoutingLogic, ListDataPassing {
         }
     }
 
+    func routeToDetailTodo(index: Int, id: Int) {
+        let storyboard = UIStoryboard(name: K.main, bundle: nil)
+        let destinationVC = storyboard.instantiateViewController(withIdentifier: "DetailViewController") as! DetailViewController
+        destinationVC.router?.dataStore?.todo = dataStore?.todos?[index]
+        destinationVC.router?.dataStore?.id = id
+        destinationVC.saveButton.title = ""
+        self.viewController?.navigationController?.pushViewController(destinationVC, animated: true)
+    }
+    
     // MARK: Navigation
   
     func navigateToDetailTodo(source: ListViewController, destination: DetailViewController) {

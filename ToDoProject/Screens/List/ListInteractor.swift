@@ -26,8 +26,7 @@ class ListInteractor: ListBusinessLogic, ListDataStore {
     var todos: [TodoItem]?
     
     var presenter: ListPresentationLogic?
-    var worker: ListWorker?
-    var todosWorker = ListWorker(coreData: CoreDataManager())
+    var todosWorker = ListWorker(coreData: CoreDataManager(), notificationManager: NotificationManager())
     
     // MARK: - Fetch Todos
     
@@ -53,6 +52,9 @@ class ListInteractor: ListBusinessLogic, ListDataStore {
         todosWorker.checkTodo(with: request.id, row: request.row) { (row, todo) -> Void in
             let response = List.CheckTodo.Response(row: row, todo: todo!)
             self.presenter?.updateTodo(response: response)
+        }
+        if let id = request.notificationId {
+            todosWorker.deleteNotification(with: id)
         }
     }
     

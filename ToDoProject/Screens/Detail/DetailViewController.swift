@@ -126,7 +126,7 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
         if sender.isOn {
             datePicker.isHidden = false
             notificationDateLabel.isHidden = false
-
+            notificationDateLabel.text = "Dont forget to save!"
         }else {
             notificationDateLabel.isHidden = true
             datePicker.isHidden = true
@@ -188,7 +188,7 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
             self.shortAlert(title: "Failed", message: "Failed creating Todo")
             return
         }
-        if viewModel.notificationSuccess == false || viewModel.notificationSuccess == nil {
+        if (viewModel.notificationSuccess == false || viewModel.notificationSuccess == nil) && notificationSwitch.isOn == true  {
             showAlertToSettings(title: "Todo saved but notification not set!", message: "Please go settings and give permission")
         }
         if isSuccess {
@@ -203,7 +203,7 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
     func displayTodo(viewModel: DetailTodo.FetchTodo.ViewModel) {
         titleTextField.text = viewModel.title
         descriptionTextField.text = viewModel.descriptions
-        if viewModel.notificationDate != NSDate.distantPast || viewModel.notificationDate >= Date() {
+        if viewModel.notificationDate != NSDate.distantPast && viewModel.notificationDate >= Date() {
             notificationSwitch.isOn = true
             notificationDateLabel.text = viewModel.notificationDate.toString()
             datePicker.date = viewModel.notificationDate
@@ -219,7 +219,7 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
             self.shortAlert(title: "Failed", message: "Failed editing Todo")
             return
         }
-        if viewModel.notificationSuccess == false || viewModel.notificationSuccess == nil {
+        if (viewModel.notificationSuccess == false || viewModel.notificationSuccess == nil) && notificationSwitch.isOn == true {
             showAlertToSettings(title: "Todo saved but notification not set!", message: "Please go settings and give permission")
         }
         if isSuccess {
