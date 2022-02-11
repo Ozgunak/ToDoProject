@@ -19,6 +19,6 @@ extension UIView {
         layer.cornerRadius = 10
         layer.shadowOpacity = 1
         layer.shadowOffset = CGSize.zero
-//        layer.shadowColor = UIColor.darkGray.cgColor
+        layer.shadowColor = UIColor.darkGray.cgColor
     }
 }

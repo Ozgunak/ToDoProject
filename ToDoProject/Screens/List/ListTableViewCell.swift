@@ -31,7 +31,7 @@ class ListTableViewCell: UITableViewCell {
             notificationDateLabel.isHidden = true
             timerLabel.isHidden = true
         }
-//        listLabel.textColor = item.isDone ?  : .white
+        bubbleView.backgroundColor = item.isDone ? UIColor(named: "light") : UIColor(named: "dark")
     }
     
     
