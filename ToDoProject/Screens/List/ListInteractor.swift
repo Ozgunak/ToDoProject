@@ -15,6 +15,7 @@ import UIKit
 protocol ListBusinessLogic {
     func fetchTodos(request: List.FetchTodos.Request)
     func checkTodo(request: List.CheckTodo.Request)
+    func deleteTodo(request: List.DeleteTodo.Request)
 }
 
 protocol ListDataStore {
@@ -22,41 +23,48 @@ protocol ListDataStore {
 }
 
 class ListInteractor: ListBusinessLogic, ListDataStore {
-    
     var todos: [TodoItem]?
     
-    
     var presenter: ListPresentationLogic?
-    var worker: ListWorker?
-    var todosWorker = ListWorker(todosStore: TodoStore())
+    var todosWorker = ListWorker(coreData: CoreDataManager(), notificationManager: NotificationManager())
+    
     // MARK: - Fetch Todos
     
     func fetchTodos(request: List.FetchTodos.Request) {
-        todosWorker.fetchTodos { (todos) -> Void in
-            self.todos = todos
-            let response = List.FetchTodos.Response(todos: todos)
-            self.presenter?.presentTodos(response: response)
+        if let text = request.text {
+            todosWorker.fetchTodos(with: text) { (todos) -> Void in
+                self.todos = todos
+                let response = List.FetchTodos.Response(todos: todos)
+                self.presenter?.presentTodos(response: response)
+            }
+        }else {
+            todosWorker.fetchTodos(completionHandler: { (todos) -> Void in
+                self.todos = todos
+                let response = List.FetchTodos.Response(todos: todos)
+                self.presenter?.presentTodos(response: response)
+            })
         }
+        
     }
+    //MARK: - Check Todos
 
     func checkTodo(request: List.CheckTodo.Request) {
-        todosWorker.checkTodo(todoIdToCheck: request.id, todoRowToCheck: request.row) { (row, todo) -> Void in
-
+        todosWorker.checkTodo(with: request.id, row: request.row) { (row, todo) -> Void in
             let response = List.CheckTodo.Response(row: row, todo: todo!)
             self.presenter?.updateTodo(response: response)
+        }
+        if let id = request.notificationId {
+            todosWorker.deleteNotification(with: id)
+        }
+    }
+    
+    func deleteTodo(request: List.DeleteTodo.Request) {
+        todosWorker.deleteTodo(with: request.id, row: request.row) { (row) in
+            let response = List.DeleteTodo.Response(row: row)
+            self.presenter?.deleteTodo(response: response)
         }
     }
 
 
 }
-    
-    
-//  func doSomething(request: List.Something.Request)
-//  {
-//    worker = ListWorker()
-//    worker?.doSomeWork()
-//
-//    let response = List.Something.Response()
-//    presenter?.presentSomething(response: response)
-//  }
 

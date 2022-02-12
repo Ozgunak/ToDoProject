@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		EF40F00D27AA940000D63756 /* TodoStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF40F00C27AA940000D63756 /* TodoStore.swift */; };
 		EF40F01027AC012D00D63756 /* ListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF40F00E27AC012D00D63756 /* ListTableViewCell.swift */; };
 		EF40F01127AC012D00D63756 /* ListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EF40F00F27AC012D00D63756 /* ListTableViewCell.xib */; };
+		EF40F01527AD515E00D63756 /* UIViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF40F01427AD515E00D63756 /* UIViewController+.swift */; };
 		EF8E502C27A8731C0088612E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF8E502B27A8731C0088612E /* AppDelegate.swift */; };
 		EF8E502E27A8731C0088612E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF8E502D27A8731C0088612E /* SceneDelegate.swift */; };
 		EF8E503327A8731C0088612E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EF8E503127A8731C0088612E /* Main.storyboard */; };
@@ -31,12 +31,16 @@
 		EF8E506327A87EF60088612E /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF8E506227A87EF60088612E /* Constants.swift */; };
 		EF8E506527A882AA0088612E /* TodoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF8E506427A882AA0088612E /* TodoItem.swift */; };
 		EF8E506827A889660088612E /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF8E506727A889660088612E /* CoreDataManager.swift */; };
+		EFAA22C127B126D50058A68B /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFAA22C027B126D50058A68B /* UIView+.swift */; };
+		EFAA22C327B299400058A68B /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFAA22C227B299400058A68B /* Date+.swift */; };
+		EFAA22C527B2A6A00058A68B /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFAA22C427B2A6A00058A68B /* NotificationManager.swift */; };
+		EFAA22C727B515160058A68B /* NotificationItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFAA22C627B515150058A68B /* NotificationItem.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		EF40F00C27AA940000D63756 /* TodoStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoStore.swift; sourceTree = "<group>"; };
 		EF40F00E27AC012D00D63756 /* ListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTableViewCell.swift; sourceTree = "<group>"; };
 		EF40F00F27AC012D00D63756 /* ListTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ListTableViewCell.xib; sourceTree = "<group>"; };
+		EF40F01427AD515E00D63756 /* UIViewController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+.swift"; sourceTree = "<group>"; };
 		EF8E502827A8731C0088612E /* ToDoProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToDoProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF8E502B27A8731C0088612E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EF8E502D27A8731C0088612E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -60,6 +64,10 @@
 		EF8E506227A87EF60088612E /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		EF8E506427A882AA0088612E /* TodoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItem.swift; sourceTree = "<group>"; };
 		EF8E506727A889660088612E /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		EFAA22C027B126D50058A68B /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
+		EFAA22C227B299400058A68B /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
+		EFAA22C427B2A6A00058A68B /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		EFAA22C627B515150058A68B /* NotificationItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationItem.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,19 +81,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		EF40F00A27A9534300D63756 /* Workers */ = {
+		EF40F01227AD513700D63756 /* Extentions */ = {
 			isa = PBXGroup;
 			children = (
+				EF40F01427AD515E00D63756 /* UIViewController+.swift */,
+				EFAA22C027B126D50058A68B /* UIView+.swift */,
+				EFAA22C227B299400058A68B /* Date+.swift */,
 			);
-			path = Workers;
-			sourceTree = "<group>";
-		};
-		EF40F00B27AA93D600D63756 /* Service */ = {
-			isa = PBXGroup;
-			children = (
-				EF40F00C27AA940000D63756 /* TodoStore.swift */,
-			);
-			path = Service;
+			path = Extentions;
 			sourceTree = "<group>";
 		};
 		EF8E501F27A8731C0088612E = {
@@ -110,9 +113,8 @@
 				EF8E502B27A8731C0088612E /* AppDelegate.swift */,
 				EF8E502D27A8731C0088612E /* SceneDelegate.swift */,
 				EF8E506227A87EF60088612E /* Constants.swift */,
+				EF40F01227AD513700D63756 /* Extentions */,
 				EF8E506927A8896A0088612E /* Managers */,
-				EF40F00B27AA93D600D63756 /* Service */,
-				EF40F00A27A9534300D63756 /* Workers */,
 				EF8E506627A882AF0088612E /* Models */,
 				EF8E504227A8733D0088612E /* Screens */,
 				EF8E503727A8731E0088612E /* Assets.xcassets */,
@@ -165,6 +167,7 @@
 			isa = PBXGroup;
 			children = (
 				EF8E506427A882AA0088612E /* TodoItem.swift */,
+				EFAA22C627B515150058A68B /* NotificationItem.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -173,6 +176,7 @@
 			isa = PBXGroup;
 			children = (
 				EF8E506727A889660088612E /* CoreDataManager.swift */,
+				EFAA22C427B2A6A00058A68B /* NotificationManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -257,18 +261,22 @@
 				EF8E505F27A8741E0088612E /* DetailViewController.swift in Sources */,
 				EF8E506827A889660088612E /* CoreDataManager.swift in Sources */,
 				EF8E506527A882AA0088612E /* TodoItem.swift in Sources */,
+				EFAA22C127B126D50058A68B /* UIView+.swift in Sources */,
 				EF8E504D27A873740088612E /* ListModels.swift in Sources */,
 				EF40F01027AC012D00D63756 /* ListTableViewCell.swift in Sources */,
+				EFAA22C327B299400058A68B /* Date+.swift in Sources */,
 				EF8E506327A87EF60088612E /* Constants.swift in Sources */,
 				EF8E505E27A8741E0088612E /* DetailModels.swift in Sources */,
 				EF8E503627A8731C0088612E /* ToDoProject.xcdatamodeld in Sources */,
 				EF8E504E27A873740088612E /* ListViewController.swift in Sources */,
-				EF40F00D27AA940000D63756 /* TodoStore.swift in Sources */,
+				EF40F01527AD515E00D63756 /* UIViewController+.swift in Sources */,
 				EF8E504B27A873740088612E /* ListWorker.swift in Sources */,
 				EF8E506027A8741E0088612E /* DetailInteractor.swift in Sources */,
 				EF8E502C27A8731C0088612E /* AppDelegate.swift in Sources */,
 				EF8E502E27A8731C0088612E /* SceneDelegate.swift in Sources */,
 				EF8E505B27A8741E0088612E /* DetailPresenter.swift in Sources */,
+				EFAA22C527B2A6A00058A68B /* NotificationManager.swift in Sources */,
+				EFAA22C727B515160058A68B /* NotificationItem.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -423,8 +431,10 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -451,8 +461,10 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

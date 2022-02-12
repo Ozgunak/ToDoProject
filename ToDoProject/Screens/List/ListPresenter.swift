@@ -15,38 +15,38 @@ import UIKit
 protocol ListPresentationLogic {
     func presentTodos(response: List.FetchTodos.Response)
     func updateTodo(response: List.CheckTodo.Response)
-    
+    func deleteTodo(response: List.DeleteTodo.Response)
 }
 
 class ListPresenter: ListPresentationLogic {
   weak var viewController: ListDisplayLogic?
-  
-    
     let todayDateFormatter : DateFormatter = {
-
         let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ko_KR")
-        dateFormatter.dateFormat = "M월 d일"
+        dateFormatter.locale = Locale.current
+        dateFormatter.dateFormat = ""
         return dateFormatter
     }()
+    
   // MARK: - Present Todos
   
     func presentTodos(response: List.FetchTodos.Response) {
         var displayedTodos : [List.FetchTodos.ViewModel.DisplayedTodo] = []
-
         for todo in response.todos {
-            let displayedTodo = List.FetchTodos.ViewModel.DisplayedTodo(id: Int(todo.id), title: todo.title , isDone: todo.isDone)
-
+            let displayedTodo = List.FetchTodos.ViewModel.DisplayedTodo(id: Int(todo.id), title: todo.title , isDone: todo.isDone, lastModifiedDate: todo.lastModifiedDate, notificationDate: todo.notificationDate, notificationId: todo.notificationId)
             displayedTodos.append(displayedTodo)
         }
-
         let viewModel = List.FetchTodos.ViewModel(displayedTodos: displayedTodos)
         viewController?.displayTodoList(viewModel: viewModel)
     }
-    
+
     func updateTodo(response: List.CheckTodo.Response) {
         let viewModel = List.CheckTodo.ViewModel(row: response.row, todo: response.todo)
         viewController?.displayUpdatedTodoList(viewModel: viewModel)
+    }
+    
+    func deleteTodo(response: List.DeleteTodo.Response) {
+        let viewModel = List.DeleteTodo.ViewModel(row: response.row)
+        viewController?.displayDeletedTodoList(viewModel: viewModel)
     }
   
 }

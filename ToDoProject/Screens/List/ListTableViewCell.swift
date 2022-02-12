@@ -9,26 +9,22 @@ import UIKit
 
 class ListTableViewCell: UITableViewCell {
 
+
     @IBOutlet weak var doneImageView: UIImageView!
     @IBOutlet weak var listLabel: UILabel!
     @IBOutlet weak var doneButton: UIButton!
     @IBOutlet weak var bubbleView: UIView!
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
-        bubbleView.layer.cornerRadius = bubbleView.frame.height / 5
+        bubbleView.addShadowAndCornerRadius()
     }
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+    func getModel(item: List.FetchTodos.ViewModel.DisplayedTodo) {
+        listLabel.text = item.title
+        doneImageView.image = item.isDone ? UIImage(named: K.Cell.done) : UIImage(named: K.Cell.notDone)
+        bubbleView.backgroundColor = item.isDone ? UIColor(named: K.Color.light) : UIColor(named: K.Color.dark)
     }
-    func getData(title: String, isDone: Bool){
-        listLabel.text = title
-        doneImageView.image = isDone ? UIImage(named: K.done) : UIImage(named: K.notDone)
-        listLabel.textColor = isDone ? .gray : .white
-    }
+    
     
     @IBAction func doneButtonPressed(_ sender: UIButton) {
         

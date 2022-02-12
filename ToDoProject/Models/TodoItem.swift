@@ -10,6 +10,8 @@ struct TodoItem {
     var id: Int
     var title: String
     var descriptions: String?
-    var notificationDate: Date?
+    var notificationDate: Date
     var isDone: Bool
+    var lastModifiedDate: Double
+    var notificationId: String?
 }

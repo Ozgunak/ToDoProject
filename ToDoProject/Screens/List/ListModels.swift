@@ -13,10 +13,10 @@
 import UIKit
 
 enum List {
-  // MARK: Use cases
   
     enum FetchTodos {
         struct Request {
+            var text: String?
         }
         struct Response {
             var todos: [TodoItem]
@@ -26,19 +26,35 @@ enum List {
                 var id: Int
                 var title: String
                 var isDone: Bool
+                var lastModifiedDate: Double
+                var notificationDate: Date
+                var notificationId: String?
             }
-
             var displayedTodos: [DisplayedTodo]
         }
     }
 
-    enum CheckTodo {
+    enum DeleteTodo {
         struct Request {
             var id: Int
             var row: Int
         }
         struct Response {
             var row: Int
+        }
+        struct ViewModel {
+            var row: Int
+        }
+    }
+    
+    enum CheckTodo {
+        struct Request {
+            var id: Int
+            var row: Int
+            var notificationId: String?
+        }
+        struct Response {
+            var row: Int
             var todo: TodoItem
         }
         struct ViewModel {
@@ -47,14 +63,5 @@ enum List {
         }
     }
 
-    enum FetchTodayDate {
-        struct Request {
-        }
-        struct Response {
-            var date: Date
-        }
-        struct ViewModel {
-            var todayString: String
-        }
-    }
+
 }

@@ -14,65 +14,51 @@ import UIKit
 
 @objc protocol ListRoutingLogic {
     func routeToCreateTodo(segue: UIStoryboardSegue?)
-    func routeToDetailTodo(index: Int)
-
+    func routeToDetailTodo(index: Int, id: Int)
 }
 
 protocol ListDataPassing {
-  var dataStore: ListDataStore? { get }
+    var dataStore: ListDataStore? { get }
 }
 
 class ListRouter: NSObject, ListRoutingLogic, ListDataPassing {
     
-    func routeToDetailTodo(index: Int) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let destinationVC = storyboard.instantiateViewController(withIdentifier: "DetailViewController") as! DetailViewController
-        destinationVC.router?.dataStore?.todo = dataStore?.todos?[index]
-        self.viewController?.navigationController?.pushViewController(destinationVC, animated: true)
-    }
-    
-    
-    
-  weak var viewController: ListViewController?
-  var dataStore: ListDataStore?
+      weak var viewController: ListViewController?
+      var dataStore: ListDataStore?
   
-  // MARK: Routing
+    // MARK: Routing
   
     func routeToCreateTodo(segue: UIStoryboardSegue?) {
         if segue == nil {
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let destinationVC = storyboard.instantiateViewController(withIdentifier: "DetailViewController") as! DetailViewController
+            let storyboard = UIStoryboard(name: K.main, bundle: nil)
+            let destinationVC = storyboard.instantiateViewController(withIdentifier: String(describing: DetailViewController.self)) as! DetailViewController
+            destinationVC.editButton.title = ""
             navigateToDetailTodo(source: viewController!, destination: destinationVC)
         }
     }
-  //func routeToSomewhere(segue: UIStoryboardSegue?)
-  //{
-  //  if let segue = segue {
-  //    let destinationVC = segue.destination as! SomewhereViewController
-  //    var destinationDS = destinationVC.router!.dataStore!
-  //    passDataToSomewhere(source: dataStore!, destination: &destinationDS)
-  //  } else {
-  //    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-  //    let destinationVC = storyboard.instantiateViewController(withIdentifier: "SomewhereViewController") as! SomewhereViewController
-  //    var destinationDS = destinationVC.router!.dataStore!
-  //    passDataToSomewhere(source: dataStore!, destination: &destinationDS)
-  //    navigateToSomewhere(source: viewController!, destination: destinationVC)
-  //  }
-  //}
 
-  // MARK: Navigation
-  
-  func navigateToDetailTodo(source: ListViewController, destination: DetailViewController)
-  {
-    source.show(destination, sender: nil)
-  }
-  
-  // MARK: Passing data
-  
-    func passDataToTodoDetail(source: ListDataStore, destination: inout DetailDataStore) {
-        let indexPath : IndexPath = (viewController?.tableView.indexPathForSelectedRow!)!
-
-        let selectedTodo = viewController?.displayedTodos[indexPath[0]]
-//        destination.id = selectedTodo?.id
+//    func routeToDetailTodo(index: Int, id: Int) {
+//        let storyboard = UIStoryboard(name: K.main, bundle: nil)
+//        let destinationVC = storyboard.instantiateViewController(withIdentifier: String(describing: DetailViewController.self)) as! DetailViewController
+//        destinationVC.router?.dataStore?.todo = dataStore?.todos?[index]
+//        destinationVC.router?.dataStore?.id = id
+//        destinationVC.saveButton.title = ""
+//        self.viewController?.navigationController?.pushViewController(destinationVC, animated: true)
+//    }
+    
+    func routeToDetailTodo(index: Int, id: Int) {
+        let storyboard = UIStoryboard(name: K.main, bundle: nil)
+        let destinationVC = storyboard.instantiateViewController(withIdentifier: String(describing: DetailViewController.self)) as! DetailViewController
+        let todo = dataStore?.todos?.filter { $0.id == id }
+        destinationVC.router?.dataStore?.todo = todo![0]
+        destinationVC.router?.dataStore?.id = id
+        destinationVC.saveButton.title = ""
+        self.viewController?.navigationController?.pushViewController(destinationVC, animated: true)
     }
+    // MARK: Navigation
+  
+    func navigateToDetailTodo(source: ListViewController, destination: DetailViewController) {
+        source.show(destination, sender: nil)
+    }
+  
 }

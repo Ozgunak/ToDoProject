@@ -12,12 +12,15 @@
 
 import UIKit
 
-enum CreateTodo {
+enum DetailTodo {
     struct TodoField {
         var title: String
         var description: String
+        var notificationDate: Date
+        var notificationId: String?
     }
-
+    
+    
     // MARK: Use cases
     enum CreateTodo {
         struct Request {
@@ -25,11 +28,27 @@ enum CreateTodo {
         }
         struct Response {
             var isSuccess: Bool?
+            var notificationSuccess: Bool?
         }
         struct ViewModel {
             var isSuccess: Bool?
+            var notificationSuccess: Bool?
         }
     }
+    enum EditTodo {
+        struct Request {
+            var todoField: TodoField
+        }
+        struct Response {
+            var isSuccess: Bool?
+            var notificationSuccess: Bool?
+        }
+        struct ViewModel {
+            var isSuccess: Bool?
+            var notificationSuccess: Bool?
+        }
+    }
+    
     
     enum FetchTodo {
       struct Request {
@@ -40,14 +59,9 @@ enum CreateTodo {
       struct ViewModel {
           var title: String
           var descriptions: String
-//          var notificationDate: String
+          var notificationDate: Date
       }
     }
 }
 
-enum TodoDetail
-{
-  // MARK: Use cases
-  
-  
-}
+

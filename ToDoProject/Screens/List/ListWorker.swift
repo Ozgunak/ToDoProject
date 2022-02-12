@@ -15,39 +15,33 @@ import UIKit
 
 // MARK: - Todos store API
 
-protocol TodosStoreProtocol {
-    func fetchTodos(completionHandler: @escaping (() throws -> [TodoItem]) -> Void)
-    func checkTodo(todoIdToCheck: Int, completionHandler: @escaping (() throws -> Int, TodoItem?) -> Void)
-}
+
 
 class ListWorker {
-    var todosStore: TodosStoreProtocol
-
-    init(todosStore: TodosStoreProtocol) {
-        self.todosStore = todosStore
+    var coreData: CoreDataManagerProtocol
+    var notificationManager: NotificationManagerProtocol
+    
+    init(coreData: CoreDataManagerProtocol, notificationManager: NotificationManagerProtocol) {
+        self.coreData = coreData
+        self.notificationManager = notificationManager
     }
 
     func fetchTodos(completionHandler: @escaping ([TodoItem]) -> Void) {
-        todosStore.fetchTodos { (todos: () throws -> [TodoItem])
-            -> Void in
-            do {
-                let todos = try todos()
-                DispatchQueue.main.async {
-                    completionHandler(todos)
-                }
-            } catch {
-                DispatchQueue.main.async {
-                    completionHandler([])
-                }
-            }
+        let todos = coreData.fetchTodoList()
+        DispatchQueue.main.async {
+            completionHandler(todos)
         }
     }
-   
+    
+    func fetchTodos(with text: String, completionHandler: @escaping ([TodoItem]) -> Void) {
+        let todos = coreData.searchTodo(with: text)
+        DispatchQueue.main.async {
+            completionHandler(todos)
+        }
+    }
 
-    func checkTodo(todoIdToCheck: Int, todoRowToCheck: Int, completionHandler: @escaping (Int, TodoItem?) -> Void) {
-        todosStore.checkTodo(todoIdToCheck: todoIdToCheck) {
-            (row: () throws -> Int, todo: TodoItem?) -> Void in
-
+    func checkTodo(with id: Int, row: Int, completionHandler: @escaping (Int, TodoItem?) -> Void) {
+        coreData.checkTodo(id: Int64(id)) { (row: () throws -> Int, todo: TodoItem?) -> Void in
             do {
                 let row = try row()
                 DispatchQueue.main.async {
@@ -60,6 +54,23 @@ class ListWorker {
             }
         }
     }
+    
+    func deleteTodo(with id: Int, row: Int, completionHandler: @escaping (Int) -> Void) {
+        coreData.deleteTodo(id: Int64(id)) { onSuccess in
+            DispatchQueue.main.async {
+                completionHandler(row)
+            }
+        }
+    }
+    
+    func deleteNotification(with notificationId: String) {
+        
+        notificationManager.deleteNotification(with: notificationId) { onSuccess in
+            print(onSuccess)
+        }
+    }
+    
+    
 }
 
 
