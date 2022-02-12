@@ -8,6 +8,7 @@ Patika.dev Mobven Bootcamp Final Project
 
 * About The Project
 * Gettings Started
+* Architecture
 * Screenshots
 * License
 
@@ -65,6 +66,14 @@ Showing notification
 ![Simulator Screen Recording - iPhone 13 - 2022-02-12 at 21 47 12](https://user-images.githubusercontent.com/64470656/153724479-553712a1-18a8-4efb-ad2a-9dca39448d0f.gif)
 
 Notification authorization not given situation
+
+![Simulator Screen Recording - iPad Air (4th generation) - 2022-02-12 at 22 42 45](https://user-images.githubusercontent.com/64470656/153726020-2365f8d2-727a-4855-bb29-b844882b6422.gif)
+
+Usage with iPad
+
+![Simulator Screen Recording - iPhone 13 mini - 2022-02-12 at 22 43 44](https://user-images.githubusercontent.com/64470656/153726024-fe7c8561-d714-4375-a1ad-764dc5123948.gif)
+
+Usage with iPhone 13 mini
 
 ## License
 
