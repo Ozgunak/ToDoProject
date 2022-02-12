@@ -21,8 +21,8 @@ class ListTableViewCell: UITableViewCell {
 
     func getModel(item: List.FetchTodos.ViewModel.DisplayedTodo) {
         listLabel.text = item.title
-        doneImageView.image = item.isDone ? UIImage(named: K.done) : UIImage(named: K.notDone)
-        bubbleView.backgroundColor = item.isDone ? UIColor(named: "light") : UIColor(named: "dark")
+        doneImageView.image = item.isDone ? UIImage(named: K.Cell.done) : UIImage(named: K.Cell.notDone)
+        bubbleView.backgroundColor = item.isDone ? UIColor(named: K.Color.light) : UIColor(named: K.Color.dark)
     }
     
     

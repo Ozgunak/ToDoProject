@@ -41,7 +41,7 @@ class CoreDataManager: CoreDataManagerProtocol {
                 }
             }
         } catch let error as NSError {
-            print("Could not edit: \(error), \(error.userInfo)")
+            print("Could not edit: \(error)")
         }
         contextSave { success in
             onSuccess(success)
@@ -61,7 +61,7 @@ class CoreDataManager: CoreDataManagerProtocol {
                 }
             }
         } catch let error as NSError {
-            print("Could not edit: \(error), \(error.userInfo)")
+            print("Could not edit: \(error)")
         }
         contextSave { success in
             onSuccess(success)
@@ -82,7 +82,7 @@ class CoreDataManager: CoreDataManagerProtocol {
                 }
             }
         } catch let error as NSError {
-            print("Could not check: \(error), \(error.userInfo)")
+            print("Could not check: \(error)")
             onSuccess(false)
         }
         contextSave { success in
@@ -96,7 +96,7 @@ class CoreDataManager: CoreDataManagerProtocol {
     func searchTodo(with text: String) -> [TodoItem] {
         var todos = [TodoItem]()
 
-        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Todos")
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: K.CoreData.entityName)
         fetchRequest.predicate = NSPredicate(format: "title contains[c] '\(text)'")
 
 
@@ -108,7 +108,7 @@ class CoreDataManager: CoreDataManagerProtocol {
                 }
             }
         } catch let error as NSError {
-            print("Could not fatch: \(error), \(error.userInfo)")
+            print("Could not fatch: \(error)")
         }
         return todos
 
@@ -124,13 +124,13 @@ class CoreDataManager: CoreDataManagerProtocol {
             if let results: [Todos] = try context.fetch(fetchRequest) as? [Todos] {
                 if results.count != 0 {
                     let objectUpdate = results[0] as NSManagedObject
-                    objectUpdate.setValue(!results[0].isDone, forKey: "isDone")
+                    objectUpdate.setValue(!results[0].isDone, forKey: K.CoreData.isDone)
                     results[0].lastModifiedDate = NSDate.timeIntervalSinceReferenceDate
                     try context.save()
                 }
             }
         } catch let error as NSError {
-            print("Could not check: \(error), \(error.userInfo)")
+            print("Could not check: \(error)")
         }
         contextSave { success in
             
@@ -141,12 +141,12 @@ class CoreDataManager: CoreDataManagerProtocol {
 
     func saveTodo(title: String, description: String, isDone: Bool, notificationDate: Date, notificationId: String?, onSuccess: @escaping ((Bool) -> Void)) {
         if let entity: NSEntityDescription
-            = NSEntityDescription.entity(forEntityName: "Todos", in: context) {
+            = NSEntityDescription.entity(forEntityName: K.CoreData.entityName, in: context) {
             
             // id get value
             var lastId: Int = 0
             let fetchRequest: NSFetchRequest<NSManagedObject>
-            = NSFetchRequest<NSManagedObject>(entityName: "Todos")
+            = NSFetchRequest<NSManagedObject>(entityName: K.CoreData.entityName)
             do {
                 if let fetchResult: [Todos] = try context.fetch(fetchRequest) as? [Todos] {
                     
@@ -157,7 +157,7 @@ class CoreDataManager: CoreDataManagerProtocol {
                     }
                 }
             } catch let error as NSError {
-                print("Could not create: \(error), \(error.userInfo)")
+                print("Could not create: \(error)")
             }
             
             if let todo: Todos = NSManagedObject(entity: entity, insertInto: context) as? Todos {
@@ -181,9 +181,9 @@ class CoreDataManager: CoreDataManagerProtocol {
     
     func fetchTodoList() -> [TodoItem] {
         var todos = [TodoItem]()
-        let idSort: NSSortDescriptor = NSSortDescriptor(key: "id", ascending: false)
+        let idSort: NSSortDescriptor = NSSortDescriptor(key: K.CoreData.id, ascending: false)
         let fetchRequest: NSFetchRequest<NSManagedObject>
-        = NSFetchRequest<NSManagedObject>(entityName: "Todos")
+        = NSFetchRequest<NSManagedObject>(entityName: K.CoreData.entityName)
         fetchRequest.sortDescriptors = [idSort]
         do {
             if let fetchResult: [Todos] = try context.fetch(fetchRequest) as? [Todos] {
@@ -193,7 +193,7 @@ class CoreDataManager: CoreDataManagerProtocol {
                 }
             }
         } catch let error as NSError {
-            print("Could not fetch: \(error), \(error.userInfo)")
+            print("Could not fetch: \(error)")
         }
         return todos
     }
@@ -203,45 +203,35 @@ class CoreDataManager: CoreDataManagerProtocol {
     
     lazy var persistentContainer: NSPersistentContainer = {
 
-        let container = NSPersistentContainer(name: "ToDoProject")
+        let container = NSPersistentContainer(name: K.CoreData.containerName)
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
 
-                fatalError("Unresolved error \(error), \(error.userInfo)")
+                fatalError("Unresolved error \(error)")
             }
         })
         return container
     }()
     
-    // MARK: - Core Data Saving support
-    
-    func saveContext () {
-        let context = persistentContainer.viewContext
-        if context.hasChanges {
-            do {
-                try context.save()
-            } catch {
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-            }
-        }
-    }
 }
 
 extension CoreDataManager {
+    //MARK: - Filter by Id
+
     fileprivate func filteredRequest(id: Int64) -> NSFetchRequest<NSFetchRequestResult> {
         let fetchRequest: NSFetchRequest<NSFetchRequestResult>
-        = NSFetchRequest<NSFetchRequestResult>(entityName: "Todos")
-        fetchRequest.predicate = NSPredicate(format: "id = %@", NSNumber(value: id))
+        = NSFetchRequest<NSFetchRequestResult>(entityName: K.CoreData.entityName)
+        fetchRequest.predicate = NSPredicate(format: K.CoreData.idPredicate, NSNumber(value: id))
         return fetchRequest
     }
-    
+    // MARK: - Core Data Saving
+
     fileprivate func contextSave(onSuccess: ((Bool) -> Void)) {
         do {
             try context.save()
             onSuccess(true)
         } catch let error as NSError {
-            print("Could not save🥶: \(error), \(error.userInfo)")
+            print("Could not save: \(error), \(error.userInfo)")
             onSuccess(false)
         }
     }

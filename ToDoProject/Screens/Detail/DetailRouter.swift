@@ -29,8 +29,8 @@ class DetailRouter: NSObject, DetailRoutingLogic, DetailDataPassing {
   
   func routeToTodoList(segue: UIStoryboardSegue?) {
     if segue == nil {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let destinationVC = storyboard.instantiateViewController(withIdentifier: "ListViewController") as! ListViewController
+        let storyboard = UIStoryboard(name: K.main, bundle: nil)
+        let destinationVC = storyboard.instantiateViewController(withIdentifier: String(describing: ListViewController.self)) as! ListViewController
         destinationVC.fetchTodos()
         navigateToList(source: viewController!, destination: destinationVC)
     }

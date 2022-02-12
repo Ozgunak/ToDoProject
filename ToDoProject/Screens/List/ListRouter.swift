@@ -30,8 +30,8 @@ class ListRouter: NSObject, ListRoutingLogic, ListDataPassing {
   
     func routeToCreateTodo(segue: UIStoryboardSegue?) {
         if segue == nil {
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let destinationVC = storyboard.instantiateViewController(withIdentifier: "DetailViewController") as! DetailViewController
+            let storyboard = UIStoryboard(name: K.main, bundle: nil)
+            let destinationVC = storyboard.instantiateViewController(withIdentifier: String(describing: DetailViewController.self)) as! DetailViewController
             destinationVC.editButton.title = ""
             navigateToDetailTodo(source: viewController!, destination: destinationVC)
         }
@@ -39,7 +39,7 @@ class ListRouter: NSObject, ListRoutingLogic, ListDataPassing {
 
     func routeToDetailTodo(index: Int, id: Int) {
         let storyboard = UIStoryboard(name: K.main, bundle: nil)
-        let destinationVC = storyboard.instantiateViewController(withIdentifier: "DetailViewController") as! DetailViewController
+        let destinationVC = storyboard.instantiateViewController(withIdentifier: String(describing: DetailViewController.self)) as! DetailViewController
         destinationVC.router?.dataStore?.todo = dataStore?.todos?[index]
         destinationVC.router?.dataStore?.id = id
         destinationVC.saveButton.title = ""
