@@ -131,7 +131,6 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
         }else {
             notificationDateLabel.isHidden = true
             datePicker.isHidden = true
-            // delete notification
         }
         
     }
@@ -183,7 +182,6 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
     }
 
     func displayCreateTodo(viewModel: DetailTodo.CreateTodo.ViewModel) {
-        print(viewModel.isSuccess as Any)
         guard let isSuccess = viewModel.isSuccess else {
             self.shortAlert(title: "Failed", message: "Failed creating Todo")
             return
@@ -214,7 +212,6 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
     }
     
     func displayEditTodo(viewModel: DetailTodo.EditTodo.ViewModel) {
-        print(viewModel.isSuccess as Any)
         guard let isSuccess = viewModel.isSuccess else {
             self.shortAlert(title: "Failed", message: "Failed editing Todo")
             return

@@ -72,9 +72,6 @@ class ListViewController: UIViewController, ListDisplayLogic {
         tableView.register(nib, forCellReuseIdentifier: K.listCell)
         configureKeyboardToolbar()
     }
-    deinit {
-        print("deinited list")
-    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -90,7 +87,6 @@ class ListViewController: UIViewController, ListDisplayLogic {
     }
     
     func fetchTodos() {
-        print("activated")
         let request = List.FetchTodos.Request()
         interactor?.fetchTodos(request: request)
     }
@@ -189,9 +185,9 @@ extension ListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if displayedTodos.isEmpty {
-            return "No Todo Yet"
+            return "No ToDo Yet"
         }else {
-            return "Todos"
+            return "ToDo's"
         }
         
     }
@@ -202,7 +198,6 @@ extension ListViewController: UITableViewDataSource {
 
 extension ListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("\(displayedTodos[indexPath.row].title): \(String(describing: displayedTodos[indexPath.row].notificationId)) - \(displayedTodos[indexPath.row].notificationDate)")
         router?.routeToDetailTodo(index: indexPath.row, id: self.displayedTodos[indexPath.row].id)
     }
     
@@ -210,7 +205,6 @@ extension ListViewController: UITableViewDelegate {
         let delete = UIContextualAction(style: .destructive, title: "Delete") { (contextualAction, view, actionPerformed: (Bool) -> Void) in
             let request = List.DeleteTodo.Request(id: self.displayedTodos[indexPath.row].id, row: indexPath.row)
             self.interactor?.deleteTodo(request: request)
-            
             actionPerformed(true)
         }
         return UISwipeActionsConfiguration(actions: [delete])

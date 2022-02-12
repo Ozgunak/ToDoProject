@@ -20,8 +20,6 @@ protocol ListPresentationLogic {
 
 class ListPresenter: ListPresentationLogic {
   weak var viewController: ListDisplayLogic?
-  
-    
     let todayDateFormatter : DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale.current
@@ -33,12 +31,10 @@ class ListPresenter: ListPresentationLogic {
   
     func presentTodos(response: List.FetchTodos.Response) {
         var displayedTodos : [List.FetchTodos.ViewModel.DisplayedTodo] = []
-
         for todo in response.todos {
             let displayedTodo = List.FetchTodos.ViewModel.DisplayedTodo(id: Int(todo.id), title: todo.title , isDone: todo.isDone, lastModifiedDate: todo.lastModifiedDate, notificationDate: todo.notificationDate, notificationId: todo.notificationId)
             displayedTodos.append(displayedTodo)
         }
-
         let viewModel = List.FetchTodos.ViewModel(displayedTodos: displayedTodos)
         viewController?.displayTodoList(viewModel: viewModel)
     }

@@ -37,15 +37,24 @@ class ListRouter: NSObject, ListRoutingLogic, ListDataPassing {
         }
     }
 
+//    func routeToDetailTodo(index: Int, id: Int) {
+//        let storyboard = UIStoryboard(name: K.main, bundle: nil)
+//        let destinationVC = storyboard.instantiateViewController(withIdentifier: String(describing: DetailViewController.self)) as! DetailViewController
+//        destinationVC.router?.dataStore?.todo = dataStore?.todos?[index]
+//        destinationVC.router?.dataStore?.id = id
+//        destinationVC.saveButton.title = ""
+//        self.viewController?.navigationController?.pushViewController(destinationVC, animated: true)
+//    }
+    
     func routeToDetailTodo(index: Int, id: Int) {
         let storyboard = UIStoryboard(name: K.main, bundle: nil)
         let destinationVC = storyboard.instantiateViewController(withIdentifier: String(describing: DetailViewController.self)) as! DetailViewController
-        destinationVC.router?.dataStore?.todo = dataStore?.todos?[index]
+        let todo = dataStore?.todos?.filter { $0.id == id }
+        destinationVC.router?.dataStore?.todo = todo![0]
         destinationVC.router?.dataStore?.id = id
         destinationVC.saveButton.title = ""
         self.viewController?.navigationController?.pushViewController(destinationVC, animated: true)
     }
-    
     // MARK: Navigation
   
     func navigateToDetailTodo(source: ListViewController, destination: DetailViewController) {

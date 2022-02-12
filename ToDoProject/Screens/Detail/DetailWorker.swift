@@ -45,7 +45,6 @@ class DetailWorker: DetailWorkerProtocol {
             DispatchQueue.main.async {
                 completionHandler(onSuccess)
             }
-            
         }
     }
 
@@ -55,31 +54,29 @@ class DetailWorker: DetailWorkerProtocol {
             DispatchQueue.main.async {
                 completionHandler(onSuccess)
             }
-            
         }
     }
+    
     func editTodoWithDate(id: Int, title: String, description: String, notificationDate: Date, notificationId: String?, completionHandler: @escaping (Bool?) -> Void) {
         coreData.editTodoWithDate(id: Int64(id), title: title, description: description, notificationDate: notificationDate, notificationId: notificationId) { onSuccess in
             DispatchQueue.main.async {
                 completionHandler(onSuccess)
             }
-            
         }
     }
+    
     func createNotification(notificationId: String, title: String, description: String, notificationDate: Date, completionHandler: @escaping (Bool?) -> Void) {
         notificationManager.notifications.append(NotificationItem(id: notificationId, title: title, description: description, date: notificationDate))
-        notificationManager.schedule(with: notificationId) { onSuccess in
+        notificationManager.checkAuth(with: notificationId) { onSuccess in
             DispatchQueue.main.async {
                 completionHandler(onSuccess)
             }
         }
-                                                
     }
+    
     func deleteNotification(with notificationId: String) {
-        
         notificationManager.deleteNotification(with: notificationId) { onSuccess in
             print(onSuccess)
         }
     }
-
 }

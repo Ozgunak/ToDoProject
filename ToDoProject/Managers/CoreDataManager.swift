@@ -23,9 +23,8 @@ protocol CoreDataManagerProtocol {
 class CoreDataManager: CoreDataManagerProtocol {
     
     lazy var context = persistentContainer.viewContext
-    
    
-    //MARK: - edit todo
+    //MARK: - Edit Todo
 
     func editTodo(id: Int64, title: String, description: String?, onSuccess: @escaping ((Bool) -> Void)) {
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = filteredRequest(id: id)
@@ -47,6 +46,7 @@ class CoreDataManager: CoreDataManagerProtocol {
             onSuccess(success)
         }
     }
+    
     func editTodoWithDate(id: Int64, title: String, description: String?, notificationDate: Date, notificationId: String?, onSuccess: @escaping ((Bool) -> Void)) {
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = filteredRequest(id: id)
         do {
@@ -95,7 +95,6 @@ class CoreDataManager: CoreDataManagerProtocol {
     
     func searchTodo(with text: String) -> [TodoItem] {
         var todos = [TodoItem]()
-
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: K.CoreData.entityName)
         fetchRequest.predicate = NSPredicate(format: "title contains[c] '\(text)'")
 
@@ -111,7 +110,6 @@ class CoreDataManager: CoreDataManagerProtocol {
             print("Could not fatch: \(error)")
         }
         return todos
-
     }
     
     //MARK: - Check Todo
@@ -133,9 +131,7 @@ class CoreDataManager: CoreDataManagerProtocol {
             print("Could not check: \(error)")
         }
         contextSave { success in
-            
         }
-
     }
     //MARK: - create save todo
 
@@ -143,7 +139,6 @@ class CoreDataManager: CoreDataManagerProtocol {
         if let entity: NSEntityDescription
             = NSEntityDescription.entity(forEntityName: K.CoreData.entityName, in: context) {
             
-            // id get value
             var lastId: Int = 0
             let fetchRequest: NSFetchRequest<NSManagedObject>
             = NSFetchRequest<NSManagedObject>(entityName: K.CoreData.entityName)
@@ -169,7 +164,6 @@ class CoreDataManager: CoreDataManagerProtocol {
                 todo.notificationDate = notificationDate
                 todo.notificationId = notificationId
                 contextSave { success in
-                    
                     onSuccess(success)
                 }
             }
@@ -177,7 +171,6 @@ class CoreDataManager: CoreDataManagerProtocol {
     }
 
     //MARK: - fetch todo
-    
     
     func fetchTodoList() -> [TodoItem] {
         var todos = [TodoItem]()
@@ -198,11 +191,9 @@ class CoreDataManager: CoreDataManagerProtocol {
         return todos
     }
     
-    
-    // MARK: - Core Data stack
+    // MARK: - CoreData Persistent Container
     
     lazy var persistentContainer: NSPersistentContainer = {
-
         let container = NSPersistentContainer(name: K.CoreData.containerName)
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {

@@ -17,11 +17,13 @@ extension UIViewController {
             alert.dismiss(animated: true, completion: nil)
         }
     }
+    
     func showAlert(title: String, message: String) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         self.present(alertController, animated: true)
     }
+    
     func showAlertToSettings(title: String, message: String) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let goToSettings = UIAlertAction(title: "Settings", style: .default) { _ in

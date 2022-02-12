@@ -30,7 +30,6 @@ enum List {
                 var notificationDate: Date
                 var notificationId: String?
             }
-
             var displayedTodos: [DisplayedTodo]
         }
     }

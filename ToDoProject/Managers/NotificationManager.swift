@@ -11,7 +11,7 @@ import UIKit
 
 protocol NotificationManagerProtocol {
     var notifications : [NotificationItem] { get set }
-    func schedule(with id: String, complation: @escaping (Bool) -> Void)
+    func checkAuth(with id: String, complation: @escaping (Bool) -> Void)
     func deleteNotification(with id: String, complationHandler: @escaping (Bool) -> Void)
 }
 
@@ -19,10 +19,9 @@ protocol NotificationManagerProtocol {
 class NotificationManager: NotificationManagerProtocol{
     
     var notifications = [NotificationItem]()
-
     let notificationCenter = UNUserNotificationCenter.current()
     
-    //MARK: - Ask for permission
+    //MARK: - Check Permission
 
     private func requestAuthorization(with id: String, complation: @escaping (Bool) -> Void){
         UNUserNotificationCenter.current().requestAuthorization(options: [.badge,.sound,.alert]) { permission, error in
@@ -36,9 +35,9 @@ class NotificationManager: NotificationManagerProtocol{
         }
     }
     
-    //MARK: - main call
+    //MARK: - Main call
 
-    func schedule(with id: String, complation: @escaping (Bool) -> Void){
+    func checkAuth(with id: String, complation: @escaping (Bool) -> Void){
         UNUserNotificationCenter.current().getNotificationSettings { settings in
             switch settings.authorizationStatus {
             case .notDetermined:
@@ -55,7 +54,7 @@ class NotificationManager: NotificationManagerProtocol{
         }
     }
     
-    //MARK: - schedule Notification
+    //MARK: - Schedule Notification
 
     private func scheduleNotification(with id: String, complationHandler: @escaping (Bool) -> Void) {
         let notify = notifications.filter { $0.id == id }
@@ -63,9 +62,7 @@ class NotificationManager: NotificationManagerProtocol{
             let content = UNMutableNotificationContent()
             content.title = notify[0].title
             content.body = notify[0].description
-            
             let dateComponent = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: notify[0].date)
-            
             let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponent, repeats: false)
             let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
             
@@ -78,7 +75,7 @@ class NotificationManager: NotificationManagerProtocol{
             }
         }
     }
-    //MARK: - delete notification
+    //MARK: - Delete Notification
 
     func deleteNotification(with id: String, complationHandler: @escaping (Bool) -> Void) {
         DispatchQueue.main.async {

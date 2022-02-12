@@ -14,7 +14,6 @@ import UIKit
 
 @objc protocol DetailRoutingLogic {
     func routeToTodoList(segue: UIStoryboardSegue?)
-    // go to settings for notification
 }
 
 protocol DetailDataPassing: AnyObject {
@@ -31,19 +30,13 @@ class DetailRouter: NSObject, DetailRoutingLogic, DetailDataPassing {
     if segue == nil {
         let storyboard = UIStoryboard(name: K.main, bundle: nil)
         let destinationVC = storyboard.instantiateViewController(withIdentifier: String(describing: ListViewController.self)) as! ListViewController
-        destinationVC.fetchTodos()
         navigateToList(source: viewController!, destination: destinationVC)
     }
   }
-    
-    
-    // func goToSettings
 
   // MARK: - Navigation
   
   func navigateToList(source: DetailViewController, destination: ListViewController) {
         source.navigationController?.popToRootViewController(animated: true)
   }
-  
-  
 }
