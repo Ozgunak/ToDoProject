@@ -20,6 +20,7 @@ protocol ListDisplayLogic: AnyObject {
 
 class ListViewController: UIViewController, ListDisplayLogic {
     
+    @IBOutlet weak var searchbarText: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     
     var interactor: ListBusinessLogic?
@@ -69,6 +70,7 @@ class ListViewController: UIViewController, ListDisplayLogic {
         super.viewDidLoad()
         let nib = UINib(nibName: K.nibName, bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: K.listCell)
+        configureKeyboardToolbar()
     }
     deinit {
         print("deinited list")
@@ -114,6 +116,32 @@ class ListViewController: UIViewController, ListDisplayLogic {
         sortByMotifiedDate()
     }
     
+    //MARK: - Done button toolbar
+
+    func createKeyboardToolbar() -> UIToolbar {
+        let flexibleSpace = UIBarButtonItem.flexibleSpace()
+        let doneBarButton = UIBarButtonItem()
+        doneBarButton.target = self
+        doneBarButton.action = #selector(doneBarButtonTapped(_:))
+        doneBarButton.title = "Done"
+        doneBarButton.style = .plain
+        
+        let toolbar = UIToolbar()
+        toolbar.items = [flexibleSpace, doneBarButton]
+        toolbar.sizeToFit()
+        return toolbar
+    }
+    
+    func configureKeyboardToolbar() {
+        let toolbar = createKeyboardToolbar()
+        searchbarText.inputAccessoryView = toolbar
+    }
+    @objc func doneBarButtonTapped(_ sender: UIBarButtonItem) {
+        searchbarText.resignFirstResponder()
+    }
+    
+    //MARK: - Sorting
+
     func sortByMotifiedDate() {
         switch displayedTodos.count {
         case 0:
@@ -132,8 +160,11 @@ class ListViewController: UIViewController, ListDisplayLogic {
         }
     }
     
+    //MARK: - Check Button
+
     @objc func checkButtonConnected(sender : UIButton!) {
         self.displayedTodos[sender.tag].isDone = !self.displayedTodos[sender.tag].isDone
+        self.displayedTodos[sender.tag].lastModifiedDate = NSDate.timeIntervalSinceReferenceDate
         let request = List.CheckTodo.Request(id: self.displayedTodos[sender.tag].id, row: sender.tag, notificationId:  self.displayedTodos[sender.tag].notificationId)
         interactor?.checkTodo(request: request)
         tableView.reloadData()
@@ -157,7 +188,12 @@ extension ListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "Tasks"
+        if displayedTodos.isEmpty {
+            return "No Todo Yet"
+        }else {
+            return "Todos"
+        }
+        
     }
     
 }

@@ -24,31 +24,11 @@
                                 <rect key="frame" x="24" y="0.0" width="287" height="60"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="S8s-yx-cLK">
-                                        <rect key="frame" x="0.0" y="16" width="187" height="28.5"/>
+                                        <rect key="frame" x="0.0" y="16" width="242" height="28.5"/>
                                         <fontDescription key="fontDescription" name="CourierNewPS-BoldMT" family="Courier New" pointSize="25"/>
                                         <color key="textColor" name="bej"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="SxN-nW-07l">
-                                        <rect key="frame" x="192" y="9.5" width="50" height="41"/>
-                                        <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Timer:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3w7-qI-mrq">
-                                                <rect key="frame" x="0.0" y="0.0" width="50" height="20.5"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" name="bej"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="14:15" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hLe-wD-C1I">
-                                                <rect key="frame" x="0.0" y="20.5" width="50" height="20.5"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" name="bej"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                        </subviews>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="50" id="cIm-CR-9Ou"/>
-                                        </constraints>
-                                    </stackView>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty" translatesAutoresizingMaskIntoConstraints="NO" id="zbD-4N-jBd">
                                         <rect key="frame" x="247" y="10" width="40" height="40"/>
                                         <constraints>
@@ -98,8 +78,6 @@
                 <outlet property="doneButton" destination="BYi-28-5ey" id="586-Sz-nGX"/>
                 <outlet property="doneImageView" destination="zbD-4N-jBd" id="6dY-mj-tJp"/>
                 <outlet property="listLabel" destination="S8s-yx-cLK" id="tpk-mz-xWy"/>
-                <outlet property="notificationDateLabel" destination="hLe-wD-C1I" id="WVO-IW-Vzt"/>
-                <outlet property="timerLabel" destination="3w7-qI-mrq" id="D8n-ja-ye9"/>
             </connections>
             <point key="canvasLocation" x="157.24637681159422" y="162.05357142857142"/>
         </tableViewCell>
@@ -107,10 +85,10 @@
     <resources>
         <image name="empty" width="100" height="100"/>
         <namedColor name="bej">
-            <color red="0.97254901960784312" green="0.92941176470588238" blue="0.8901960784313725" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.99215686274509807" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="dark">
-            <color red="0.47450980392156861" green="0.52941176470588236" blue="0.46666666666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.63137254901960782" blue="0.49803921568627452" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

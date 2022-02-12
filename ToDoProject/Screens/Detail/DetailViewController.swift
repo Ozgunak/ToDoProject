@@ -30,7 +30,7 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
     @IBOutlet weak var editButton: UIBarButtonItem!
     @IBOutlet weak var saveButton: UIBarButtonItem!
     @IBOutlet weak var titleTextField: UITextField!
-    @IBOutlet weak var descriptionTextField: UITextField!
+    @IBOutlet weak var descriptionTextView: UITextView!
     @IBOutlet weak var datePicker: UIDatePicker!
     
   // MARK: Object lifecycle
@@ -93,7 +93,7 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
     @IBAction func saveButtonTapped(_ sender: UIBarButtonItem) {
         if titleTextField.text != "" {
             let title = titleTextField.text
-            let description = descriptionTextField.text
+            let description = descriptionTextView.text
              
             let date = notificationSwitch.isOn ? datePicker.date : NSDate.distantPast
             if title != nil {
@@ -109,7 +109,7 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
     @IBAction func editButtonTapped(_ sender: UIBarButtonItem) {
         if titleTextField.text != "" {
             let title = titleTextField.text
-            let description = descriptionTextField.text
+            let description = descriptionTextView.text
             let date = notificationSwitch.isOn ? datePicker.date : NSDate.distantPast
             if title != nil {
                 let request = DetailTodo.EditTodo.Request(todoField: DetailTodo.TodoField(title: title!, description: description ?? "", notificationDate: date))
@@ -127,6 +127,7 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
             datePicker.isHidden = false
             notificationDateLabel.isHidden = false
             notificationDateLabel.text = "Dont forget to save!"
+            datePicker.minimumDate = Date()
         }else {
             notificationDateLabel.isHidden = true
             datePicker.isHidden = true
@@ -137,7 +138,6 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
     //MARK: - Date Picker
 
     @IBAction func datePickerTapped(_ sender: UIDatePicker) {
-//        let date = sender.date
     }
     
     //MARK: - Back button as Cancel
@@ -167,12 +167,12 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
     func configureKeyboardToolbar() {
         let toolbar = createKeyboardToolbar()
         titleTextField.inputAccessoryView = toolbar
-        descriptionTextField.inputAccessoryView = toolbar
+        descriptionTextView.inputAccessoryView = toolbar
         
     }
     @objc func doneBarButtonTapped(_ sender: UIBarButtonItem) {
         titleTextField.resignFirstResponder()
-        descriptionTextField.resignFirstResponder()
+        descriptionTextView.resignFirstResponder()
     }
     
     //MARK: - Data functions
@@ -202,7 +202,7 @@ class DetailViewController: UIViewController, DetailDisplayLogic {
     }
     func displayTodo(viewModel: DetailTodo.FetchTodo.ViewModel) {
         titleTextField.text = viewModel.title
-        descriptionTextField.text = viewModel.descriptions
+        descriptionTextView.text = viewModel.descriptions
         if viewModel.notificationDate != NSDate.distantPast && viewModel.notificationDate >= Date() {
             notificationSwitch.isOn = true
             notificationDateLabel.text = viewModel.notificationDate.toString()
