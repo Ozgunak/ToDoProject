@@ -67,6 +67,10 @@ Showing notification
 
 Notification authorization not given situation
 
+![Simulator Screen Recording - iPhone 13 - 2022-02-13 at 07 58 48](https://user-images.githubusercontent.com/64470656/153739399-741e091a-e2d1-4554-8d43-4ff493d62d44.gif)
+
+Dark Mode iPhone 13
+
 ![Simulator Screen Recording - iPad Air (4th generation) - 2022-02-12 at 22 42 45](https://user-images.githubusercontent.com/64470656/153726020-2365f8d2-727a-4855-bb29-b844882b6422.gif)
 
 Usage with iPad
