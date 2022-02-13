@@ -15,9 +15,15 @@ import UIKit
 
 // MARK: - Todos store API
 
+protocol ListWorkerProtocol {
+    func fetchTodos(completionHandler: @escaping ([TodoItem]) -> Void)
+    func fetchTodos(with text: String, completionHandler: @escaping ([TodoItem]) -> Void)
+    func checkTodo(with id: Int, row: Int, completionHandler: @escaping (Int, TodoItem?) -> Void)
+    func deleteTodo(with id: Int, row: Int, completionHandler: @escaping (Int) -> Void)
+    func deleteNotification(with notificationId: String)
+}
 
-
-class ListWorker {
+class ListWorker: ListWorkerProtocol {
     var coreData: CoreDataManagerProtocol
     var notificationManager: NotificationManagerProtocol
     
@@ -64,7 +70,6 @@ class ListWorker {
     }
     
     func deleteNotification(with notificationId: String) {
-        
         notificationManager.deleteNotification(with: notificationId) { onSuccess in
             print(onSuccess)
         }
